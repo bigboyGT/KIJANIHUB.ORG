@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GKIT Application Form</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 100px;
+        }
+
+        .form-header h1 {
+            color: #2b7a78;
+        }
+
+        .form-header p {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            color: #17252a;
+            border-bottom: 2px solid #2b7a78;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+        }
+
+        .form-footer {
+            text-align: center;
+        }
+
+        .submit-button {
+            background: #2b7a78;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background: #3aafa9;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <header class="form-header">
+            <img src="logo.png" alt="GKIT Logo" class="logo">
+            <h1>GKIT Application Form</h1>
+            <p>"Go Green - Save the Future - Kenya Forever"</p>
+        </header>
+
+        <form action="submit-form.php" method="post">
+            <section class="section">
+                <h2>Personal Information</h2>
+                <label for="business-name">Business Name</label>
+                <input type="text" id="business-name" name="business-name" placeholder="Enter your business name" required>
+
+                <label for="certificate-no">Certificate Number</label>
+                <input type="text" id="certificate-no" name="certificate-no" placeholder="Enter your certificate number" required>
+
+                <label for="family-name">Family Name</label>
+                <input type="text" id="family-name" name="family-name" placeholder="Enter your family name" required>
+
+                <label for="first-name">First Name</label>
+                <input type="text" id="first-name" name="first-name" placeholder="Enter your first name" required>
+
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required>
+
+                <label for="sex">Sex</label>
+                <select id="sex" name="sex" required>
+                    <option value="">Select</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </section>
+
+            <section class="section">
+                <h2>Contact Information</h2>
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+                <label for="next-of-kin">Next of Kin Name</label>
+                <input type="text" id="next-of-kin" name="next-of-kin" placeholder="Enter next of kin name">
+
+                <label for="kin-phone">Next of Kin Phone</label>
+                <input type="tel" id="kin-phone" name="kin-phone" placeholder="Enter next of kin phone">
+            </section>
+
+            <section class="section">
+                <h2>Skills and Occupation</h2>
+                <label for="skills">Acquired Skills</label>
+                <textarea id="skills" name="skills" placeholder="List any acquired skills"></textarea>
+
+                <label for="education">Highest Qualification</label>
+                <input type="text" id="education" name="education" placeholder="Certificate/Diploma/Degree">
+
+                <label for="occupation">Occupation</label>
+                <input type="text" id="occupation" name="occupation" placeholder="Enter your current occupation">
+
+                <label for="talent">Talent</label>
+                <textarea id="talent" name="talent" placeholder="What are you naturally best at?"></textarea>
+            </section>
+
+            <section class="section">
+                <h2>Motivation and Resources</h2>
+                <label for="dream">What is your personal dream in life?</label>
+                <textarea id="dream" name="dream" placeholder="Enter your dream"></textarea>
+
+                <label for="resource">What resources can you provide to GKIT?</label>
+                <textarea id="resource" name="resource" placeholder="List resources you can provide"></textarea>
+            </section>
+
+            <section class="section">
+                <h2>Participation</h2>
+                <label for="donation">Do you want to make a donation?</label>
+                <select id="donation" name="donation">
+                    <option value="">Select</option>
+                    <option value="one-time">One-Time</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+
+                <label for="volunteer">Volunteer Options</label>
+                <div>
+                    <input type="checkbox" id="part-time" name="volunteer[]" value="part-time">
+                    <label for="part-time">Part-Time Volunteer</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="full-time" name="volunteer[]" value="full-time">
+                    <label for="full-time">Full-Time Volunteer</label>
+                </div>
+            </section>
+
+            <div class="form-footer">
+                <button type="submit" class="submit-button">Submit Application</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
