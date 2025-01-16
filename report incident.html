@@ -5,9 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Environmental Incident Reporting</title>
-    <link rel="stylesheet" href="report incident.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="./css/report-incident.css">
+    <!-- Leaflet.js Map Library -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
@@ -20,7 +24,7 @@
         <!-- Form Section -->
         <section>
             <h2>Incident Details</h2>
-            <form id="incidentForm">
+            <form id="incidentForm" enctype="multipart/form-data">
                 <label for="incidentType">Incident Type:</label>
                 <select id="incidentType" name="incidentType" required>
                     <option value="" disabled selected>Select an Incident Type</option>
@@ -43,7 +47,7 @@
                 <span id="intensityValue">3</span>
 
                 <label for="imageUpload">Upload Incident Image:</label>
-                <input type="file" id="imageUpload" name="imageUpload" accept="image/*" required>
+                <input type="file" id="imageUpload" name="image" accept="image/*" required>
 
                 <button type="submit">Submit Incident Report</button>
             </form>
@@ -57,10 +61,11 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 Kijanihub. All rights reserved.</p>
+        <p>&copy; 2025 kijanihub Environmental incident Reporting. All rights reserved.</p>
     </footer>
 
-    <script src="report incident.js"></script>
+    <!-- Link JavaScript -->
+    <script src="./js/report-incident.js"></script>
 </body>
 
 </html>
