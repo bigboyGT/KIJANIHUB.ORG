@@ -1,196 +1,443 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GKIT Application Form</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GKIT Application Form</title>
+   
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-        .form-container {
-            max-width: 800px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
+    .form-container {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 900px;
+      padding: 20px;
+    }
 
-        .form-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
 
-        .logo {
-            width: 100px;
-        }
+    .form-header img {
+      width: 80px;
+      height: auto;
+    }
 
-        .form-header h1 {
-            color: #2b7a78;
-        }
+    .form-header h1 {
+      text-align: center;
+      color: #3a9d23;
+      font-size: 24px;
+      margin: 0 auto;
+    }
 
-        .form-header p {
-            font-size: 0.9em;
-            color: #555;
-        }
+    .form-header p {
+      text-align: center;
+      color: #666666;
+      font-size: 14px;
+    }
 
-        .section {
-            margin-bottom: 20px;
-        }
+    .form-group {
+      margin-bottom: 15px;
+    }
 
-        .section h2 {
-            color: #17252a;
-            border-bottom: 2px solid #2b7a78;
-            padding-bottom: 5px;
-            margin-bottom: 10px;
-        }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333333;
+    }
 
-        label {
-            display: block;
-            margin: 10px 0 5px;
-            color: #555;
-            font-weight: bold;
-        }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #dddddd;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #333333;
+    }
 
-        input, textarea, select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1em;
-        }
+    .form-group textarea {
+      resize: none;
+      height: 100px;
+    }
 
-        textarea {
-            resize: vertical;
-        }
+    .form-actions {
+      text-align: center;
+      margin-top: 20px;
+    }
 
-        input[type="checkbox"] {
-            width: auto;
-        }
+    .form-actions button {
+      background-color: #3a9d23;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
 
-        .form-footer {
-            text-align: center;
-        }
+    .form-actions button:hover {
+      background-color: #2f7c1c;
+    }
 
-        .submit-button {
-            background: #2b7a78;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            font-size: 1em;
-            cursor: pointer;
-        }
+    .declaration {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #333;
+    }
 
-        .submit-button:hover {
-            background: #3aafa9;
-        }
-    </style>
+    .declaration label {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <div class="form-container">
-        <header class="form-header">
-            <img src="logo.png" alt="GKIT Logo" class="logo">
-            <h1>GKIT Application Form</h1>
-            <p>"Go Green - Save the Future - Kenya Forever"</p>
-        </header>
-
-        <form action="submit-form.php" method="post">
-            <section class="section">
-                <h2>Personal Information</h2>
-                <label for="business-name">Business Name</label>
-                <input type="text" id="business-name" name="business-name" placeholder="Enter your business name" required>
-
-                <label for="certificate-no">Certificate Number</label>
-                <input type="text" id="certificate-no" name="certificate-no" placeholder="Enter your certificate number" required>
-
-                <label for="family-name">Family Name</label>
-                <input type="text" id="family-name" name="family-name" placeholder="Enter your family name" required>
-
-                <label for="first-name">First Name</label>
-                <input type="text" id="first-name" name="first-name" placeholder="Enter your first name" required>
-
-                <label for="dob">Date of Birth</label>
-                <input type="date" id="dob" name="dob" required>
-
-                <label for="sex">Sex</label>
-                <select id="sex" name="sex" required>
-                    <option value="">Select</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                </select>
-            </section>
-
-            <section class="section">
-                <h2>Contact Information</h2>
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
-
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
-
-                <label for="next-of-kin">Next of Kin Name</label>
-                <input type="text" id="next-of-kin" name="next-of-kin" placeholder="Enter next of kin name">
-
-                <label for="kin-phone">Next of Kin Phone</label>
-                <input type="tel" id="kin-phone" name="kin-phone" placeholder="Enter next of kin phone">
-            </section>
-
-            <section class="section">
-                <h2>Skills and Occupation</h2>
-                <label for="skills">Acquired Skills</label>
-                <textarea id="skills" name="skills" placeholder="List any acquired skills"></textarea>
-
-                <label for="education">Highest Qualification</label>
-                <input type="text" id="education" name="education" placeholder="Certificate/Diploma/Degree">
-
-                <label for="occupation">Occupation</label>
-                <input type="text" id="occupation" name="occupation" placeholder="Enter your current occupation">
-
-                <label for="talent">Talent</label>
-                <textarea id="talent" name="talent" placeholder="What are you naturally best at?"></textarea>
-            </section>
-
-            <section class="section">
-                <h2>Motivation and Resources</h2>
-                <label for="dream">What is your personal dream in life?</label>
-                <textarea id="dream" name="dream" placeholder="Enter your dream"></textarea>
-
-                <label for="resource">What resources can you provide to GKIT?</label>
-                <textarea id="resource" name="resource" placeholder="List resources you can provide"></textarea>
-            </section>
-
-            <section class="section">
-                <h2>Participation</h2>
-                <label for="donation">Do you want to make a donation?</label>
-                <select id="donation" name="donation">
-                    <option value="">Select</option>
-                    <option value="one-time">One-Time</option>
-                    <option value="monthly">Monthly</option>
-                </select>
-
-                <label for="volunteer">Volunteer Options</label>
-                <div>
-                    <input type="checkbox" id="part-time" name="volunteer[]" value="part-time">
-                    <label for="part-time">Part-Time Volunteer</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="full-time" name="volunteer[]" value="full-time">
-                    <label for="full-time">Full-Time Volunteer</label>
-                </div>
-            </section>
-
-            <div class="form-footer">
-                <button type="submit" class="submit-button">Submit Application</button>
-            </div>
-        </form>
+  <div class="form-container">
+    <div class="form-header">
+      <img src="https://i.ibb.co/vVmMCCQ/images.png" alt="Logo 1" border="0"></a
+      <h1>GKIT Application Form</h1>
+     <img src="https://i.ibb.co/SJWXy40/images.png" alt="Logo 2">
     </div>
+    <p style="text-align: center;">"Go Green - Save the Future - Kenya Forever"</p>
+    <form>
+      <!-- Business Info -->
+      <div class="form-group">
+        <label for="business-name">Business Name</label>
+        <input type="text" id="business-name" name="business-name">
+      </div>
+      <div class="form-group">
+        <label for="certificate-no">Certificate Number</label>
+        <input type="text" id="certificate-no" name="certificate-no">
+      </div>
+
+      <!-- Personal Information -->
+      <div class="form-group">
+        <label for="family-name">Family Name</label>
+        <input type="text" id="family-name" name="family-name" required>
+      </div>
+      <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" name="first-name" required>
+      </div>
+      <div class="form-group">
+        <label for="middle-name">Middle Name</label>
+        <input type="text" id="middle-name" name="middle-name">
+      </div>
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" name="dob" required>
+      </div>
+      <div class="form-group">
+        <label for="sex">Sex</label>
+        <select id="sex" name="sex" required>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="id-number">National Identity Card Number</label>
+        <input type="text" id="id-number" name="id-number" required>
+      </div>
+      <div class="form-group">
+        <label for="county">County</label>
+        <select id="county" name="county">
+          <option value="Baringo">Baringo</option>
+          <option value="Bomet">Bomet</option>
+          <option value="Bungoma">Bungoma</option>
+          <option value="Busia">Busia</option>
+          <option value="Elgeyo-Marakwet">Elgeyo-Marakwet</option>
+          <option value="Embu">Embu</option>
+          <option value="Garissa">Garissa</option>
+          <option value="Homa Bay">Homa Bay</option>
+          <option value="Isiolo">Isiolo</option>
+          <option value="Kakamega">Kakamega</option>
+          <option value="Kericho">Kericho</option>
+          <option value="Kiambu">Kiambu</option>
+          <option value="Kilifi">Kilifi</option>
+          <option value="Kirinyaga">Kirinyaga</option>
+          <option value="Kisii">Kisii</option>
+          <option value="Kisumu">Kisumu</option>
+          <option value="Kitui">Kitui</option>
+          <option value="Kwale">Kwale</option>
+          <option value="Laikipia">Laikipia</option>
+          <option value="Lamu">Lamu</option>
+          <option value="Machakos">Machakos</option>
+          <option value="Makueni">Makueni</option>
+          <option value="Mandera">Mandera</option>
+          <option value="Meru">Meru</option>
+          <option value="Migori">Migori</option>
+          <option value="Mombasa">Mombasa</option>
+          <option value="Murang’a">Murang’a</option>
+          <option value="Nairobi">Nairobi</option>
+          <option value="Nakuru">Nakuru</option>
+          <option value="Nandi">Nandi</option>
+          <option value="Narok">Narok</option>
+          <option value="Nyamira">Nyamira</option>
+          <option value="Nyandarua">Nyandarua</option>
+          <option value="Samburu">Samburu</option>
+          <option value="Siaya">Siaya</option>
+          <option value="Taita Taveta">Taita Taveta</option>
+          <option value="Tana River">Tana River</option>
+          <option value="Tharaka Nithi">Tharaka Nithi</option>
+          <option value="Trans Nzoia">Trans Nzoia</option>
+          <option value="Turkana">Turkana</option>
+          <option value="Uasin Gishu">Uasin Gishu</option>
+          <option value="Vihiga">Vihiga</option>
+          <option value="Wajir">Wajir</option>
+          <option value="West Pokot">West Pokot</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="constituency">Constituency</label>
+        <select id="constituency" name="constituency">
+          <option value="Lang'ata">Lang'ata</option>
+          <option value="Embu">Embu</option>
+          <option value="Bungoma Central">Bungoma Central</option>
+          <option value="Bungoma South">Bungoma South</option>
+          <option value="Mombasa Town">Mombasa Town</option>
+<option value="Changamwe">Changamwe</option>
+<option value="Jomvu">Jomvu</option>
+<option value="Kisauni">Kisauni</option>
+<option value="Nyali">Nyali</option>
+<option value="Likoni">Likoni</option>
+<option value="Jomvu">Jomvu</option>
+<option value="Bamburi">Bamburi</option>
+<option value="Mvita">Mvita</option>
+<option value="Kilimani">Kilimani</option>
+<option value="Nakuru Town East">Nakuru Town East</option>
+<option value="Nakuru Town West">Nakuru Town West</option>
+<option value="Gilgil">Gilgil</option>
+<option value="Njoro">Njoro</option>
+<option value="Subukia">Subukia</option>
+<option value="Bahati">Bahati</option>
+<option value="Rongai">Rongai</option>
+<option value="Lanet">Lanet</option>
+<option value="Kuresoi South">Kuresoi South</option>
+<option value="Kuresoi North">Kuresoi North</option>
+<option value="Molo">Molo</option>
+<option value="Nakuru">Nakuru</option>
+<option value="Olenguruone">Olenguruone</option>
+<option value="Samburu East">Samburu East</option>
+<option value="Samburu West">Samburu West</option>
+<option value="Samburu Central">Samburu Central</option>
+<option value="Tana River South">Tana River South</option>
+<option value="Tana River North">Tana River North</option>
+<option value="Bura">Bura</option>
+<option value="Lamu">Lamu</option>
+<option value="Lamu West">Lamu West</option>
+<option value="Lamu East">Lamu East</option>
+<option value="Tana River">Tana River</option>
+<option value="Bomet Central">Bomet Central</option>
+<option value="Bomet East">Bomet East</option>
+<option value="Chepalungu">Chepalungu</option>
+<option value="Bomet">Bomet</option>
+<option value="Kajiado West">Kajiado West</option>
+<option value="Kajiado East">Kajiado East</option>
+<option value="Kajiado Central">Kajiado Central</option>
+<option value="Kajiado North">Kajiado North</option>
+<option value="Isinya">Isinya</option>
+<option value="Makueni">Makueni</option>
+<option value="Makueni South">Makueni South</option>
+<option value="Makueni North">Makueni North</option>
+<option value="Makueni Central">Makueni Central</option>
+<option value="Machakos Town">Machakos Town</option>
+<option value="Machakos">Machakos</option>
+<option value="Masinga">Masinga</option>
+<option value="Matungulu">Matungulu</option>
+<option value="Yatta">Yatta</option>
+<option value="Kangundo">Kangundo</option>
+<option value="Matungulu">Matungulu</option>
+<option value="Mavoko">Mavoko</option>
+<option value="Machakos West">Machakos West</option>
+<option value="Kangundo">Kangundo</option>
+<option value="Kitui South">Kitui South</option>
+<option value="Kitui Central">Kitui Central</option>
+<option value="Kitui East">Kitui East</option>
+<option value="Kitui West">Kitui West</option>
+<option value="Kalonzo">Kalonzo</option>
+<option value="Machakos East">Machakos East</option>
+<option value="Meru Town">Meru Town</option>
+<option value="Igembe Central">Igembe Central</option>
+<option value="Igembe South">Igembe South</option>
+<option value="Igembe North">Igembe North</option>
+<option value="Meru">Meru</option>
+<option value="Tigania West">Tigania West</option>
+<option value="Tigania East">Tigania East</option>
+<option value="Buuri">Buuri</option>
+<option value="Kibirichia">Kibirichia</option>
+<option value="Ntonyiri">Ntonyiri</option>
+<option value="Isiolo">Isiolo</option>
+<option value="Isiolo North">Isiolo North</option>
+<option value="Isiolo South">Isiolo South</option>
+<option value="Samburu East">Samburu East</option>
+<option value="Samburu West">Samburu West</option>
+<option value="Samburu Central">Samburu Central</option>
+<option value="Nyeri Town">Nyeri Town</option>
+<option value="Mathira">Mathira</option>
+<option value="Kieni">Kieni</option>
+<option value="Othaya">Othaya</option>
+<option value="Tetu">Tetu</option>
+<option value="Mukurweini">Mukurweini</option>
+<option value="Nyeri">Nyeri</option>
+<option value="Karatina">Karatina</option>
+<option value="Mwea">Mwea</option>
+<option value="Kangundo">Kangundo</option>
+<option value="Mavoko">Mavoko</option>
+<option value="Masinga">Masinga</option>
+<option value="Matungulu">Matungulu</option>
+<option value="Machakos West">Machakos West</option>
+<option value="Kitui West">Kitui West</option>
+<option value="Kitui East">Kitui East</option>
+<option value="Kitui Central">Kitui Central</option>
+<option value="Kitui South">Kitui South</option>
+<option value="Chuka">Chuka</option>
+<option value="Chungungo">Chungungo</option>
+<option value="Dadaab">Dadaab</option>
+<option value="Dagoreti">Dagoreti</option>
+<option value="Dandora">Dandora</option>
+<option value="Dara">Dara</option>
+<option value="Digo">Digo</option>
+<option value="Dundori">Dundori</option>
+<option value="Eastleigh">Eastleigh</option>
+<option value="Eldama Ravine">Eldama Ravine</option>
+<option value="Eldoret">Eldoret</option>
+<option value="Embu Town">Embu Town</option>
+<option value="Gikambura">Gikambura</option>
+<option value="Gikambura Town">Gikambura Town</option>
+<option value="Gikambura Ward">Gikambura Ward</option>
+<option value="Gikondo">Gikondo</option>
+<option value="Gikoyo">Gikoyo</option>
+<option value="Gikuyu">Gikuyu</option>
+<option value="Gikuyu Central">Gikuyu Central</option>
+<option value="Gikunyo">Gikunyo</option>
+<option value="Gisebe">Gisebe</option>
+<option value="Gisero">Gisero</option>
+<option value="Gikunyo">Gikunyo</option>
+<option value="Gikundi">Gikundi</option>
+<option value="Gilgil">Gilgil</option>
+<option value="Githa">Githa</option>
+<option value="Githunguri">Githunguri</option>
+<option value="Gize">Gize</option>
+<option value="Giza">Giza</option>
+<option value="Gituamba">Gituamba</option>
+<option value="Gituwe">Gituwe</option>
+<option value="Gikura">Gikura</option>
+<option value="Gikona">Gikona</option>
+<option value="Gikuyush">Gikuyush</option>
+<option value="Gikuyu Ward">Gikuyu Ward</option>
+<option value="Gikambu">Gikambu</option>
+<option value="Gikambura">Gikambura</option>
+<option value="Gikamburu">Gikamburu</option>
+<option value="Gikuru">Gikuru</option>
+<option value="Gikundi">Gikundi</option>
+<option value="Gikunda">Gikunda</option>
+<option value="Gikuine">Gikuine</option>
+<option value="Gikuni">Gikuni</option>
+<option value="Gikangani">Gikangani</option>
+<option value="Giti">Giti</option>
+<option value="Gituama">Gituama</option>
+<option value="Gim">Gim</option>
+<option value="Giteru">Giteru</option>
+<option value="Gikanzi">Gikanzi</option>
+<option value="Gikere">Gikere</option>
+<option value="Gikunda">Gikunda</option>
+<option value="Gilato">Gilato</option>
+<option value="Gikathe">Gikathe</option>
+<option value="Giteke">Giteke</option>
+<option value="Giwa">Giwa</option>
+<option value="Gongoni">Gongoni</option>
+<option value="Galu">Galu</option>
+<option value="Giritu">Giritu</option>
+<option value="Gikia">Gikia</option>
+<option value="Gikere Town">Gikere Town</option>
+<option value="Gituamba">Gituamba</option>
+<option value="Gikui">Gikui</option>
+
+          <option value="Kakamega Central">Kakamega Central</option>
+          <option value="Kakamega North">Kakamega North</option>
+          <option value="Kisii Town">Kisii Town</option>
+          <option value="Kisumu West">Kisumu West</option>
+          <option value="Kiambu Town">Kiambu Town</option>
+          <option value="Kisumu East">Kisumu East</option>
+          <option value="Mombasa">Mombasa</option>
+          <option value="Nairobi">Nairobi</option>
+          <option value="Mandera">Mandera</option>
+          <option value="Uasin Gishu">Uasin Gishu</option>
+          <option value="Wajir">Wajir</option>
+          <!-- Add more constituencies here -->
+        </select>
+      </div>
+
+      <!-- Other Information -->
+      <div class="form-group">
+        <label for="kin-name">Next of Kin's Name</label>
+        <input type="text" id="kin-name" name="kin-name" required>
+      </div>
+      <div class="form-group">
+        <label for="kin-phone">Next of Kin's Phone Number</label>
+        <input type="tel" id="kin-phone" name="kin-phone" required>
+      </div>
+
+      <!-- How did you know about GKIT -->
+      <div class="form-group">
+        <label>How did you know about GKIT?</label>
+        <label><input type="radio" name="awareness" value="internet"> Internet</label><br>
+        <label><input type="radio" name="awareness" value="pamphlet"> Pamphlet</label><br>
+        <label><input type="radio" name="awareness" value="radio"> Radio</label><br>
+        <label><input type="radio" name="awareness" value="other"> Other</label>
+      </div>
+
+      <!-- Donations -->
+      <div class="form-group">
+        <label>Do you want to make a donation?</label>
+        <label>One-off Amount: <input type="text" name="oneoff-donation"></label><br>
+        <label>Monthly Amount: <input type="text" name="monthly-donation"></label><br>
+        <label><input type="checkbox" name="volunteer" value="parttime"> Volunteer Part-Time</label><br>
+        <label><input type="checkbox" name="volunteer" value="fulltime"> Volunteer Full-Time</label>
+      </div>
+
+      <!-- Attach CV -->
+      <div class="form-group">
+        <label for="cv">Attach CV</label>
+        <input type="file" id="cv" name="cv" required>
+      </div>
+
+      <!-- Declaration -->
+      <div class="declaration">
+        <p>
+          <label for="declaration">
+            Declaration: I declare that this information is true, complete, and correct to the best of my knowledge and belief.
+          </label>
+        </p>
+        <input type="text" placeholder="Name" required>
+        <input type="date" required>
+      </div>
+
+      <!-- Submit -->
+      <div class="form-actions">
+        <button type="submit">Submit Application</button>
+      </div>
+    </form>
+  </div>
 </body>
 </html>
