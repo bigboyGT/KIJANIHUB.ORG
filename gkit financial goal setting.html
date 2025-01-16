@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GKIT Financial Goal Setting Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f9;
+            margin: 20px;
+            padding: 20px;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .form-header img {
+            max-height: 80px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <!-- Header with Logos -->
+        <div class="form-header">
+            <img src="https://i.ibb.co/vVmMCCQ/images.png" alt="Logo 1">
+            <img src="https://i.ibb.co/SJWXy40/images.png" alt="Logo 2">
+        </div>
+
+        <h1>GKIT Financial Goal Setting Form</h1>
+        <h2>Putting Your Goals in Writing</h2>
+        <p><strong>Note:</strong> Goal setting works best when goals are specific, written down, and inspirational!</p>
+
+        <form action="#" method="post">
+            <!-- Reasons for building a Green Enterprise -->
+            <label for="reason1">Reason 1 for building your Green Enterprise:</label>
+            <textarea id="reason1" name="reason1" rows="3" required></textarea>
+
+            <label for="reason2">Reason 2 for building your Green Enterprise:</label>
+            <textarea id="reason2" name="reason2" rows="3" required></textarea>
+
+            <label for="reason3">Reason 3 for building your Green Enterprise:</label>
+            <textarea id="reason3" name="reason3" rows="3" required></textarea>
+
+            <!-- Financial Goals -->
+            <h3>Financial Goals</h3>
+            <label for="currentIncome">Current monthly income (KES):</label>
+            <input type="number" id="currentIncome" name="currentIncome" required>
+
+            <label for="income3months">Monthly income goal in 3 months (KES):</label>
+            <input type="number" id="income3months" name="income3months" required>
+
+            <label for="income6months">Monthly income goal in 6 months (KES):</label>
+            <input type="number" id="income6months" name="income6months" required>
+
+            <label for="income1year">Monthly income goal in 1 year (KES):</label>
+            <input type="number" id="income1year" name="income1year" required>
+
+            <!-- Commitment -->
+            <h3>Commitment</h3>
+            <label for="hours">Hours per week you commit to your Green Enterprise:</label>
+            <input type="number" id="hours" name="hours" required>
+
+            <label for="mentorCommitment">Mentorship commitment:</label>
+            <textarea id="mentorCommitment" name="mentorCommitment" rows="2" required>I will commit to mentor another Green Champion to establish a Green Enterprise.</textarea>
+
+            <!-- Submit Button -->
+            <button type="submit">Submit Your Goals</button>
+        </form>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>The Greening Kenya Initiative Trust</strong></p>
+            <p>P.O. Box 40168 - 00100, Nairobi, Kenya</p>
+            <p>Tel: 0722984992 / 0712062393 / 0713257570 / 0720273218</p>
+            <p>Email: <a href="mailto:greeningkenyainitiativetrust2030@gmail.com">greeningkenyainitiativetrust2030@gmail.com</a></p>
+        </div>
+    </div>
+</body>
+</html>

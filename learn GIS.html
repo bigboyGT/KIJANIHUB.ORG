@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online GIS Course | Kijani Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background: linear-gradient(135deg, #7c6a0a, #fa9500);
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        header h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        header p {
+            font-size: 1.3rem;
+            margin: 10px 0 0;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #babd8d;
+            padding: 15px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+        nav a:hover {
+            color: #ffdac6;
+            transform: scale(1.1);
+        }
+        .content {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .module {
+            background: linear-gradient(135deg, #ffffff, #f4f4f9);
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .module:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .module h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #fa9500;
+            display: flex;
+            align-items: center;
+        }
+        .module h3::before {
+            content: '\2713';
+            margin-right: 10px;
+            color: #7c6a0a;
+        }
+        .module p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #fa9500, #eb6424);
+            color: white;
+            padding: 12px 25px;
+            margin: 10px 0;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .btn:hover {
+            background: linear-gradient(135deg, #eb6424, #fa9500);
+            transform: scale(1.05);
+        }
+        footer {
+            background-color: #7c6a0a;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+        footer a {
+            color: #ffdac6;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .hero {
+            background: url('https://source.unsplash.com/1200x400/?mapping,environment') no-repeat center center/cover;
+            color: #ffffff;
+            text-align: center;
+            padding: 120px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .hero h1, .hero p {
+            position: relative;
+            z-index: 1;
+            text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .hero h1 {
+            font-size: 4rem;
+            animation: fadeInDown 1s ease;
+        }
+        .hero p {
+            font-size: 1.4rem;
+            animation: fadeInUp 1s ease;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        ul li::before {
+            content: '\2022';
+            color: #fa9500;
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        ul li a {
+            color: #fa9500;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        ul li a:hover {
+            color: #eb6424;
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to KijaniHub's Online GIS Course</h1>
+        <p>Empowering Communities with Open GIS Solutions</p>
+    </header>
+
+    <div class="hero">
+        <h1>Learn GIS and get certified </h1>
+        <p>Master GIS tools to map your world and drive sustainable change.</p>
+    </div>
+
+    <nav>
+        <a href="#about">About</a>
+        <a href="#modules">Modules</a>
+        <a href="#resources">Resources</a>
+        <a href="#community">Community</a>
+    </nav>
+
+    <div class="content">
+        <section id="about">
+            <h2>About the Course</h2>
+            <p>This online GIS course by Kijani Hub is designed to teach environmental enthusiasts, students, and community members how to use GIS tools for sustainable development and biodiversity mapping. Learn at your own pace using open-source tools like QGIS and OpenStreetMap.</p>
+        </section>
+
+        <section id="modules">
+            <h2>Course Modules</h2>
+            <div class="module">
+                <h3>Module 1: Introduction to GIS</h3>
+                <p>Understand the basics of GIS and its applications in environmental science and community mapping.</p>
+                <a class="btn" href="#">Watch Lesson</a>
+            </div>
+            <div class="module">
+<h3>Module 2: Installing and Using QGIS</h3>
+                <p>Learn how to download, install, and navigate QGIS, a free and open-source GIS tool.</p>
+                <a class="btn" href="#">Watch Lesson</a>
+            </div>
+            <div class="module">
+                <h3>Module 3: Data Collection and Management</h3>
+                <p>Explore methods for collecting and managing GIS data using OpenStreetMap and other tools.</p>
+                <a class="btn" href="#">Watch Lesson</a>
+            </div>
+            <div class="module">
+                <h3>Module 4: Environmental Mapping</h3>
+                <p>Create environmental maps for biodiversity tracking and sustainable development projects.</p>
+                <a class="btn" href="#">Watch Lesson</a>
+            </div>
+            <div class="module">
+                <h3>Module 5: Hands-on Project</h3>
+                <p>Apply your skills in a real-world mapping project focused on your local community.</p>
+                <a class="btn" href="#">Start Project</a>
+            </div>
+        </section>
+
+        <section id="resources">
+            <h2> Resources</h2>
+            <ul>
+                <li><a href="https://qgis.org">QGIS Official Website</a></li>
+                <li><a href="https://www.openstreetmap.org">OpenStreetMap</a></li>
+                <li><a href="https://www.youtube.com">YouTube Tutorials</a></li>
+                <li><a href="https://classroom.google.com">Google Classroom</a></li>
+            </ul>
+        </section>
+
+        <section id="community">
+            <h2>Join Our Community</h2>
+            <p>Connect with other learners through our community channels:</p>
+            <ul>
+                <li><a href="https://wa.me/">WhatsApp Group</a></li>
+                <li><a href="https://t.me/">Telegram Channel</a></li>
+                <li><a href="https://www.linkedin.com/in/george-boge-7a61a9269">LinkedIn</a></li>
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <p>Kijani Hub © 2025 | Empowering Communities Through Technology</p>
+        <p>Contact: <a href="mailto:kijanihub@gmail.com">kijanihub@gmail.com</a></p>
+    </footer>
+</body>
+</html>
