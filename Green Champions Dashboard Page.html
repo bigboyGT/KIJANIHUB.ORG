@@ -3,278 +3,1073 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Environmental Projects Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>green champions: Advanced Environmental Analytics Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.4/dist/gsap.min.js"></script>
     <style>
-        /* General Reset */
+        :root {
+            --primary-dark: #1b5e20;
+            --primary-main: #2e7d32;
+            --primary-light: #4caf50;
+            --accent-dark: #004d40;
+            --accent-main: #00796b;
+            --accent-light: #b2dfdb;
+            --text-primary: #263238;
+            --text-secondary: #546e7a;
+            --background: #f5f7fa;
+            --surface: #ffffff;
+            --error: #d32f2f;
+            --warning: #ffa000;
+            --success: #388e3c;
+        }
+
+        /* Enhanced Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Body Styling */
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* Header Section */
+        /* Sophisticated Header with Parallax Effect */
         header {
+            position: relative;
+            height: 80vh;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
             color: white;
-            padding: 20px 40px;
-            background: linear-gradient(90deg, #4caf50, #2e7d32);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 0 2rem;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary-dark), var(--accent-dark));
+            isolation: isolate;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover;
+            opacity: 0.4;
+            z-index: -1;
+            animation: parallax 20s linear infinite;
+        }
+
+        @keyframes parallax {
+            0% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.05) translateY(-20px); }
+            100% { transform: scale(1) translateY(0); }
         }
 
         header h1 {
-            font-size: 2.8em;
-            margin: 10px 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease-out;
         }
 
         header p {
-            font-size: 1.2em;
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            max-width: 800px;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease-out 0.2s forwards;
+            opacity: 0;
         }
 
-        /* Section Styling */
+        .header-cta {
+            display: flex;
+            gap: 1.5rem;
+            animation: fadeInUp 1s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modern Section Design */
         section {
-            margin: 30px auto;
-            padding: 20px;
-            max-width: 1200px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 5rem auto;
+            padding: 3rem;
+            max-width: 1400px;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-light), var(--accent-main));
+        }
+
+        section:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.2);
         }
 
         section h2 {
-            font-size: 2em;
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
             text-align: center;
-            margin-bottom: 20px;
-            color: #2e7d32;
+            margin-bottom: 2.5rem;
+            color: var(--primary-dark);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        /* Green Champions Dashboard */
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent-main));
+            border-radius: 2px;
+        }
+
+        /* Enhanced Dashboard Grid */
         .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--surface) 0%, #f8f9fa 100%);
+            border-radius: 12px;
             text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent-main));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-main);
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-main));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+            color: var(--primary-dark);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .stat-card .stat-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Animated Progress Cards */
+        .progress-card {
+            position: relative;
+            padding: 2rem;
+            border-radius: 12px;
+            background: var(--surface);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .progress-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .progress-card .project-meta {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
-        .dashboard .stat {
-            width: 300px;
-            margin: 20px;
-            padding: 20px;
-            background: #a5d6a7;
-            border-radius: 10px;
-            font-size: 1.2em;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
+        .progress-card .progress-container {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 1.5rem 0;
+            overflow: hidden;
         }
 
-        .dashboard .stat:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        .progress-card .progress-bar {
+            height: 100%;
+            border-radius: 5px;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent-main));
+            transition: width 1.5s ease-out;
+            position: relative;
         }
 
-        .dashboard .stat strong {
-            font-size: 1.5em;
-            color: #1b5e20;
+        .progress-card .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                            rgba(255,255,255,0) 0%, 
+                            rgba(255,255,255,0.3) 50%, 
+                            rgba(255,255,255,0) 100%);
+            animation: shimmer 2s infinite;
         }
 
-        .dashboard .btn {
-            margin-top: 20px;
-            padding: 12px 30px;
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-card .funding-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-card .funding-amount {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        /* Modern Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 2rem;
             border: none;
-            background: #2e7d32;
-            color: white;
-            font-size: 1em;
-            font-weight: bold;
-            border-radius: 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .dashboard .btn:hover {
-            background: #66bb6a;
-            transform: scale(1.1);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Climate Project Tracker */
-        .tracker .project {
-            margin: 20px 0;
-            padding: 20px;
-            background: #b2dfdb;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .tracker .project:hover {
-            transform: scale(1.03);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .tracker .project h3 {
-            margin-bottom: 10px;
-        }
-
-        .tracker .project button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            border: none;
-            background: #004d40;
-            color: white;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        .tracker .project button:hover {
-            background: #00796b;
-            transform: scale(1.05);
-        }
-
-        .tracker .project button a {
-            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             text-decoration: none;
         }
 
-        /* Village Barazas Digital Hub */
-        .hub img {
-            max-width: 100%;
-            border-radius: 10px;
-            margin: 20px 0;
-            transition: transform 0.3s;
-        }
-
-        .hub img:hover {
-            transform: scale(1.05);
-        }
-
-        .hub button {
-            padding: 10px 20px;
-            border: none;
-            background: #33691e;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-main));
             color: white;
-            font-weight: bold;
-            font-size: 1em;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
         }
 
-        .hub button:hover {
-            background: #558b2f;
-            transform: scale(1.1);
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(46, 125, 50, 0.3);
         }
 
-        /* Public Participation Portal */
-        .portal form {
-            margin: 20px 0;
-            display: flex;
-            flex-direction: column;
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--accent-light), var(--accent-main));
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 121, 107, 0.3);
+        }
+
+        .btn-icon {
+            margin-right: 0.5rem;
+        }
+
+        /* Interactive Digital Hub */
+        .hub-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
             align-items: center;
         }
 
-        .portal input, .portal textarea {
-            margin: 10px 0;
-            padding: 10px;
-            width: 80%;
-            max-width: 500px;
-            border: 1px solid #1976d2;
-            border-radius: 5px;
+        .hub-image {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            height: 400px;
+            position: relative;
         }
 
-        .portal button {
-            padding: 10px 20px;
-            border: none;
-            background: #0d47a1;
-            color: white;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
+        .hub-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
-        .portal button:hover {
-            background: #1976d2;
+        .hub-image:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .hub-image:hover img {
             transform: scale(1.05);
         }
 
+        .hub-content {
+            padding: 1rem;
+        }
+
+        .hub-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+
+        .hub-content p {
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .hub-features {
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-main));
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .feature-text h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: var(--primary-dark);
+        }
+
+        .feature-text p {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Advanced Form Styles */
+        .portal-form {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+            background-color: white;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-main));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(46, 125, 50, 0.3);
+        }
+
+        /* Advanced Chart Container */
+        .chart-section {
+            padding: 3rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            border-radius: 16px;
+            margin: 3rem auto;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+            text-align: center;
+        }
+
         /* Responsive Design */
-        @media (max-width: 768px) {
-            .dashboard .stat, .tracker .project {
-                width: 90%;
-                margin: 10px auto;
+        @media (max-width: 1200px) {
+            .hub-container {
+                grid-template-columns: 1fr;
             }
+            
+            .hub-image {
+                height: 300px;
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 2rem 1rem;
+                margin: 3rem auto;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        [data-aos] {
+            opacity: 0;
+            transition-property: opacity, transform;
+        }
+
+        [data-aos="fade-up"] {
+            transform: translateY(30px);
+        }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating Elements */
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--primary-dark);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 0.5rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Notification Badge */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 50px;
+            background-color: var(--primary-light);
+            color: white;
         }
     </style>
 </head>
 <body>
+    <!-- Enhanced Header with Parallax -->
     <header>
-        <h1>Environmental Projects Dashboard</h1>
-        <p>Explore various initiatives and opportunities for sustainable development.</p>
+        <h1green champions</h1>
+        <p>Comprehensive monitoring and engagement platform for sustainable development initiatives</p>
+        <div class="header-cta">
+            <a href="#dashboard" class="btn btn-primary">
+                <i class="fas fa-chart-line btn-icon"></i>View Dashboard
+            </a>
+            <a href="#participate" class="btn btn-secondary">
+                <i class="fas fa-hands-helping btn-icon"></i>Get Involved
+            </a>
+        </div>
     </header>
 
     <!-- Green Champions Dashboard -->
-    <section>
-        <h2>Green Champions Dashboard</h2>
+    <section id="dashboard" data-aos="fade-up">
+        <h2>Sustainability Metrics Dashboard</h2>
         <div class="dashboard">
-            <div class="stat">Trees Planted: <strong>1,234</strong></div>
-            <div class="stat">CO₂ Offset: <strong>12,345 kg</strong></div>
-            <div class="stat">Communities Impacted: <strong>56</strong></div>
-            <a href="registergreen champions.html" target="_blank" class="btn">REGISTER GREEN CHAMPIONS</a>
-            <a href="gkit financial goal setting.html" target="_blank" class="btn">gkit financial goal setting</a>
-
+            <div class="stat-card">
+                <i class="fas fa-tree"></i>
+                <div class="stat-value">1,847</div>
+                <div class="stat-label">Trees Planted</div>
+                <div class="badge" style="margin-top: 1rem;">+12% this month</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-cloud"></i>
+                <div class="stat-value">28,456 <small>kg</small></div>
+                <div class="stat-label">CO₂ Offset</div>
+                <div class="badge" style="margin-top: 1rem;">Equivalent to 200 cars</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div class="stat-value">89</div>
+                <div class="stat-label">Communities Engaged</div>
+                <div class="badge" style="margin-top: 1rem;">5 new this week</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-lightbulb"></i>
+                <div class="stat-value">42</div>
+                <div class="stat-label">Active Projects</div>
+                <div class="badge" style="margin-top: 1rem;">3 awaiting funding</div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="registergreen champions.html" class="btn btn-primary">
+                <i class="fas fa-user-plus btn-icon"></i>Register as Green Champion
+            </a>
+            <a href="gkit-financial-goal-setting.html" class="btn btn-secondary" style="margin-left: 1rem;">
+                <i class="fas fa-chart-pie btn-icon"></i>Financial Planning Toolkit
+            </a>
         </div>
     </section>
 
     <!-- Climate Project Funding Tracker -->
-    <section>
-        <h2>Climate Project Funding Tracker</h2>
+    <section data-aos="fade-up">
+        <h2>Climate Action Project Tracker</h2>
         <div class="tracker">
-            <div class="project">
+            <div class="progress-card">
                 <h3>Solar Energy Initiative</h3>
-                <p>Funding Goal: ksh500,000</p>
-                <p>Current Funding: ksh300,000</p>
-                <button><a href="donate.html" target="_blank" class="cta-button">Contribute Now</a></button>
+                <div class="project-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Nairobi County</span>
+                    <span><i class="fas fa-calendar-alt"></i> Target: Dec 2023</span>
+                </div>
+                <p>Installation of solar panels in 10 community centers to provide clean energy access to 5,000 residents.</p>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 60%;"></div>
+                </div>
+                <div class="funding-details">
+                    <span class="funding-amount">Ksh 300,000 raised</span>
+                    <span>of Ksh 500,000 goal</span>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <a href="donate.html" class="btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-donate btn-icon"></i>Contribute
+                    </a>
+                    <a href="project-details.html" class="btn btn-secondary" style="flex: 1;">
+                        <i class="fas fa-info-circle btn-icon"></i>Details
+                    </a>
+                </div>
             </div>
-            <div class="project">
+            
+            <div class="progress-card">
                 <h3>Rainwater Harvesting Program</h3>
-                <p>Funding Goal: ksh200,000</p>
-                <p>Current Funding: ksh120,000</p>
-                <button><a href="donate.html" target="_blank" class="cta-button">Contribute Now</a></button>
+                <div class="project-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Kajiado County</span>
+                    <span><i class="fas fa-calendar-alt"></i> Target: Mar 2024</span>
+                </div>
+                <p>Construction of rainwater collection systems for 15 schools in arid regions to ensure water security.</p>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 40%;"></div>
+                </div>
+                <div class="funding-details">
+                    <span class="funding-amount">Ksh 80,000 raised</span>
+                    <span>of Ksh 200,000 goal</span>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <a href="donate.html" class="btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-donate btn-icon"></i>Contribute
+                    </a>
+                    <a href="project-details.html" class="btn btn-secondary" style="flex: 1;">
+                        <i class="fas fa-info-circle btn-icon"></i>Details
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Village Barazas Digital Hub -->
-    <section>
-        <h2>Village Barazas Digital Hub</h2>
-        <div class="hub">
-            <img src="https://i.ibb.co/GVfFv4z/maasai-village-masai-mara-kenya.jpg" alt="maasai-village-masai-mara-kenya">
-            <p>Join discussions and access valuable resources for sustainable development.</p>
+    <section data-aos="fade-up">
+        <h2>Community Engagement Hub</h2>
+        <div class="hub-container">
+            <div class="hub-content">
+                <h3>Digital Village Barazas</h3>
+                <p>Our interactive platform connects communities across Kenya to share knowledge, best practices, and collaborate on environmental initiatives. Participate in virtual meetings, access training materials, and join the conversation on sustainable development.</p>
+                
+                <div class="hub-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h4>Interactive Forums</h4>
+                            <p>Join topic-specific discussions with experts and community leaders</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h4>Event Calendar</h4>
+                            <p>Never miss important meetings, training sessions, or deadlines</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-download"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h4>Resource Library</h4>
+                            <p>Access manuals, templates, and case studies for your projects</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-door-open btn-icon"></i>Enter Hub
+                    </a>
+                    <a href="#" class="btn btn-secondary">
+                        <i class="fas fa-video btn-icon"></i>View Tutorial
+                    </a>
+                </div>
+            </div>
+            <div class="hub-image floating">
+                <img src="https://images.unsplash.com/photo-1566438480900-0609be27a4be?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Community meeting">
+            </div>
         </div>
     </section>
 
     <!-- Public Participation Portal -->
-    <section>
-        <h2>Public Participation Portal</h2>
-        <div class="portal">
-            <form>
-                <input type="text" placeholder="Your Name" required>
-                <textarea placeholder="Your Suggestions/Feedback" rows="5" required></textarea>
-                <button>Submit</button>
+    <section id="participate" data-aos="fade-up">
+        <h2>Community Input Portal</h2>
+        <div class="portal-form">
+            <form id="participationForm">
+                <div class="form-group">
+                    <label for="name" class="form-label">Your Name</label>
+                    <input type="text" id="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="community" class="form-label">Community/Organization</label>
+                    <input type="text" id="community" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="suggestions" class="form-label">Your Suggestions or Feedback</label>
+                    <textarea id="suggestions" class="form-control" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Areas of Interest</label>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.5rem;">
+                        <label style="display: flex; align-items: center;">
+                            <input type="checkbox" name="interests" value="reforestation" style="margin-right: 0.5rem;">
+                            Reforestation
+                        </label>
+                        <label style="display: flex; align-items: center;">
+                            <input type="checkbox" name="interests" value="renewable-energy" style="margin-right: 0.5rem;">
+                            Renewable Energy
+                        </label>
+                        <label style="display: flex; align-items: center;">
+                            <input type="checkbox" name="interests" value="water-conservation" style="margin-right: 0.5rem;">
+                            Water Conservation
+                        </label>
+                        <label style="display: flex; align-items: center;">
+                            <input type="checkbox" name="interests" value="waste-management" style="margin-right: 0.5rem;">
+                            Waste Management
+                        </label>
+                        <label style="display: flex; align-items: center;">
+                            <input type="checkbox" name="interests" value="education" style="margin-right: 0.5rem;">
+                            Education
+                        </label>
+                        <label style="display: flex; align-items: center;">
+                            <input type="checkbox" name="interests" value="policy" style="margin-right: 0.5rem;">
+                            Policy Advocacy
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane" style="margin-right: 0.5rem;"></i>Submit Your Input
+                </button>
             </form>
         </div>
     </section>
+
+    <!-- Advanced Analytics Section -->
+    <section class="chart-section" data-aos="fade-up">
+        <h2>Environmental Impact Analytics</h2>
+        <div class="chart-grid">
+            <div class="chart-card">
+                <div class="chart-title">Project Funding Distribution</div>
+                <div id="fundingChart" style="height: 300px;"></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Carbon Offset Timeline</div>
+                <div id="carbonChart" style="height: 300px;"></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Community Participation</div>
+                <div id="participationChart" style="height: 550px;"></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Resource Allocation</div>
+                <div id="resourceChart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Initialize AOS (Animate On Scroll)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simple AOS implementation
+            const aosElements = document.querySelectorAll('[data-aos]');
+            
+            const animateOnScroll = () => {
+                aosElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('aos-animate');
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Run once on load
+            
+            // Animate progress bars
+            document.querySelectorAll('.progress-bar').forEach(bar => {
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = bar.getAttribute('data-width') || bar.style.width;
+                }, 500);
+            });
+        });
+
+        // Funding Chart (using ApexCharts)
+        const fundingOptions = {
+            series: [{
+                name: 'Funding',
+                data: [300000, 80000, 150000, 200000]
+            }],
+            chart: {
+                type: 'bar',
+                height: '100%',
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800
+                }
+            },
+            colors: ['#4CAF50'],
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: ['Solar Energy', 'Rainwater Harvesting', 'Waste Mgmt', 'Education'],
+                labels: {
+                    formatter: function(val) {
+                        return 'Ksh ' + val.toLocaleString();
+                    }
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return 'Ksh ' + val.toLocaleString();
+                    }
+                }
+            }
+        };
+        const fundingChart = new ApexCharts(document.querySelector("#fundingChart"), fundingOptions);
+        fundingChart.render();
+
+        // Carbon Chart
+        const carbonOptions = {
+            series: [{
+                name: 'Carbon Offset (kg)',
+                data: [1200, 3100, 5400, 8200, 11200, 15800, 19400, 22400, 25800, 28456]
+            }],
+            chart: {
+                height: '100%',
+                type: 'area',
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800
+                }
+            },
+            colors: ['#00796B'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                }
+            },
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','nov','dec'],
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val.toLocaleString() + ' kg CO₂';
+                    }
+                }
+            }
+        };
+        const carbonChart = new ApexCharts(document.querySelector("#carbonChart"), carbonOptions);
+        carbonChart.render();
+
+        // Participation Chart
+        const participationOptions = {
+            series: [{
+                name: 'Participants',
+                data: [45, 52, 38, 24, 33, 26, 21, 20, 6, 8, 15, 10]
+            }],
+            chart: {
+                height: '200%',
+                type: 'polarArea',
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800
+                }
+            },
+            colors: ['#4CAF50', '#8BC34A', '#CDDC39', '#FFC107', '#FF9800', '#FF5722', '#795548', '#9E9E9E', '#607D8B', '#2196F3', '#3F51B5', '#673AB7', '#CDDC39', '#FFC107', '#FF9800', '#FF5722', '#795548', '#9E9E9E', '#607D8B', '#2196F3', '#FF9800', '#FF5722' ],
+            stroke: {
+                colors: ['#fff']
+            },
+            fill: {
+                opacity: 0.8
+            },
+            labels: [ 'Agriculture', 'Waste Mgmt', 'Other','Agriculture ',' Lands','Water',' Education','Housing',' Forestry ','Roads','Livestock ','Social Security ',' Transport','Textile','Fisheries ','Industrialization','Trade ','Sports','Security','Energy ','Culture','Digital',],
+            yaxis: {
+                show: false
+            },
+            legend: {
+                position: 'right'
+            }
+        };
+        const participationChart = new ApexCharts(document.querySelector("#participationChart"), participationOptions);
+        participationChart.render();
+
+        // Resource Chart
+        const resourceOptions = {
+            series: [44, 55, 13, 43, 22],
+            chart: {
+                height: '100%',
+                type: 'donut',
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800
+                }
+            },
+            colors: ['#4CAF50', '#8BC34A', '#CDDC39', '#FFC107', '#FF9800'],
+            labels: ['Personnel', 'Equipment', 'Materials', 'Transport', 'Admin'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total Budget',
+                                formatter: function(w) {
+                                    return 'Ksh 1.2M';
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        const resourceChart = new ApexCharts(document.querySelector("#resourceChart"), resourceOptions);
+        resourceChart.render();
+
+        // Form submission
+        document.getElementById('participationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Here you would typically send the form data to a server
+            alert('Thank you for your submission! Your input is valuable to us.');
+            this.reset();
+        });
+
+        // GSAP animations
+        gsap.from("header h1", {duration: 1, y: -50, opacity: 0, ease: "power2.out"});
+        gsap.from("header p", {duration: 1, y: -50, opacity: 0, ease: "power2.out", delay: 0.2});
+        gsap.from(".header-cta", {duration: 1, y: -50, opacity: 0, ease: "power2.out", delay: 0.4});
+    </script>
 </body>
 </html>

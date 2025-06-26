@@ -1,71 +1,1121 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Environmental Incident Reporting</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Environmental Incident Reporting Network</title>
+  
+  <!-- Leaflet.js Map Library -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- Leaflet Plugins -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+  
+  <!-- Date Picker -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Roboto+Slab:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #0277bd;
+      --primary-dark: #01579b;
+      --primary-light: #b3e5fc;
+      --secondary-color: #2e7d32;
+      --danger-color: #c62828;
+      --warning-color: #f9a825;
+      --success-color: #2e7d32;
+      --dark-text: #263238;
+      --light-text: #eceff1;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --map-height: 500px;
+    }
     
-    <!-- Link CSS -->
-    <link rel="stylesheet" href="report incident.css">
-    <!-- Leaflet.js Map Library -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      color: var(--dark-text);
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    /* Header with Navigation */
+    header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      color: var(--light-text);
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .logo i {
+      font-size: 2rem;
+      color: #fff;
+    }
+    
+    .logo-text {
+      font-family: 'Roboto Slab', serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    
+    nav a {
+      color: var(--light-text);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    nav a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Main Content Layout */
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    
+    @media (max-width: 1200px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Card Styling */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--primary-light);
+    }
+    
+    .card-title {
+      font-family: 'Roboto Slab', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    
+    .card-icon {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+    
+    /* Form Styling */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+    
+    .required:after {
+      content: " *";
+      color: var(--danger-color);
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(2, 119, 189, 0.2);
+    }
+    
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    /* Custom Select Styling */
+    .select-wrapper {
+      position: relative;
+    }
+    
+    .select-wrapper:after {
+      content: "▼";
+      font-size: 0.8rem;
+      color: var(--primary-dark);
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    
+    /* Range Slider */
+    .range-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    input[type="range"] {
+      -webkit-appearance: none;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      flex: 1;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      background: var(--primary-dark);
+    }
+    
+    .range-value {
+      min-width: 30px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    
+    /* File Upload Styling */
+    .file-upload {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .file-upload-btn {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px dashed var(--primary-color);
+      border-radius: 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .file-upload-btn:hover {
+      background: rgba(179, 229, 252, 0.5);
+    }
+    
+    .file-upload input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .file-preview {
+      margin-top: 1rem;
+      display: none;
+    }
+    
+    .file-preview img {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+    
+    /* Button Styling */
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-secondary {
+      background: #757575;
+    }
+    
+    .btn-secondary:hover {
+      background: #616161;
+    }
+    
+    .btn-danger {
+      background: var(--danger-color);
+    }
+    
+    .btn-danger:hover {
+      background: #b71c1c;
+    }
+    
+    .btn-success {
+      background: var(--success-color);
+    }
+    
+    .btn-success:hover {
+      background: #1b5e20;
+    }
+    
+    .btn-block {
+      display: block;
+      width: 100%;
+    }
+    
+    /* Map Styling */
+    #map {
+      height: var(--map-height);
+      width: 100%;
+      border-radius: 8px;
+      z-index: 1;
+    }
+    
+    /* Incident Severity Indicators */
+    .severity-indicator {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    
+    .severity-1 { background-color: #4caf50; }
+    .severity-2 { background-color: #8bc34a; }
+    .severity-3 { background-color: #ffc107; }
+    .severity-4 { background-color: #ff9800; }
+    .severity-5 { background-color: #f44336; }
+    
+    /* Dashboard Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin: 0.5rem 0;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #757575;
+    }
+    
+    /* Incident List */
+    .incident-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .incident-item {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.2s ease;
+    }
+    
+    .incident-item:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .incident-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    
+    .incident-type {
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    
+    .incident-date {
+      color: #757575;
+      font-size: 0.9rem;
+    }
+    
+    .incident-location {
+      font-size: 0.9rem;
+      color: #616161;
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      animation: modalFadeIn 0.3s ease;
+    }
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .modal-title {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+    }
+    
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #757575;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      nav ul {
+        gap: 1rem;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Animation Classes */
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(2, 119, 189, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(2, 119, 189, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(2, 119, 189, 0); }
+    }
+    
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+  
 </head>
-
 <body>
-    <header>
-        <h1>Report Environmental Incidents</h1>
-    </header>
+  <!-- Header with Navigation -->
+  <header>
+    <div class="logo">
+      <i class="fas fa-globe-americas"></i>
+      <span class="logo-text">EcoWatch Network</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="#" class="active"><i class="fas fa-plus-circle"></i> Report Incident</a></li>
+        <li><a href="#"><i class="fas fa-map-marked-alt"></i> Incident Map</a></li>
+        <li><a href="#"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <main>
-        <!-- Form Section -->
-        <section>
-            <h2>Incident Details</h2>
-            <form id="incidentForm" enctype="multipart/form-data">
-                <label for="incidentType">Incident Type:</label>
-                <select id="incidentType" name="incidentType" required>
-                    <option value="" disabled selected>Select an Incident Type</option>
-                    <option value="pollution">Pollution</option>
-                    <option value="deforestation">Deforestation</option>
-                    <option value="wildlife poaching">Wildlife Poaching</option>
-                    <option value="illegal dumping">Illegal Dumping</option>
-                </select>
-
-                <label for="incidentDetails">Incident Description:</label>
-                <textarea id="incidentDetails" name="incidentDetails" placeholder="Describe the incident" required></textarea>
-
-                <label for="location">Location Coordinates:</label>
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Left Column -->
+    <div class="left-column">
+      <!-- Incident Reporting Form -->
+      <div class="card pulse">
+        <div class="card-header">
+          <h2 class="card-title"><i class="fas fa-exclamation-triangle card-icon"></i> Report New Environmental Incident</h2>
+        </div>
+        
+        <form id="incidentForm" enctype="multipart/form-data">
+          <!-- Incident Type -->
+          <div class="form-group">
+            <label for="incidentType" class="required">Incident Type</label>
+            <div class="select-wrapper">
+              <select id="incidentType" name="incidentType" required>
+                <option value="" disabled selected>Select incident type</option>
+                <option value="air_pollution">Air Pollution</option>
+                <option value="water_pollution">Water Pollution</option>
+                <option value="soil_contamination">Soil Contamination</option>
+                <option value="deforestation">Deforestation</option>
+                <option value="wildlife_poaching">Wildlife Poaching</option>
+                <option value="illegal_dumping">Illegal Dumping</option>
+                <option value="oil_spill">Oil Spill</option>
+                <option value="chemical_leak">Chemical Leak</option>
+                <option value="other">Other Environmental Hazard</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Incident Details -->
+          <div class="form-group">
+            <label for="incidentDetails" class="required">Incident Description</label>
+            <textarea id="incidentDetails" name="incidentDetails" placeholder="Provide detailed description of the incident including any visible effects, odors, or immediate dangers..." required></textarea>
+          </div>
+          
+          <!-- Date and Time -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="incidentDate" class="required">Date Observed</label>
+              <input type="datetime-local" id="incidentDate" name="incidentDate" required>
+            </div>
+            <div class="form-group">
+              <label for="reportDate">Reporting Date</label>
+              <input type="datetime-local" id="reportDate" name="reportDate" readonly>
+            </div>
+          </div>
+          
+          <!-- Location Information -->
+          <div class="form-group">
+            <label class="required">Location Information</label>
+            <div class="form-row">
+              <div class="form-group">
                 <input type="text" id="latitude" name="latitude" placeholder="Latitude" readonly>
+              </div>
+              <div class="form-group">
                 <input type="text" id="longitude" name="longitude" placeholder="Longitude" readonly>
-                <button type="button" id="getLocation">Get Current Location</button>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <button type="button" id="getLocation" class="btn btn-secondary">
+                  <i class="fas fa-location-arrow"></i> Get Current Location
+                </button>
+              </div>
+              <div class="form-group">
+                <button type="button" id="selectOnMap" class="btn btn-secondary">
+                  <i class="fas fa-map-marker-alt"></i> Select on Map
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" id="address" name="address" placeholder="Or enter address manually">
+            </div>
+          </div>
+          
+          <!-- Severity and Impact -->
+          <div class="form-group">
+            <label for="severity" class="required">Severity Level</label>
+            <div class="range-container">
+              <input type="range" id="severity" name="severity" min="1" max="5" value="3" oninput="updateSeverityValue(this.value)">
+              <span id="severityValue" class="range-value">3</span>
+            </div>
+            <div class="severity-labels">
+              <span style="float: left;">Minor</span>
+              <span style="float: right;">Critical</span>
+              <div style="clear: both;"></div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="affectedArea">Estimated Affected Area (sq km)</label>
+            <input type="number" id="affectedArea" name="affectedArea" min="0" step="0.1" placeholder="Enter estimated affected area">
+          </div>
+          
+          <!-- Media Upload -->
+          <div class="form-group">
+            <label for="mediaUpload" class="required">Upload Evidence</label>
+            <div class="file-upload">
+              <button type="button" class="file-upload-btn">
+                <i class="fas fa-cloud-upload-alt"></i> Click to upload photos or videos
+              </button>
+              <input type="file" id="mediaUpload" name="media" accept="image/*,video/*" multiple required>
+            </div>
+            <div class="file-preview" id="filePreview"></div>
+          </div>
+          
+          <!-- Reporter Information -->
+          <div class="form-group">
+            <label>Reporter Information (optional)</label>
+            <input type="text" id="reporterName" name="reporterName" placeholder="Your name">
+            <input type="email" id="reporterEmail" name="reporterEmail" placeholder="Your email" class="mt-1">
+            <div class="form-check mt-1">
+              <input type="checkbox" id="anonymous" name="anonymous">
+              <label for="anonymous">Submit anonymously</label>
+            </div>
+          </div>
+          
+          <!-- Form Actions -->
+          <div class="form-group">
+            <button type="submit" class="btn btn-success btn-block">
+              <i class="fas fa-paper-plane"></i> Submit Incident Report
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Recent Incidents -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="fas fa-history card-icon"></i> Recently Reported Incidents</h2>
+        </div>
+        <div class="incident-list" id="recentIncidents">
+          <!-- Will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Column -->
+    <div class="right-column">
+      <!-- Incident Map -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="fas fa-map-marked-alt card-icon"></i> Incident Location</h2>
+        </div>
+        <div id="map"></div>
+        <div class="map-actions mt-2">
+          <button id="clearMarker" class="btn btn-secondary btn-sm">
+            <i class="fas fa-trash-alt"></i> Clear Marker
+          </button>
+        </div>
+      </div>
+      
+      <!-- Incident Statistics -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="fas fa-chart-pie card-icon"></i> Incident Statistics</h2>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <i class="fas fa-exclamation-circle" style="color: var(--primary-color);"></i>
+            <div class="stat-value" id="totalIncidents">0</div>
+            <div class="stat-label">Total Reports</div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-tree" style="color: var(--secondary-color);"></i>
+            <div class="stat-value" id="deforestationCount">0</div>
+            <div class="stat-label">Deforestation</div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-tint" style="color: #2196f3;"></i>
+            <div class="stat-value" id="pollutionCount">0</div>
+            <div class="stat-label">Pollution</div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-paw" style="color: #795548;"></i>
+            <div class="stat-value" id="wildlifeCount">0</div>
+            <div class="stat-label">Wildlife</div>
+          </div>
+        </div>
+        <canvas id="incidentChart" height="200"></canvas>
+      </div>
+      
+      <!-- Emergency Contacts -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="fas fa-phone-alt card-icon"></i> Emergency Contacts</h2>
+        </div>
+        <div class="emergency-contacts">
+          <button class="btn btn-danger btn-block mb-1">
+            <i class="fas fa-phone"></i> Environmental Emergency Hotline
+          </button>
+          <button class="btn btn-secondary btn-block mb-1">
+            <i class="fas fa-phone"></i> Local Wildlife Authority
+          </button>
+          <button class="btn btn-secondary btn-block">
+            <i class="fas fa-phone"></i> Pollution Control Board
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Submission Modal -->
+  <div class="modal" id="submissionModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Report Submission</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div id="modalBody">
+        <p>Your report is being processed...</p>
+      </div>
+    </div>
+  </div>
+  
+ 
+    
+  <!-- JavaScript -->
 
-                <label for="intensity">Incident Intensity:</label>
-                <input type="range" id="intensity" name="intensity" min="1" max="5" value="3" oninput="updateIntensityValue(this.value)">
-                <span id="intensityValue">3</span>
+ <!-- Full JavaScript block: paste just before </body> -->
+<script>
+  const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbwca-Y6Jz7aCHq-faIh_9yO25G6Ye83LctETDfM_MbpEa87O-YhJW2CRtXcqrIyFn5sLA/exec";
 
-                <label for="imageUpload">Upload Incident Image:</label>
-                <input type="file" id="imageUpload" name="image" accept="image/*" required>
+  let map, incidentMarkers, currentMarker, recentIncidents, incidentChart;
 
-                <button type="submit">Submit Incident Report</button>
-            </form>
-        </section>
+  document.addEventListener("DOMContentLoaded", () => {
+    incidentMarkers = L.markerClusterGroup();
+    currentMarker = null;
+    recentIncidents = [];
 
-        <!-- Map Section -->
-        <section>
-            <h2>Incident Location</h2>
-            <div id="map" style="height: 400px;"></div>
-        </section>
-    </main>
+    initMap();
+    initDatePickers();
+    setupFileUpload();
+    setupGeolocation();
+    setupFormHandler();
+    loadRecentIncidents();
+    updateStatistics();
 
-    <footer>
-        <p>&copy; 2025 kijanihub Environmental incident Reporting. All rights reserved.</p>
-    </footer>
+    // Set current datetime
+    document.getElementById("reportDate").value = formatDateTime(new Date());
+  });
 
-    <!-- Link JavaScript -->
-    <script src="report incident.js"></script>
+  function initMap() {
+    map = L.map("map").setView([20, 0], 2);
+    const osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19, attribution: "&copy; OSM"
+    }).addTo(map);
+    const sat = L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      { attribution: "&copy; Esri" }
+    );
+    L.control.layers({ "Map": osm, "Satellite": sat }).addTo(map);
+    L.control.scale().addTo(map);
+
+    map.on("click", e => {
+      if (currentMarker) map.removeLayer(currentMarker);
+      currentMarker = L.marker(e.latlng, { draggable:true }).addTo(map)
+        .bindPopup("Incident Location").openPopup();
+      updateCoordinates(e.latlng.lat, e.latlng.lng);
+      reverseGeocode(e.latlng.lat, e.latlng.lng);
+    });
+
+    document.getElementById("selectOnMap").onclick = () =>
+      alert("Click on the map to select the incident location");
+    document.getElementById("clearMarker").onclick = () => {
+      if (currentMarker) { map.removeLayer(currentMarker); currentMarker = null; }
+      ["latitude","longitude","address"].forEach(id=>document.getElementById(id).value="");
+    };
+  }
+
+  function initDatePickers() {
+    flatpickr("#incidentDate", {
+      enableTime: true,
+      dateFormat: "Y-m-d H:i",
+      defaultDate: new Date(),
+      maxDate: new Date()
+    });
+  }
+
+  function setupFileUpload() {
+    const inp = document.getElementById("mediaUpload"),
+          prev = document.getElementById("filePreview");
+    inp.addEventListener("change", function() {
+      prev.innerHTML = "";
+      prev.style.display = this.files.length ? "flex" : "none";
+      Array.from(this.files).slice(0,3).forEach(file => {
+        if (file.type.startsWith("image/")) {
+          const r = new FileReader();
+          r.onload = e => {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.style.maxWidth = "100px";
+            img.style.marginRight = "10px";
+            prev.appendChild(img);
+          };
+          r.readAsDataURL(file);
+        } else if (file.type.startsWith("video/")) {
+          const icon = document.createElement("i");
+          icon.className = "fas fa-video";
+          icon.style.fontSize = "48px";
+          icon.style.marginRight = "10px";
+          prev.appendChild(icon);
+        }
+      });
+      if (this.files.length > 3) {
+        const more = document.createElement("span");
+        more.textContent = `+${this.files.length - 3} more`;
+        prev.appendChild(more);
+      }
+    });
+  }
+
+  function setupGeolocation() {
+    document.getElementById("getLocation").onclick = () => {
+      if (!navigator.geolocation) {
+        alert("Geolocation not supported");
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          const {latitude:lat, longitude:lng} = pos.coords;
+          if (currentMarker) map.removeLayer(currentMarker);
+          currentMarker = L.marker([lat,lng], {draggable:true}).addTo(map)
+            .bindPopup("Your Location").openPopup();
+          map.setView([lat,lng],13);
+          updateCoordinates(lat,lng);
+          reverseGeocode(lat,lng);
+        },
+        err => alert(`Error getting location: ${err.message}`),
+        {enableHighAccuracy:true, timeout:5000, maximumAge:0}
+      );
+    };
+  }
+
+  function setupFormHandler() {
+    const form = document.getElementById("incidentForm");
+    const modal = document.getElementById("submissionModal");
+    const body = document.getElementById("modalBody");
+
+    form.onsubmit = e => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        alert("Please fill in all required fields");
+        return;
+      }
+      if (!document.getElementById("latitude").value ||
+          !document.getElementById("longitude").value) {
+        alert("Please set the incident location");
+        return;
+      }
+      modal.style.display = "flex";
+      body.innerHTML = "<p>Your report is being processed…</p>";
+
+      const file = document.getElementById("mediaUpload").files[0];
+      if (!file) {
+        body.innerHTML = '<p style="color:red;">❗ Please upload an image.</p>';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const payload = {
+          incidentType: document.getElementById("incidentType").value,
+          description: document.getElementById("incidentDetails").value,
+          dateObserved: document.getElementById("incidentDate").value,
+          latitude: document.getElementById("latitude").value,
+          longitude: document.getElementById("longitude").value,
+          address: document.getElementById("address").value,
+          severity: document.getElementById("severity").value,
+          affectedArea: document.getElementById("affectedArea").value,
+          reporterName: document.getElementById("anonymous").checked
+            ? "Anonymous"
+            : (document.getElementById("reporterName").value || "Anonymous"),
+          reporterEmail: document.getElementById("reporterEmail").value,
+          mediaName: file.name,
+          mediaType: file.type,
+          mediaBase64: reader.result  // includes prefix
+        };
+
+        try {
+          await fetch(APPSCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify(payload)
+          });
+          submitIncident();  // on success
+        } catch(err) {
+          console.error(err);
+          body.innerHTML = `
+            <div style="color:#c62828;text-align:center;padding:1rem;">
+              <p>❌ Submission failed. Please check your connection.</p>
+            </div>`;
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+
+    document.querySelector(".close-modal").onclick = () =>
+      (modal.style.display = "none");
+  }
+
+  function submitIncident() {
+    const form = document.getElementById("incidentForm");
+    const fd = new FormData(form);
+    const incident = {
+      id: Date.now(),
+      type: fd.get("incidentType"),
+      description: fd.get("incidentDetails"),
+      date: fd.get("incidentDate"),
+      lat: parseFloat(fd.get("latitude")),
+      lng: parseFloat(fd.get("longitude")),
+      severity: parseInt(fd.get("severity")),
+      reporter: fd.get("anonymous")==="on"
+        ? "Anonymous"
+        : (fd.get("reporterName") || "Anonymous"),
+      timestamp: new Date().toISOString(),
+    };
+
+    recentIncidents.unshift(incident);
+    if (recentIncidents.length>5) recentIncidents.pop();
+    updateModalSuccess(incident);
+    loadRecentIncidents();
+    updateStatistics();
+    addIncidentToMap(incident);
+
+    form.reset();
+    document.getElementById("filePreview").style.display="none";
+    document.getElementById("filePreview").innerHTML="";
+    document.getElementById("reportDate").value = formatDateTime(new Date());
+    document.getElementById("severityValue").textContent="3";
+    if (currentMarker) {
+      map.removeLayer(currentMarker);
+      currentMarker = null;
+    }
+  }
+
+  function updateModalSuccess(inc) {
+    document.getElementById("modalBody").innerHTML = `
+      <div style="text-align:center;padding:1rem;">
+        <i class="fas fa-check-circle" style="font-size:3rem;color:var(--success-color);margin-bottom:1rem;"></i>
+        <h3 style="color:var(--success-color);">Report Submitted Successfully!</h3>
+        <p>ID: <strong>EID-${inc.id}</strong></p>
+        <button class="btn btn-success" onclick="document.getElementById('submissionModal').style.display='none'">Close</button>
+      </div>`;
+  }
+
+  function loadRecentIncidents() {
+    const c = document.getElementById("recentIncidents");
+    c.innerHTML = "";
+    if (!recentIncidents.length) {
+      c.innerHTML = '<p style="text-align:center;color:#757575;padding:1rem;">No recent incidents</p>';
+      return;
+    }
+    recentIncidents.forEach(i => {
+      const d = document.createElement("div"); d.className="incident-item";
+      d.innerHTML = `
+        <div class="incident-header">
+          <span class="incident-type"><span class="severity-indicator severity-${i.severity}"></span>${i.type}</span>
+          <span class="incident-date">${new Date(i.date).toLocaleDateString()}</span>
+        </div>
+        <div class="incident-location"><i class="fas fa-map-marker-alt"></i> ${i.lat.toFixed(4)}, ${i.lng.toFixed(4)}</div>
+        <div class="incident-description">${i.description.substring(0,100)}...</div>
+      `;
+      c.appendChild(d);
+    });
+  }
+
+  function updateStatistics() {
+    document.getElementById("totalIncidents").textContent = recentIncidents.length;
+    const counts = {
+      deforestation: recentIncidents.filter(i=>i.type==="deforestation").length,
+      pollution: recentIncidents.filter(i=>i.type.includes("pollution")).length,
+      wildlife: recentIncidents.filter(i=>i.type.includes("wildlife")).length
+    };
+    document.getElementById("deforestationCount").textContent = counts.deforestation;
+    document.getElementById("pollutionCount").textContent = counts.pollution;
+    document.getElementById("wildlifeCount").textContent = counts.wildlife;
+    updateChart();
+  }
+
+  function updateChart() {
+    const ctx = document.getElementById("incidentChart").getContext("2d");
+    if (incidentChart) incidentChart.destroy();
+    const data = {
+      "Air Pollution": recentIncidents.filter(i=>i.type==="air_pollution").length,
+      "Water Pollution": recentIncidents.filter(i=>i.type==="water_pollution").length,
+      "Deforestation": recentIncidents.filter(i=>i.type==="deforestation").length,
+      "Wildlife Poaching": recentIncidents.filter(i=>i.type==="wildlife_poaching").length,
+      "Illegal Dumping": recentIncidents.filter(i=>i.type==="illegal_dumping").length,
+      Other: recentIncidents.filter(i=>i.type==="other").length
+    };
+    incidentChart = new Chart(ctx, {
+      type:"doughnut",
+      data:{ labels:Object.keys(data), datasets:[{ data:Object.values(data), borderWidth:1 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:"right" } } }
+    });
+  }
+
+  function addIncidentToMap(inc) {
+    const marker = L.marker([inc.lat,inc.lng],{ icon:getMarkerIcon(inc.type,inc.severity) })
+      .bindPopup(`<b>${inc.type}</b><br>${inc.description.substring(0,100)}...`);
+    incidentMarkers.addLayer(marker);
+    map.addLayer(incidentMarkers);
+    map.fitBounds(incidentMarkers.getBounds());
+  }
+
+  function getMarkerIcon(type,severity) {
+    let color;
+    switch(severity) {
+      case 1: color="#4caf50"; break;
+      case 2: color="#8bc34a"; break;
+      case 3: color="#ffc107"; break;
+      case 4: color="#ff9800"; break;
+      case 5: color="#f44336"; break;
+      default: color="#757575";
+    }
+    let cls="fa-exclamation-triangle";
+    if(type.includes("pollution")) cls="fa-smog";
+    else if(type.includes("deforestation")) cls="fa-tree";
+    else if(type.includes("wildlife")) cls="fa-paw";
+    else if(type.includes("dumping")) cls="fa-trash";
+    return L.divIcon({
+      html:`<div style="background:${color};width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;border:2px solid white;box-shadow:0 2px 5px rgba(0,0,0,0.2)"><i class="fas ${cls}"></i></div>`,
+      className:"", iconSize:[30,30], iconAnchor:[15,15]
+    });
+  }
+
+  function updateCoordinates(lat,lng) {
+    document.getElementById("latitude").value = lat.toFixed(6);
+    document.getElementById("longitude").value = lng.toFixed(6);
+  }
+  function reverseGeocode(lat,lng) {
+    setTimeout(()=>document.getElementById("address").value = `Approx address for ${lat.toFixed(4)}, ${lng.toFixed(4)}`,500);
+  }
+  function updateSeverityValue(v){document.getElementById("severityValue").textContent=v;}
+  function formatDateTime(d){
+    const p=n=>n.toString().padStart(2,"0");
+    return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  }
+</script>
+
 </body>
-
 </html>

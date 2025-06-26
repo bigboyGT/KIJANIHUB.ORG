@@ -4,281 +4,1161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shark Ocean Cleaner</title>
+    <title>Shark Ocean Cleaner Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* CSS Code */
+        :root {
+            --deep-blue: #03045e;
+            --ocean-blue: #0077b6;
+            --light-blue: #90e0ef;
+            --accent-orange: #ff9e00;
+            --danger-red: #ef233c;
+        }
 
         /* General Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: #0077b6;
+            font-family: 'Poppins', sans-serif;
+            background: var(--deep-blue);
             color: #fff;
-            text-align: center;
+            overflow: hidden;
+            height: 100vh;
+            touch-action: none;
         }
 
+        /* Header with gradient and animation */
         header {
-            background: #023e8a;
-            padding: 10px 0;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, var(--deep-blue) 0%, var(--ocean-blue) 100%);
+            padding: 15px 0;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 10;
+            border-bottom: 2px solid var(--light-blue);
         }
 
         header h1 {
             margin: 0;
-            font-size: 2rem;
+            font-size: 2.2rem;
+            background: linear-gradient(to right, #ffffff, var(--light-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
         }
 
         header p {
             margin: 5px 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
 
-        /* Fullscreen Canvas */
+        .game-info {
+            display: flex;
+            justify-content: space-around;
+            padding: 5px 0;
+        }
+
+        .info-box {
+            background: rgba(0, 119, 182, 0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid var(--light-blue);
+        }
+
+        /* Fullscreen Canvas with parallax effect */
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 120px);
+            overflow: hidden;
+        }
+
         canvas {
             display: block;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
             position: absolute;
             top: 0;
             left: 0;
+        }
+
+        #backgroundCanvas {
+            z-index: 1;
+        }
+
+        #gameCanvas {
+            z-index: 2;
+        }
+
+        #effectsCanvas {
+            z-index: 3;
         }
 
         /* Hidden images for game assets */
         img[hidden] {
             display: none;
         }
+
+        /* Game controls for mobile */
+        .mobile-controls {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            justify-content: center;
+            z-index: 4;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            background: rgba(144, 224, 239, 0.3);
+            border: 2px solid var(--light-blue);
+            border-radius: 50%;
+            margin: 0 15px;
+            color: white;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .control-btn:active {
+            background: rgba(144, 224, 239, 0.6);
+        }
+
+        /* Power-up indicator */
+        .powerup-indicator {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            z-index: 4;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        /* Pause button */
+        .pause-btn {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            z-index: 4;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* Game over modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--deep-blue) 0%, var(--ocean-blue) 100%);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 2px solid var(--light-blue);
+            box-shadow: 0 0 20px rgba(144, 224, 239, 0.5);
+        }
+
+        .modal h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--light-blue);
+        }
+
+        .modal p {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: var(--accent-orange);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #ff8500;
+            transform: translateY(-2px);
+        }
+
+        /* Tutorial overlay */
+        .tutorial {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .tutorial-content {
+            max-width: 500px;
+        }
+
+        .tutorial h2 {
+            color: var(--light-blue);
+            margin-bottom: 20px;
+        }
+
+        .tutorial-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tutorial-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .mobile-controls {
+                display: flex;
+            }
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>Shark Ocean Cleaner</h1>
-        <p>Help the shark keep the ocean clean by eating trash!</p>
-        <p>Use arrow keys to move the shark.</p>
-        <p>Score: <span id="score">0</span></p>
+        <h1>Shark Ocean Cleaner Pro</h1>
+        <p>Help the shark keep the ocean clean by eating trash and avoiding predators!</p>
+        <div class="game-info">
+            <div class="info-box">Score: <span id="score">0</span></div>
+            <div class="info-box">Lives: <span id="lives">3</span></div>
+            <div class="info-box">Level: <span id="level">1</span></div>
+            <div class="info-box">High Score: <span id="highScore">0</span></div>
+        </div>
     </header>
-    <main>
-        <!-- Canvas for Game -->
-        <canvas id="gameCanvas"></canvas>
 
-        <!-- Hidden Images -->
-        <img id="backgroundImg" src="https://i.ibb.co/3czXvtS/underwater-bg.png" alt="Background" hidden>
-        <img id="sharkImg" src="https://i.ibb.co/JyG5QzT/shark.png" alt="Shark" hidden>
-        <img id="smallTrashImg" src="https://i.ibb.co/RP39rY2/small-trash.png" alt="Small Trash" hidden>
-        <img id="mediumTrashImg" src="https://i.ibb.co/pJ1pb2g/medium-trash.png" alt="Medium Trash" hidden>
-    </main>
+    <div class="game-container">
+        <canvas id="backgroundCanvas"></canvas>
+        <canvas id="gameCanvas"></canvas>
+        <canvas id="effectsCanvas"></canvas>
+
+        <div class="powerup-indicator" id="powerupIndicator">
+            Power-Up Active: <span id="powerupTimer">0</span>s
+        </div>
+
+        <button class="pause-btn" id="pauseBtn">Pause</button>
+
+        <div class="mobile-controls">
+            <div class="control-btn" id="upBtn">↑</div>
+            <div class="control-btn" id="leftBtn">←</div>
+            <div class="control-btn" id="rightBtn">→</div>
+            <div class="control-btn" id="downBtn">↓</div>
+        </div>
+    </div>
+
+    <!-- Hidden Images -->
+    <div hidden>
+        <img id="backgroundImg" src="https://i.ibb.co/3czXvtS/underwater-bg.png" alt="Background">
+        <img id="sharkImg" src="https://i.ibb.co/JyG5QzT/shark.png" alt="Shark">
+        <img id="sharkPowerImg" src="https://i.ibb.co/0jZqY7N/shark-power.png" alt="Powered Shark">
+        <img id="smallTrashImg" src="https://i.ibb.co/RP39rY2/small-trash.png" alt="Small Trash">
+        <img id="mediumTrashImg" src="https://i.ibb.co/pJ1pb2g/medium-trash.png" alt="Medium Trash">
+        <img id="largeTrashImg" src="https://i.ibb.co/0yYv0nX/large-trash.png" alt="Large Trash">
+        <img id="plasticBagImg" src="images/plastic bag.png" alt="Plastic Bag">
+        <img id="jellyfishImg" src="images/angry jellyfish.png" alt="Jellyfish">
+        <img id="powerupImg" src="images/powerup.png" alt="Power-Up">
+        <img id="bubbleImg" src="https://i.ibb.co/0JZ7Y9X/bubble.png" alt="Bubble">
+        <img id="explosionImg" src="images/explosion.png" alt="Explosion">
+    </div>
+
+    <!-- Game Over Modal -->
+    <div class="modal" id="gameOverModal">
+        <div class="modal-content">
+            <h2>GAME OVER</h2>
+            <p>Your final score: <span id="finalScore">0</span></p>
+            <p>High score: <span id="finalHighScore">0</span></p>
+            <button class="btn" id="tryAgainBtn">Try Again</button>
+            <button class="btn" id="menuBtn">Main Menu</button>
+        </div>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div class="tutorial" id="tutorial">
+        <div class="tutorial-content">
+            <h2>How to Play</h2>
+            
+            <div class="tutorial-item">
+                <img src="https://i.ibb.co/JyG5QzT/shark.png" alt="Shark" class="tutorial-icon">
+                <p>Control the shark with arrow keys or on-screen buttons</p>
+            </div>
+            
+            <div class="tutorial-item">
+                <img src="https://i.ibb.co/RP39rY2/small-trash.png" alt="Trash" class="tutorial-icon">
+                <p>Eat trash to score points (small: 10, medium: 20, large: 30)</p>
+            </div>
+            
+            <div class="tutorial-item">
+                <img src="images/plastic bag.png" alt="Plastic Bag" class="tutorial-icon">
+                <p>Avoid plastic bags - they reduce your health</p>
+            </div>
+            
+            <div class="tutorial-item">
+                <img src="images/angry jellyfish.png" alt="Jellyfish" class="tutorial-icon">
+                <p>Avoid jellyfish - they're dangerous!</p>
+            </div>
+            
+            <div class="tutorial-item">
+                <img src="images/powerup.png" alt="Power-Up" class="tutorial-icon">
+                <p>Collect power-ups for temporary invincibility</p>
+            </div>
+            
+            <button class="btn" id="startGameBtn">Start Game</button>
+        </div>
+    </div>
 
     <script>
         // JavaScript Code
+        document.addEventListener('DOMContentLoaded', () => {
+            // Canvas setup
+            const backgroundCanvas = document.getElementById('backgroundCanvas');
+            const bgCtx = backgroundCanvas.getContext('2d');
+            const gameCanvas = document.getElementById('gameCanvas');
+            const ctx = gameCanvas.getContext('2d');
+            const effectsCanvas = document.getElementById('effectsCanvas');
+            const effectsCtx = effectsCanvas.getContext('2d');
 
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+            // UI elements
+            const scoreElement = document.getElementById('score');
+            const livesElement = document.getElementById('lives');
+            const levelElement = document.getElementById('level');
+            const highScoreElement = document.getElementById('highScore');
+            const powerupIndicator = document.getElementById('powerupIndicator');
+            const powerupTimer = document.getElementById('powerupTimer');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const gameOverModal = document.getElementById('gameOverModal');
+            const finalScoreElement = document.getElementById('finalScore');
+            const finalHighScoreElement = document.getElementById('finalHighScore');
+            const tryAgainBtn = document.getElementById('tryAgainBtn');
+            const menuBtn = document.getElementById('menuBtn');
+            const tutorial = document.getElementById('tutorial');
+            const startGameBtn = document.getElementById('startGameBtn');
 
-        // Resize canvas to fullscreen
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            shark.x = canvas.width / 10;
-            shark.y = canvas.height / 2 - shark.height / 2;
-        }
+            // Mobile controls
+            const upBtn = document.getElementById('upBtn');
+            const leftBtn = document.getElementById('leftBtn');
+            const rightBtn = document.getElementById('rightBtn');
+            const downBtn = document.getElementById('downBtn');
 
-        // Retrieve images from HTML
-        const backgroundImg = document.getElementById('backgroundImg');
-        const sharkImg = document.getElementById('sharkImg');
-        const smallTrashImg = document.getElementById('smallTrashImg');
-        const mediumTrashImg = document.getElementById('mediumTrashImg');
+            // Game state
+            let gameState = 'tutorial'; // 'tutorial', 'playing', 'paused', 'gameOver'
+            let highScore = localStorage.getItem('sharkGameHighScore') || 0;
+            highScoreElement.textContent = highScore;
 
-        // Shark object (thicker shark with increased dimensions)
-        const shark = {
-            x: canvas.width / 10,
-            y: canvas.height / 2 - 75, // Adjusted starting position for thicker shark
-            width: 160, // Increased width for thickness
-            height: 160, // Increased height for thickness
-            speed: 5,
-            dx: 0,
-            dy: 0,
-        };
+            // Retrieve images from HTML
+            const images = {
+                background: document.getElementById('backgroundImg'),
+                shark: document.getElementById('sharkImg'),
+                sharkPower: document.getElementById('sharkPowerImg'),
+                smallTrash: document.getElementById('smallTrashImg'),
+                mediumTrash: document.getElementById('mediumTrashImg'),
+                largeTrash: document.getElementById('largeTrashImg'),
+                plasticBag: document.getElementById('plasticBagImg'),
+                jellyfish: document.getElementById('jellyfishImg'),
+                powerup: document.getElementById('powerupImg'),
+                bubble: document.getElementById('bubbleImg'),
+                explosion: document.getElementById('explosionImg')
+            };
 
-        // Trash objects
-        let trashArray = [];
-        let score = 0;
-        let isGameOver = false;
+            // Game objects
+            const game = {
+                score: 0,
+                lives: 3,
+                level: 1,
+                speed: 1,
+                lastTrashSpawn: 0,
+                lastEnemySpawn: 0,
+                lastPowerupSpawn: 0,
+                trashSpawnRate: 2000, // ms
+                enemySpawnRate: 5000, // ms
+                powerupSpawnRate: 15000, // ms
+                trashArray: [],
+                enemyArray: [],
+                powerups: [],
+                bubbles: [],
+                explosions: [],
+                background: {
+                    layers: [],
+                    offset: 0
+                },
+                isPowerActive: false,
+                powerEndTime: 0,
+                isGameOver: false,
+                frameCount: 0
+            };
 
-        // Generate random trash
-        function generateTrash() {
-            if (!isGameOver) {
-                const sizeIndex = Math.floor(Math.random() * 2); // 0: small, 1: medium
-                const img = sizeIndex === 0 ? smallTrashImg : mediumTrashImg;
-                const trashSize = sizeIndex === 0 ? 30 : 50; // Small: 30px, Medium: 50px
-                const speed = 2 + Math.random() * 2; // Random speed
+            // Shark object
+            const shark = {
+                x: 100,
+                y: 0,
+                width: 120,
+                height: 80,
+                speed: 6,
+                dx: 0,
+                dy: 0,
+                health: 100,
+                maxHealth: 100,
+                isInvincible: false,
+                invincibleEndTime: 0
+            };
 
-                trashArray.push({
-                    x: canvas.width,
-                    y: Math.random() * (canvas.height - trashSize),
-                    width: trashSize,
-                    height: trashSize,
-                    speed,
-                    img, // Reference to the appropriate trash image
+            // Initialize background layers for parallax effect
+            function initBackground() {
+                game.background.layers = [
+                    { img: images.background, speed: 0.2, y: 0 },
+                    { img: images.background, speed: 0.5, y: 0 },
+                    { img: images.background, speed: 0.8, y: 0 }
+                ];
+            }
+
+            // Resize canvases to fullscreen
+            function resizeCanvases() {
+                const width = window.innerWidth;
+                const height = window.innerHeight - 120; // Account for header
+
+                backgroundCanvas.width = width;
+                backgroundCanvas.height = height;
+                gameCanvas.width = width;
+                gameCanvas.height = height;
+                effectsCanvas.width = width;
+                effectsCanvas.height = height;
+
+                // Reset shark position
+                shark.y = height / 2 - shark.height / 2;
+            }
+
+            // Draw parallax background
+            function drawBackground() {
+                bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+                
+                game.background.layers.forEach(layer => {
+                    // Draw two copies of the background for seamless scrolling
+                    bgCtx.drawImage(layer.img, game.background.offset * layer.speed, layer.y, backgroundCanvas.width, backgroundCanvas.height);
+                    bgCtx.drawImage(layer.img, (game.background.offset * layer.speed) - backgroundCanvas.width, layer.y, backgroundCanvas.width, backgroundCanvas.height);
+                });
+                
+                // Update background offset
+                game.background.offset += 0.5;
+                if (game.background.offset >= backgroundCanvas.width) {
+                    game.background.offset = 0;
+                }
+            }
+
+            // Generate random trash
+            function generateTrash() {
+                const now = Date.now();
+                if (now - game.lastTrashSpawn < game.trashSpawnRate / game.speed) return;
+                
+                game.lastTrashSpawn = now;
+                
+                const trashTypes = [
+                    { img: images.smallTrash, width: 30, height: 30, points: 10 },
+                    { img: images.mediumTrash, width: 50, height: 50, points: 20 },
+                    { img: images.largeTrash, width: 70, height: 70, points: 30 }
+                ];
+                
+                const type = trashTypes[Math.floor(Math.random() * trashTypes.length)];
+                const speed = 2 + Math.random() * 2 * game.speed;
+                
+                game.trashArray.push({
+                    x: gameCanvas.width,
+                    y: Math.random() * (gameCanvas.height - type.height),
+                    width: type.width,
+                    height: type.height,
+                    speed: speed,
+                    img: type.img,
+                    points: type.points,
+                    rotation: Math.random() * Math.PI * 2,
+                    rotationSpeed: (Math.random() - 0.5) * 0.1
                 });
             }
-        }
 
-        // Move the shark
-        function moveShark() {
-            shark.x += shark.dx;
-            shark.y += shark.dy;
+            // Generate enemies (plastic bags and jellyfish)
+            function generateEnemy() {
+                const now = Date.now();
+                if (now - game.lastEnemySpawn < game.enemySpawnRate / game.speed) return;
+                
+                game.lastEnemySpawn = now;
+                
+                const enemyTypes = [
+                    { 
+                        img: images.plasticBag, 
+                        width: 40, 
+                        height: 60, 
+                        damage: 20,
+                        speed: 3 + Math.random() * 2 * game.speed,
+                        type: 'plastic'
+                    },
+                    { 
+                        img: images.jellyfish, 
+                        width: 60, 
+                        height: 80, 
+                        damage: 35,
+                        speed: 2 + Math.random() * 2 * game.speed,
+                        type: 'jellyfish'
+                    }
+                ];
+                
+                const type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+                
+                game.enemyArray.push({
+                    x: gameCanvas.width,
+                    y: Math.random() * (gameCanvas.height - type.height),
+                    width: type.width,
+                    height: type.height,
+                    speed: type.speed,
+                    img: type.img,
+                    damage: type.damage,
+                    type: type.type,
+                    wobbleOffset: Math.random() * Math.PI * 2,
+                    wobbleSpeed: Math.random() * 0.05 + 0.02
+                });
+            }
 
-            // Boundaries
-            if (shark.x < 0) shark.x = 0;
-            if (shark.x + shark.width > canvas.width) shark.x = canvas.width - shark.width;
-            if (shark.y < 0) shark.y = 0;
-            if (shark.y + shark.height > canvas.height) shark.y = canvas.height - shark.height;
-        }
+            // Generate power-ups
+            function generatePowerup() {
+                const now = Date.now();
+                if (now - game.lastPowerupSpawn < game.powerupSpawnRate / game.speed) return;
+                if (game.isPowerActive) return;
+                
+                game.lastPowerupSpawn = now;
+                
+                game.powerups.push({
+                    x: gameCanvas.width,
+                    y: Math.random() * (gameCanvas.height - 50),
+                    width: 50,
+                    height: 50,
+                    speed: 3 * game.speed,
+                    img: images.powerup,
+                    duration: 8000 // 8 seconds
+                });
+            }
 
-        // Move and remove trash
-        function moveTrash() {
-            for (let i = trashArray.length - 1; i >= 0; i--) {
-                const trash = trashArray[i];
-                trash.x -= trash.speed;
-
-                // Remove trash if it goes offscreen
-                if (trash.x + trash.width < 0) {
-                    gameOver(); // End the game if trash passes
+            // Generate bubbles for effect
+            function generateBubbles() {
+                if (game.frameCount % 10 === 0) {
+                    game.bubbles.push({
+                        x: shark.x + shark.width / 2,
+                        y: shark.y + shark.height,
+                        size: Math.random() * 10 + 5,
+                        speed: Math.random() * 2 + 1,
+                        opacity: Math.random() * 0.5 + 0.5,
+                        life: 100
+                    });
                 }
             }
-        }
 
-        // Detect collision between shark and trash
-        function detectCollision() {
-            trashArray.forEach((trash, index) => {
-                if (
-                    shark.x < trash.x + trash.width &&
-                    shark.x + shark.width > trash.x &&
-                    shark.y < trash.y + trash.height &&
-                    shark.y + shark.height > trash.y
-                ) {
-                    // Collision detected
-                    score += 10; // Add to score
-                    document.getElementById('score').textContent = score;
-                    trashArray.splice(index, 1); // Remove trash
+            // Move the shark
+            function moveShark() {
+                shark.x += shark.dx;
+                shark.y += shark.dy;
+
+                // Boundaries
+                if (shark.x < 0) shark.x = 0;
+                if (shark.x + shark.width > gameCanvas.width) shark.x = gameCanvas.width - shark.width;
+                if (shark.y < 0) shark.y = 0;
+                if (shark.y + shark.height > gameCanvas.height) shark.y = gameCanvas.height - shark.height;
+            }
+
+            // Move trash
+            function moveTrash() {
+                for (let i = game.trashArray.length - 1; i >= 0; i--) {
+                    const trash = game.trashArray[i];
+                    trash.x -= trash.speed;
+                    trash.rotation += trash.rotationSpeed;
+
+                    // Remove trash if it goes offscreen
+                    if (trash.x + trash.width < 0) {
+                        game.trashArray.splice(i, 1);
+                    }
                 }
-            });
-        }
+            }
 
-        // Draw background
-        function drawBackground() {
-            ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-        }
+            // Move enemies
+            function moveEnemies() {
+                for (let i = game.enemyArray.length - 1; i >= 0; i--) {
+                    const enemy = game.enemyArray[i];
+                    enemy.x -= enemy.speed;
+                    enemy.wobbleOffset += enemy.wobbleSpeed;
+                    
+                    // Wobble effect for jellyfish
+                    if (enemy.type === 'jellyfish') {
+                        enemy.y += Math.sin(enemy.wobbleOffset) * 1.5;
+                    }
 
-        // Draw shark
-        function drawShark() {
-            ctx.drawImage(sharkImg, shark.x, shark.y, shark.width, shark.height);
-        }
+                    // Remove enemy if it goes offscreen
+                    if (enemy.x + enemy.width < 0) {
+                        game.enemyArray.splice(i, 1);
+                    }
+                }
+            }
 
-        // Draw trash
-        function drawTrash() {
-            trashArray.forEach(trash => {
-                ctx.drawImage(trash.img, trash.x, trash.y, trash.width, trash.height);
-            });
-        }
+            // Move powerups
+            function movePowerups() {
+                for (let i = game.powerups.length - 1; i >= 0; i--) {
+                    const powerup = game.powerups[i];
+                    powerup.x -= powerup.speed;
 
-        // Display Game Over screen
-        function gameOver() {
-            isGameOver = true;
+                    // Remove powerup if it goes offscreen
+                    if (powerup.x + powerup.width < 0) {
+                        game.powerups.splice(i, 1);
+                    }
+                }
+            }
 
-            // Stop all trash movement
-            trashArray = [];
+            // Move and update bubbles
+            function updateBubbles() {
+                for (let i = game.bubbles.length - 1; i >= 0; i--) {
+                    const bubble = game.bubbles[i];
+                    bubble.y -= bubble.speed;
+                    bubble.life -= 1;
+                    
+                    // Remove bubble if it's offscreen or life is over
+                    if (bubble.y + bubble.size < 0 || bubble.life <= 0) {
+                        game.bubbles.splice(i, 1);
+                    }
+                }
+            }
 
-            // Clear the canvas and display Game Over message
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Update explosions
+            function updateExplosions() {
+                for (let i = game.explosions.length - 1; i >= 0; i--) {
+                    const explosion = game.explosions[i];
+                    explosion.frame += 1;
+                    
+                    // Remove explosion after animation
+                    if (explosion.frame > 10) {
+                        game.explosions.splice(i, 1);
+                    }
+                }
+            }
 
-            ctx.fillStyle = '#fff';
-            ctx.font = '36px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
-            ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 20);
+            // Check collisions between shark and trash
+            function checkTrashCollisions() {
+                for (let i = game.trashArray.length - 1; i >= 0; i--) {
+                    const trash = game.trashArray[i];
+                    
+                    if (checkCollision(shark, trash)) {
+                        // Collision detected - increase score
+                        game.score += trash.points;
+                        scoreElement.textContent = game.score;
+                        
+                        // Create explosion effect
+                        game.explosions.push({
+                            x: trash.x + trash.width/2 - 30,
+                            y: trash.y + trash.height/2 - 30,
+                            width: 60,
+                            height: 60,
+                            frame: 0
+                        });
+                        
+                        // Remove trash
+                        game.trashArray.splice(i, 1);
+                        
+                        // Check for level up
+                        checkLevelUp();
+                    }
+                }
+            }
 
-            // Display Try Again button
-            const tryAgainButton = document.createElement('button');
-            tryAgainButton.textContent = 'Try Again';
-            tryAgainButton.style.position = 'absolute';
-            tryAgainButton.style.left = `${canvas.offsetLeft + canvas.width / 2 - 50}px`;
-            tryAgainButton.style.top = `${canvas.offsetTop + canvas.height / 2 + 50}px`;
-            tryAgainButton.style.padding = '10px 20px';
-            tryAgainButton.style.backgroundColor = '#4CAF50';
-            tryAgainButton.style.color = '#fff';
-            tryAgainButton.style.border = 'none';
-            tryAgainButton.style.borderRadius = '5px';
-            tryAgainButton.style.cursor = 'pointer';
+            // Check collisions between shark and enemies
+            function checkEnemyCollisions() {
+                if (shark.isInvincible || game.isPowerActive) return;
+                
+                for (let i = game.enemyArray.length - 1; i >= 0; i--) {
+                    const enemy = game.enemyArray[i];
+                    
+                    if (checkCollision(shark, enemy)) {
+                        // Collision detected - decrease health
+                        shark.health -= enemy.damage;
+                        
+                        // Create explosion effect
+                        game.explosions.push({
+                            x: enemy.x + enemy.width/2 - 30,
+                            y: enemy.y + enemy.height/2 - 30,
+                            width: 60,
+                            height: 60,
+                            frame: 0
+                        });
+                        
+                        // Remove enemy
+                        game.enemyArray.splice(i, 1);
+                        
+                        // Make shark briefly invincible
+                        shark.isInvincible = true;
+                        shark.invincibleEndTime = Date.now() + 1000; // 1 second
+                        
+                        // Update health display
+                        updateHealth();
+                        
+                        // Check for game over
+                        if (shark.health <= 0) {
+                            shark.health = 0;
+                            loseLife();
+                        }
+                    }
+                }
+            }
 
-            document.body.appendChild(tryAgainButton);
+            // Check collisions between shark and powerups
+            function checkPowerupCollisions() {
+                for (let i = game.powerups.length - 1; i >= 0; i--) {
+                    const powerup = game.powerups[i];
+                    
+                    if (checkCollision(shark, powerup)) {
+                        // Activate power
+                        activatePower(powerup.duration);
+                        
+                        // Remove powerup
+                        game.powerups.splice(i, 1);
+                    }
+                }
+            }
 
-            tryAgainButton.addEventListener('click', () => {
-                document.body.removeChild(tryAgainButton);
-                resetGame();
-            });
-        }
+            // Generic collision detection
+            function checkCollision(obj1, obj2) {
+                return (
+                    obj1.x < obj2.x + obj2.width &&
+                    obj1.x + obj1.width > obj2.x &&
+                    obj1.y < obj2.y + obj2.height &&
+                    obj1.y + obj1.height > obj2.y
+                );
+            }
 
-        // Reset the game
-        function resetGame() {
-            isGameOver = false;
-            score = 0;
-            document.getElementById('score').textContent = score;
-            shark.x = canvas.width / 20;
-            shark.y = canvas.height / 25 - shark.height / 5;
-            trashArray = [];
-            gameLoop();
-        }
+            // Activate power-up
+            function activatePower(duration) {
+                game.isPowerActive = true;
+                game.powerEndTime = Date.now() + duration;
+                powerupIndicator.style.display = 'block';
+            }
 
-        // Update game objects
-        function update() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+            // Update power-up timer
+            function updatePowerupTimer() {
+                if (!game.isPowerActive) return;
+                
+                const remaining = Math.max(0, game.powerEndTime - Date.now());
+                powerupTimer.textContent = (remaining / 1000).toFixed(1);
+                
+                if (remaining <= 0) {
+                    game.isPowerActive = false;
+                    powerupIndicator.style.display = 'none';
+                }
+            }
 
-            // Draw the background
-            drawBackground();
+            // Update shark invincibility
+            function updateInvincibility() {
+                if (!shark.isInvincible) return;
+                
+                if (Date.now() >= shark.invincibleEndTime) {
+                    shark.isInvincible = false;
+                }
+            }
 
-            // Move and draw objects
-            moveShark();
-            moveTrash();
-            detectCollision();
-            drawShark();
-            drawTrash();
-        }
+            // Update health display
+            function updateHealth() {
+                const healthPercent = (shark.health / shark.maxHealth) * 100;
+                
+                // Visual feedback based on health
+                if (healthPercent < 30) {
+                    // Add red tint to screen when health is low
+                    effectsCtx.fillStyle = 'rgba(239, 35, 60, 0.2)';
+                    effectsCtx.fillRect(0, 0, effectsCanvas.width, effectsCanvas.height);
+                }
+            }
 
-        // Game loop
-        function gameLoop() {
-            if (!isGameOver) {
-                update();
+            // Lose a life
+            function loseLife() {
+                game.lives -= 1;
+                livesElement.textContent = game.lives;
+                
+                if (game.lives <= 0) {
+                    gameOver();
+                } else {
+                    // Reset health for next life
+                    shark.health = shark.maxHealth;
+                    
+                    // Make shark invincible for 3 seconds after losing a life
+                    shark.isInvincible = true;
+                    shark.invincibleEndTime = Date.now() + 3000;
+                }
+            }
+
+            // Check if player should level up
+            function checkLevelUp() {
+                const levelThreshold = game.level * 500;
+                
+                if (game.score >= levelThreshold) {
+                    game.level += 1;
+                    levelElement.textContent = game.level;
+                    
+                    // Increase game speed
+                    game.speed = 1 + (game.level * 0.1);
+                    
+                    // Decrease spawn rates
+                    game.trashSpawnRate = Math.max(500, 2000 - (game.level * 100));
+                    game.enemySpawnRate = Math.max(1000, 5000 - (game.level * 200));
+                    
+                    // Show level up message
+                    showMessage(`Level ${game.level}!`);
+                }
+            }
+
+            // Show temporary message
+            function showMessage(text) {
+                effectsCtx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                effectsCtx.fillRect(gameCanvas.width/2 - 150, gameCanvas.height/2 - 30, 300, 60);
+                
+                effectsCtx.fillStyle = '#ffffff';
+                effectsCtx.font = '24px Poppins';
+                effectsCtx.textAlign = 'center';
+                effectsCtx.fillText(text, gameCanvas.width/2, gameCanvas.height/2);
+                
+                // Clear after 2 seconds
+                setTimeout(() => {
+                    effectsCtx.clearRect(0, 0, effectsCanvas.width, effectsCanvas.height);
+                }, 2000);
+            }
+
+            // Game over
+            function gameOver() {
+                gameState = 'gameOver';
+                game.isGameOver = true;
+                
+                // Update high score
+                if (game.score > highScore) {
+                    highScore = game.score;
+                    localStorage.setItem('sharkGameHighScore', highScore);
+                }
+                
+                // Show game over modal
+                finalScoreElement.textContent = game.score;
+                finalHighScoreElement.textContent = highScore;
+                gameOverModal.style.display = 'flex';
+            }
+
+            // Reset game
+            function resetGame() {
+                gameState = 'playing';
+                game.isGameOver = false;
+                game.score = 0;
+                game.lives = 3;
+                game.level = 1;
+                game.speed = 1;
+                game.trashArray = [];
+                game.enemyArray = [];
+                game.powerups = [];
+                game.bubbles = [];
+                game.explosions = [];
+                game.isPowerActive = false;
+                
+                shark.x = 100;
+                shark.y = gameCanvas.height / 2 - shark.height / 2;
+                shark.health = shark.maxHealth;
+                shark.isInvincible = false;
+                
+                scoreElement.textContent = '0';
+                livesElement.textContent = '3';
+                levelElement.textContent = '1';
+                
+                gameOverModal.style.display = 'none';
+                
+                // Start game loop
+                gameLoop();
+            }
+
+            // Draw shark
+            function drawShark() {
+                const sharkImg = game.isPowerActive ? images.sharkPower : images.shark;
+                
+                // Draw shark with invincibility flicker
+                if (!shark.isInvincible || Math.floor(Date.now() / 100) % 2 === 0) {
+                    ctx.drawImage(sharkImg, shark.x, shark.y, shark.width, shark.height);
+                }
+                
+                // Draw health bar
+                const healthPercent = (shark.health / shark.maxHealth) * 100;
+                ctx.fillStyle = healthPercent > 50 ? '#4CAF50' : healthPercent > 20 ? '#FFC107' : '#F44336';
+                ctx.fillRect(shark.x, shark.y - 10, shark.width * (healthPercent / 100), 5);
+                ctx.strokeStyle = '#000';
+                ctx.strokeRect(shark.x, shark.y - 10, shark.width, 5);
+            }
+
+            // Draw trash with rotation
+            function drawTrash() {
+                game.trashArray.forEach(trash => {
+                    ctx.save();
+                    ctx.translate(trash.x + trash.width/2, trash.y + trash.height/2);
+                    ctx.rotate(trash.rotation);
+                    ctx.drawImage(trash.img, -trash.width/2, -trash.height/2, trash.width, trash.height);
+                    ctx.restore();
+                });
+            }
+
+            // Draw enemies with wobble effect
+            function drawEnemies() {
+                game.enemyArray.forEach(enemy => {
+                    ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
+                });
+            }
+
+            // Draw powerups
+            function drawPowerups() {
+                game.powerups.forEach(powerup => {
+                    // Pulse effect
+                    const scale = 1 + Math.sin(Date.now() / 200) * 0.1;
+                    
+                    ctx.save();
+                    ctx.translate(powerup.x + powerup.width/2, powerup.y + powerup.height/2);
+                    ctx.scale(scale, scale);
+                    ctx.drawImage(powerup.img, -powerup.width/2, -powerup.height/2, powerup.width, powerup.height);
+                    ctx.restore();
+                });
+            }
+
+            // Draw bubbles
+            function drawBubbles() {
+                game.bubbles.forEach(bubble => {
+                    ctx.beginPath();
+                    ctx.arc(bubble.x, bubble.y, bubble.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(144, 224, 239, ${bubble.opacity})`;
+                    ctx.fill();
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${bubble.opacity * 0.8})`;
+                    ctx.stroke();
+                });
+            }
+
+            // Draw explosions
+            function drawExplosions() {
+                game.explosions.forEach(explosion => {
+                    const frameSize = explosion.frame * 5;
+                    ctx.globalAlpha = 1 - (explosion.frame / 10);
+                    ctx.drawImage(
+                        images.explosion,
+                        0, 0, images.explosion.width, images.explosion.height,
+                        explosion.x - frameSize/2, explosion.y - frameSize/2,
+                        explosion.width + frameSize, explosion.height + frameSize
+                    );
+                    ctx.globalAlpha = 1;
+                });
+            }
+
+            // Draw game UI
+            function drawUI() {
+                // Draw score and lives in top corners
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                ctx.fillRect(10, 10, 150, 60);
+                
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '16px Poppins';
+                ctx.textAlign = 'left';
+                ctx.fillText(`Score: ${game.score}`, 20, 30);
+                ctx.fillText(`Lives: ${game.lives}`, 20, 50);
+                ctx.fillText(`Level: ${game.level}`, 20, 70);
+                
+                // Draw power-up indicator if active
+                if (game.isPowerActive) {
+                    const remaining = Math.max(0, game.powerEndTime - Date.now());
+                    const percent = (remaining / 8000) * 100;
+                    
+                    ctx.fillStyle = 'rgba(255, 158, 0, 0.3)';
+                    ctx.fillRect(0, 0, gameCanvas.width * (percent / 100), 5);
+                }
+            }
+
+            // Clear canvases
+            function clearCanvases() {
+                bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+                ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+                effectsCtx.clearRect(0, 0, effectsCanvas.width, effectsCanvas.height);
+            }
+
+            // Main game loop
+            function gameLoop() {
+                if (gameState !== 'playing') return;
+                
+                clearCanvases();
+                
+                // Update game state
+                game.frameCount += 1;
+                drawBackground();
+                moveShark();
+                generateTrash();
+                generateEnemy();
+                generatePowerup();
+                generateBubbles();
+                moveTrash();
+                moveEnemies();
+                movePowerups();
+                updateBubbles();
+                updateExplosions();
+                checkTrashCollisions();
+                checkEnemyCollisions();
+                checkPowerupCollisions();
+                updatePowerupTimer();
+                updateInvincibility();
+                updateHealth();
+                
+                // Draw game objects
+                drawTrash();
+                drawEnemies();
+                drawPowerups();
+                drawShark();
+                drawBubbles();
+                drawExplosions();
+                drawUI();
+                
+                // Continue loop
                 requestAnimationFrame(gameLoop);
             }
-        }
 
-        // Event listeners for shark movement
-        document.addEventListener('keydown', e => {
-            if (e.key === 'ArrowUp') shark.dy = -shark.speed;
-            if (e.key === 'ArrowDown') shark.dy = shark.speed;
-            if (e.key === 'ArrowLeft') shark.dx = -shark.speed;
-            if (e.key === 'ArrowRight') shark.dx = shark.speed;
+            // Event listeners
+            function setupEventListeners() {
+                // Keyboard controls
+                document.addEventListener('keydown', e => {
+                    if (gameState !== 'playing') return;
+                    
+                    if (e.key === 'ArrowUp') shark.dy = -shark.speed;
+                    if (e.key === 'ArrowDown') shark.dy = shark.speed;
+                    if (e.key === 'ArrowLeft') shark.dx = -shark.speed;
+                    if (e.key === 'ArrowRight') shark.dx = shark.speed;
+                    
+                    // Space to pause
+                    if (e.key === ' ') togglePause();
+                });
+
+                document.addEventListener('keyup', e => {
+                    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') shark.dy = 0;
+                    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') shark.dx = 0;
+                });
+
+                // Mobile touch controls
+                upBtn.addEventListener('touchstart', () => shark.dy = -shark.speed);
+                upBtn.addEventListener('touchend', () => shark.dy = 0);
+                downBtn.addEventListener('touchstart', () => shark.dy = shark.speed);
+                downBtn.addEventListener('touchend', () => shark.dy = 0);
+                leftBtn.addEventListener('touchstart', () => shark.dx = -shark.speed);
+                leftBtn.addEventListener('touchend', () => shark.dx = 0);
+                rightBtn.addEventListener('touchstart', () => shark.dx = shark.speed);
+                rightBtn.addEventListener('touchend', () => shark.dx = 0);
+
+                // Mouse click controls for desktop
+                upBtn.addEventListener('mousedown', () => shark.dy = -shark.speed);
+                upBtn.addEventListener('mouseup', () => shark.dy = 0);
+                downBtn.addEventListener('mousedown', () => shark.dy = shark.speed);
+                downBtn.addEventListener('mouseup', () => shark.dy = 0);
+                leftBtn.addEventListener('mousedown', () => shark.dx = -shark.speed);
+                leftBtn.addEventListener('mouseup', () => shark.dx = 0);
+                rightBtn.addEventListener('mousedown', () => shark.dx = shark.speed);
+                rightBtn.addEventListener('mouseup', () => shark.dx = 0);
+
+                // Pause button
+                pauseBtn.addEventListener('click', togglePause);
+
+                // Game over buttons
+                tryAgainBtn.addEventListener('click', resetGame);
+                menuBtn.addEventListener('click', () => {
+                    gameOverModal.style.display = 'none';
+                    tutorial.style.display = 'flex';
+                    gameState = 'tutorial';
+                });
+
+                // Start game button
+                startGameBtn.addEventListener('click', () => {
+                    tutorial.style.display = 'none';
+                    resetGame();
+                });
+
+                // Window resize
+                window.addEventListener('resize', resizeCanvases);
+            }
+
+            // Toggle pause
+            function togglePause() {
+                if (gameState === 'playing') {
+                    gameState = 'paused';
+                    pauseBtn.textContent = 'Resume';
+                    
+                    // Show pause overlay
+                    effectsCtx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                    effectsCtx.fillRect(0, 0, effectsCanvas.width, effectsCanvas.height);
+                    effectsCtx.fillStyle = '#ffffff';
+                    effectsCtx.font = '36px Poppins';
+                    effectsCtx.textAlign = 'center';
+                    effectsCtx.fillText('PAUSED', effectsCanvas.width/2, effectsCanvas.height/2);
+                } else if (gameState === 'paused') {
+                    gameState = 'playing';
+                    pauseBtn.textContent = 'Pause';
+                    effectsCtx.clearRect(0, 0, effectsCanvas.width, effectsCanvas.height);
+                    gameLoop();
+                }
+            }
+
+            // Initialize game
+            function initGame() {
+                resizeCanvases();
+                initBackground();
+                setupEventListeners();
+                
+                // Show tutorial
+                tutorial.style.display = 'flex';
+            }
+
+            // Start the game
+            initGame();
         });
-
-        document.addEventListener('keyup', e => {
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') shark.dy = 0;
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') shark.dx = 0;
-        });
-
-        // Adjust canvas to fullscreen on window resize
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas(); // Initial resize
-
-        // Spawn trash every 2 seconds
-        setInterval(generateTrash, 2000);
-
-        // Start the game
-        gameLoop();
     </script>
 </body>
 

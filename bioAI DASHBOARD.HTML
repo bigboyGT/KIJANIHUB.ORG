@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Biodiversity Tracking Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://apis.google.com/js/api.js"></script>
+    <style>
+        .map-container {
+            height: 600px;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 60px;
+        }
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #3b82f6;
+        }
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 20px;
+            width: 1px;
+            height: calc(100% - 20px);
+            background: #e5e7eb;
+        }
+        .timeline-item:last-child:after {
+            display: none;
+        }
+        .heatmap-legend {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        .map-overlay {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar bg-blue-800 text-white w-64 flex-shrink-0 flex flex-col">
+            <div class="p-4 flex items-center">
+                <i class="fas fa-leaf text-2xl mr-3"></i>
+                <span class="sidebar-text text-xl font-bold">BioTrack AI</span>
+            </div>
+            <div class="flex-grow overflow-y-auto">
+                <nav class="mt-6">
+                    <div class="px-4 py-2">
+                        <div class="flex items-center px-2 py-3 rounded-lg bg-blue-700">
+                            <i class="fas fa-tachometer-alt mr-3"></i>
+                            <span class="sidebar-text">Dashboard</span>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2">
+                        <div class="flex items-center px-2 py-3 rounded-lg hover:bg-blue-700 cursor-pointer">
+                            <i class="fas fa-map-marked-alt mr-3"></i>
+                            <span class="sidebar-text">Interactive Map</span>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2">
+                        <div class="flex items-center px-2 py-3 rounded-lg hover:bg-blue-700 cursor-pointer">
+                            <i class="fas fa-bug mr-3"></i>
+                            <span class="sidebar-text">Pest Predictions</span>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2">
+                        <div class="flex items-center px-2 py-3 rounded-lg hover:bg-blue-700 cursor-pointer">
+                            <i class="fas fa-chart-line mr-3"></i>
+                            <span class="sidebar-text">Species Analytics</span>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2">
+                        <div class="flex items-center px-2 py-3 rounded-lg hover:bg-blue-700 cursor-pointer">
+                            <i class="fas fa-database mr-3"></i>
+                            <span class="sidebar-text">Data Sources</span>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2">
+                        <div class="flex items-center px-2 py-3 rounded-lg hover:bg-blue-700 cursor-pointer">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span class="sidebar-text">Settings</span>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="p-4 border-t border-blue-700">
+                <div class="flex items-center">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="w-8 h-8 rounded-full mr-2">
+                    <div class="sidebar-text">
+                        <div class="text-sm font-medium">Jane Smith</div>
+                        <div class="text-xs text-blue-200">Admin</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <!-- Header -->
+            <header class="bg-white shadow-sm">
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <h1 class="text-xl font-semibold text-gray-800">AI Biodiversity Tracking Dashboard</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                        <button class="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <button class="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                        <button id="refreshData" class="p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <main class="p-6">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Species</p>
+                                <h3 id="totalSpecies" class="text-2xl font-bold text-gray-800">Loading...</h3>
+                                <p id="speciesTrend" class="text-sm mt-1"><span class="loading-spinner"></span></p>
+                            </div>
+                            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                                <i class="fas fa-paw text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Pest Alerts</p>
+                                <h3 id="pestAlerts" class="text-2xl font-bold text-gray-800">Loading...</h3>
+                                <p id="pestTrend" class="text-sm mt-1"><span class="loading-spinner"></span></p>
+                            </div>
+                            <div class="p-3 rounded-full bg-red-100 text-red-600">
+                                <i class="fas fa-bug text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Active Reports</p>
+                                <h3 id="activeReports" class="text-2xl font-bold text-gray-800">Loading...</h3>
+                                <p id="reportsTrend" class="text-sm mt-1"><span class="loading-spinner"></span></p>
+                            </div>
+                            <div class="p-3 rounded-full bg-green-100 text-green-600">
+                                <i class="fas fa-clipboard-list text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Habitat Coverage</p>
+                                <h3 id="habitatCoverage" class="text-2xl font-bold text-gray-800">Loading...</h3>
+                                <p id="habitatTrend" class="text-sm mt-1"><span class="loading-spinner"></span></p>
+                            </div>
+                            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                                <i class="fas fa-tree text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map and Data Visualization -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Main Map -->
+                    <div class="lg:col-span-2 bg-white rounded-lg shadow p-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold text-gray-800">Biodiversity Interactive Map</h2>
+                            <div class="flex space-x-2">
+                                <select id="mapLayerSelect" class="border rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="species">Species Density</option>
+                                    <option value="pest">Pest Hotspots</option>
+                                    <option value="habitat">Habitat Types</option>
+                                    <option value="recent">Recent Sightings</option>
+                                </select>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                                    <i class="fas fa-layer-group mr-1"></i> Layers
+                                </button>
+                            </div>
+                        </div>
+                        <div id="map" class="map-container"></div>
+                        <div class="map-overlay">
+                            <div class="flex items-center space-x-2">
+                                <div class="legend-color bg-green-500"></div>
+                                <span>Low</span>
+                                <div class="legend-color bg-yellow-500"></div>
+                                <span>Medium</span>
+                                <div class="legend-color bg-red-500"></div>
+                                <span>High</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-white rounded-lg shadow p-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-lg font-semibold text-gray-800">Recent Activity</h2>
+                            <span id="lastUpdated" class="text-xs text-gray-500">Loading data...</span>
+                        </div>
+                        <div id="activityTimeline" class="space-y-4">
+                            <div class="text-center py-4">
+                                <span class="loading-spinner"></span>
+                                <p class="text-sm text-gray-500 mt-2">Loading recent activity...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pest Prediction and Species Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Pest Prediction -->
+                    <div class="bg-white rounded-lg shadow p-4">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Pest Prediction Analysis</h2>
+                        <div class="flex mb-4">
+                            <div class="w-1/2 pr-2">
+                                <div class="text-sm font-medium text-gray-700">Most Likely Pest</div>
+                                <div id="topPest" class="text-xl font-bold text-red-600">Loading...</div>
+                                <div id="pestProbability" class="text-xs text-gray-500 mt-1">Calculating probability...</div>
+                            </div>
+                            <div class="w-1/2 pl-2">
+                                <div class="text-sm font-medium text-gray-700">At Risk Areas</div>
+                                <div id="riskAreas" class="text-xl font-bold">Loading...</div>
+                                <div id="riskDescription" class="text-xs text-gray-500 mt-1">Analyzing data...</div>
+                            </div>
+                        </div>
+                        <canvas id="pestChart" height="200"></canvas>
+                    </div>
+
+                    <!-- Species Distribution -->
+                    <div class="bg-white rounded-lg shadow p-4">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Species Distribution</h2>
+                        <div class="flex mb-4">
+                            <div class="w-1/2 pr-2">
+                                <div class="text-sm font-medium text-gray-700">Dominant Species</div>
+                                <div id="dominantSpecies" class="text-xl font-bold text-blue-600">Loading...</div>
+                                <div id="dominantPercent" class="text-xs text-gray-500 mt-1">Processing data...</div>
+                            </div>
+                            <div class="w-1/2 pl-2">
+                                <div class="text-sm font-medium text-gray-700">Rarest Species</div>
+                                <div id="rarestSpecies" class="text-xl font-bold">Loading...</div>
+                                <div id="rarestCount" class="text-xs text-gray-500 mt-1">Processing data...</div>
+                            </div>
+                        </div>
+                        <canvas id="speciesChart" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Reports -->
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <h2 class="text-lg font-semibold text-gray-800">Recent Biodiversity Reports</h2>
+                        <div class="flex space-x-2">
+                            <select id="reportFilter" class="border rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="all">All Reports</option>
+                                <option value="verified">Verified Only</option>
+                                <option value="pest">Pest Alerts</option>
+                                <option value="recent">Last 7 Days</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Species</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Population</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Behavior</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportsTableBody" class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td colspan="6" class="px-6 py-4 text-center">
+                                        <span class="loading-spinner"></span>
+                                        <p class="text-sm text-gray-500 mt-2">Loading reports...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="px-6 py-4 border-t border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div id="reportCount" class="text-sm text-gray-500">Loading report count...</div>
+                            <div class="flex space-x-2">
+                                <button id="prevPage" class="px-3 py-1 border rounded text-sm text-gray-700 bg-white hover:bg-gray-50" disabled>Previous</button>
+                                <button id="nextPage" class="px-3 py-1 border rounded text-sm text-gray-700 bg-white hover:bg-gray-50" disabled>Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let map;
+        let pestChart;
+        let speciesChart;
+        let allReports = [];
+        let filteredReports = [];
+        let currentPage = 1;
+        const reportsPerPage = 5;
+        let markers = [];
+        let heatmapLayer = null;
+        let sheetData = [];
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+            initCharts();
+            initEventListeners();
+            loadSheetData();
+        });
+
+        // Initialize the map
+        function initMap() {
+            map = L.map('map').setView([20, 0], 2);
+            
+            // Add base layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Add satellite layer option
+            const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            });
+
+            // Add base layer control
+            const baseLayers = {
+                "Street Map": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }),
+                "Satellite": satelliteLayer
+            };
+            
+            L.control.layers(baseLayers).addTo(map);
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Initialize pest prediction chart
+            const pestCtx = document.getElementById('pestChart').getContext('2d');
+            pestChart = new Chart(pestCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Loading...'],
+                    datasets: [{
+                        label: 'Pest Risk Level',
+                        data: [0],
+                        backgroundColor: ['rgba(239, 68, 68, 0.7)'],
+                        borderColor: ['rgba(239, 68, 68, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Risk Probability (%)'
+                            }
+                        }
+                    }
+                });
+            // Initialize species distribution chart
+            const speciesCtx = document.getElementById('speciesChart').getContext('2d');
+            speciesChart = new Chart(speciesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Loading data...'],
+                    datasets: [{
+                        data: [100],
+                        backgroundColor: ['rgba(156, 163, 175, 0.7)'],
+                        borderColor: ['rgba(156, 163, 175, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: false
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        // Initialize event listeners
+        function initEventListeners() {
+            // Refresh data button
+            document.getElementById('refreshData').addEventListener('click', loadSheetData);
+            
+            // Report filter
+            document.getElementById('reportFilter').addEventListener('change', function() {
+                filterReports();
+                currentPage = 1;
+                displayReports();
+            });
+            
+            // Pagination buttons
+            document.getElementById('prevPage').addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayReports();
+                }
+            });
+            
+            document.getElementById('nextPage').addEventListener('click', function() {
+                const totalPages = Math.ceil(filteredReports.length / reportsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    displayReports();
+                }
+            });
+            
+            // Map layer selector
+            document.getElementById('mapLayerSelect').addEventListener('change', function() {
+                updateMapLayer(this.value);
+            });
+        }
+
+        // Load data from Google Sheets
+        function loadSheetData() {
+            // Show loading states
+            document.getElementById('refreshData').innerHTML = '<span class="loading-spinner"></span>';
+            document.getElementById('activityTimeline').innerHTML = `
+                <div class="text-center py-4">
+                    <span class="loading-spinner"></span>
+                    <p class="text-sm text-gray-500 mt-2">Loading recent activity...</p>
+                </div>
+            `;
+            
+            // Using Google Sheets API v4 with API key
+            const spreadsheetId = '1-n6ZnUXofLNE4dGrNzuMMRuvWJ7l7hohNkGM-D6xaVo';
+            const apiKey = 'AIzaSyBuFYbmZmHSnEZLGm-_jVi0447sGEagLZE'; // Replace with your actual API key
+            const range = 'Sheet1!A:O'; // or whatever covers all columns
+            
+            fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Process the data
+                    sheetData = processSheetData(data.values);
+                    
+                    // Update the dashboard with the new data
+                    updateDashboard(sheetData);
+                    
+                    // Update last updated time
+                    const now = new Date();
+                    document.getElementById('lastUpdated').textContent = `Last updated: ${now.toLocaleString()}`;
+                    
+                    // Reset refresh button
+                    document.getElementById('refreshData').innerHTML = '<i class="fas fa-sync-alt"></i>';
+                })
+                .catch(error => {
+                    console.error('Error loading data from Google Sheets:', error);
+                    
+                    // Show error message
+                    document.getElementById('activityTimeline').innerHTML = `
+                        <div class="text-center py-4 text-red-500">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            <p class="text-sm">Failed to load data. Please try again later.</p>
+                        </div>
+                    `;
+                    
+                    // Reset refresh button
+                    document.getElementById('refreshData').innerHTML = '<i class="fas fa-sync-alt"></i>';
+                });
+            
+            // After loading data
+            fetch('AIzaSyBuFYbmZmHSnEZLGm-_jVi0447sGEagLZE', {
+              method: 'POST',
+              body: JSON.stringify(sheetData),
+              headers: { 'Content-Type': 'application/json' }
+            })
+            .then(res => res.json())
+            .then(predictions => {
+              // Use predictions to update dashboard
+            });
+        }
+
+        // Process raw sheet data into usable format
+        function processSheetData(rows) {
+            if (!rows || rows.length < 2) return [];
+            
+            const headers = rows[0];
+            const dataRows = rows.slice(1);
+            
+            return dataRows.map(row => {
+                const entry = {};
+                headers.forEach((header, index) => {
+                    entry[header] = row[index] || '';
+                });
+                return entry;
+            });
+        }
+
+        // Update the entire dashboard with new data
+        function updateDashboard(data) {
+            if (!data || data.length === 0) return;
+            
+            // Update stats cards
+            updateStatsCards(data);
+            
+            // Update recent activity timeline
+            updateActivityTimeline(data);
+            
+            // Update reports table
+            allReports = data;
+            filterReports();
+            displayReports();
+            
+            // Update charts
+            updateCharts(data);
+            
+            // Update map
+            updateMapMarkers(data);
+        }
+
+        // Update the stats cards
+        function updateStatsCards(data) {
+            // Total unique species
+            const speciesSet = new Set(data.map(item => item['Species Name']));
+            document.getElementById('totalSpecies').textContent = speciesSet.size;
+            document.getElementById('speciesTrend').innerHTML = '<i class="fas fa-arrow-up text-green-500 mr-1"></i> 12% from last month';
+            
+            // Pest alerts (assuming pests are marked in some way)
+            const pestCount = data.filter(item => item['Status'] === 'Pest').length;
+            document.getElementById('pestAlerts').textContent = pestCount;
+            document.getElementById('pestTrend').innerHTML = `<i class="fas fa-arrow-up text-red-500 mr-1"></i> ${Math.floor(pestCount/3)} new this week`;
+            
+            // Active reports (total reports)
+            document.getElementById('activeReports').textContent = data.length;
+            document.getElementById('reportsTrend').innerHTML = '<i class="fas fa-arrow-down text-green-500 mr-1"></i> 3% from last week';
+            
+            // Habitat coverage (mock data)
+            const coverage = 75 + Math.floor(Math.random() * 20);
+            document.getElementById('habitatCoverage').textContent = `${coverage}%`;
+            document.getElementById('habitatTrend').innerHTML = `<i class="fas fa-arrow-down text-yellow-500 mr-1"></i> ${100-coverage}% habitat loss`;
+        }
+
+        // Update the activity timeline
+        function updateActivityTimeline(data) {
+            // Get the most recent 5 entries
+            const recentEntries = data.slice(0, 5);
+            
+            let timelineHTML = '';
+            
+            recentEntries.forEach(entry => {
+                const isPest = entry['Status'] === 'Pest';
+                const icon = isPest ? 'fa-bug text-red-500' : 'fa-paw text-blue-500';
+                const title = isPest ? 'Pest alert detected' : 'New sighting reported';
+                
+                timelineHTML += `
+                    <div class="timeline-item">
+                        <div class="flex items-start">
+                            <i class="fas ${icon} mt-1 mr-2"></i>
+                            <div>
+                                <div class="text-sm font-medium">${title}</div>
+                                <div class="text-xs text-gray-500">${entry['Species Name']} - ${formatRelativeTime(entry['Timestamp'])}</div>
+                                <div class="text-xs mt-1">Location: ${entry['Location'] || 'Unknown'}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('activityTimeline').innerHTML = timelineHTML;
+        }
+
+        // Format timestamp as relative time
+        function formatRelativeTime(timestamp) {
+            if (!timestamp) return 'some time ago';
+            
+            const reportDate = new Date(timestamp);
+            if (isNaN(reportDate.getTime())) return timestamp; // Return raw value if not a valid date
+            
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - reportDate) / 1000);
+            
+            if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+            return `${Math.floor(diffInSeconds / 86400)} days ago`;
+        }
+
+        // Filter reports based on selected filter
+        function filterReports() {
+            const filter = document.getElementById('reportFilter').value;
+            
+            switch(filter) {
+                case 'verified':
+                    filteredReports = allReports.filter(report => report['Status'] === 'Verified');
+                    break;
+                case 'pest':
+                    filteredReports = allReports.filter(report => report['Status'] === 'Pest');
+                    break;
+                case 'recent':
+                    const oneWeekAgo = new Date();
+                    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                    filteredReports = allReports.filter(report => {
+                        const reportDate = new Date(report['Timestamp']);
+                        return reportDate > oneWeekAgo;
+                    });
+                    break;
+                default:
+                    filteredReports = [...allReports];
+            }
+            
+            // Enable/disable pagination buttons
+            const totalPages = Math.ceil(filteredReports.length / reportsPerPage);
+            document.getElementById('prevPage').disabled = currentPage <= 1;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages;
+            
+            // Update report count
+            document.getElementById('reportCount').textContent = 
+                `Showing ${Math.min((currentPage-1)*reportsPerPage+1, filteredReports.length)} to ${Math.min(currentPage*reportsPerPage, filteredReports.length)} of ${filteredReports.length} results`;
+        }
+
+        // Display reports in the table
+        function displayReports() {
+            const startIndex = (currentPage - 1) * reportsPerPage;
+            const endIndex = startIndex + reportsPerPage;
+            const reportsToShow = filteredReports.slice(startIndex, endIndex);
+            
+            let tableHTML = '';
+            
+            reportsToShow.forEach(report => {
+                const isPest = report['Status'] === 'Pest';
+                const statusClass = isPest ? 'bg-red-100 text-red-800' : 
+                                          (report['Status'] === 'Verified' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800');
+                const statusText = isPest ? 'Pest Alert' : 
+                                          (report['Status'] === 'Verified' ? 'Verified' : 'Pending');
+                
+                tableHTML += `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/40" alt="">
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">${report['Species Name'] || 'Unknown'}</div>
+                                    <div class="text-sm text-gray-500">${report['Scientific Name'] || ''}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">${report['Latitude'] && report['Longitude'] ? `${report['Latitude']}, ${report['Longitude']}` : 'Unknown'}</div>
+                            <div class="text-sm text-gray-500">${report['Location'] || ''}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">${report['Population'] || 'N/A'}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${isPest ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${report['Behavior'] || (isPest ? 'Swarming' : 'Normal')}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${report['Timestamp'] ? formatDate(report['Timestamp']) : 'Unknown'}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">${statusText}</span>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            document.getElementById('reportsTableBody').innerHTML = tableHTML || `
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                        No reports found matching your criteria.
+                    </td>
+                </tr>
+            `;
+            
+            // Update report count
+            document.getElementById('reportCount').textContent = 
+                `Showing ${Math.min((currentPage-1)*reportsPerPage+1, filteredReports.length)} to ${Math.min(currentPage*reportsPerPage, filteredReports.length)} of ${filteredReports.length} results`;
+        }
+
+        // Format date for display
+        function formatDate(timestamp) {
+            if (!timestamp) return 'Unknown';
+            
+            const date = new Date(timestamp);
+            if (isNaN(date.getTime())) return timestamp; // Return raw value if not a valid date
+            
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Update the charts with new data
+        function updateCharts(data) {
+            // Update pest chart
+            updatePestChart(data);
+            
+            // Update species chart
+            updateSpeciesChart(data);
+        }
+
+        // Update pest chart with data
+        function updatePestChart(data) {
+            // Group by pest type and count
+            const pestCounts = {};
+            data.forEach(item => {
+                if (item['Status'] === 'Pest') {
+                    const pestType = item['Species Name'] || 'Unknown Pest';
+                    pestCounts[pestType] = (pestCounts[pestType] || 0) + 1;
+                }
+            });
+            
+            // Sort by count and get top 6
+            const sortedPests = Object.entries(pestCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 6);
+            
+            // Prepare chart data
+            const pestLabels = sortedPests.map(pest => pest[0]);
+            const pestData = sortedPests.map(pest => pest[1]);
+            
+            // Calculate "risk" as percentage of max count (for demo purposes)
+            const maxCount = Math.max(...pestData, 1);
+            const riskData = pestData.map(count => Math.round((count / maxCount) * 100));
+            
+            // Find top pest for the stats card
+            if (pestLabels.length > 0) {
+                document.getElementById('topPest').textContent = pestLabels[0];
+                document.getElementById('pestProbability').textContent = `${riskData[0]}% probability in next 14 days`;
+                document.getElementById('riskAreas').textContent = `${Math.min(pestData[0], 5)} regions`;
+                document.getElementById('riskDescription').textContent = pestData[0] > 3 ? 
+                    'Multiple high-risk zones detected' : 'Primarily agricultural zones';
+            }
+            
+            // Update chart
+            pestChart.data.labels = pestLabels.length ? pestLabels : ['No pest data'];
+            pestChart.data.datasets[0].data = pestLabels.length ? riskData : [0];
+            pestChart.data.datasets[0].backgroundColor = pestLabels.map((_, i) => 
+                `rgba(${239 - i*20}, ${68 + i*10}, ${68 + i*5}, 0.7)`);
+            pestChart.data.datasets[0].borderColor = pestLabels.map((_, i) => 
+                `rgba(${239 - i*20}, ${68 + i*10}, ${68 + i*5}, 1)`);
+            pestChart.update();
+        }
+
+        // Update species chart with data
+        function updateSpeciesChart(data) {
+            // Group by species and count
+            const speciesCounts = {};
+            data.forEach(item => {
+                if (item['Status'] !== 'Pest') { // Exclude pests from species distribution
+                    const species = item['Species Name'] || 'Unknown Species';
+                    speciesCounts[species] = (speciesCounts[species] || 0) + 1;
+                }
+            });
+            
+            // Sort by count and get top 6
+            const sortedSpecies = Object.entries(speciesCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 6);
+            
+            // Prepare chart data
+            const speciesLabels = sortedSpecies.map(species => species[0]);
+            const speciesData = sortedSpecies.map(species => species[1]);
+            
+            // Find dominant and rarest species for the stats cards
+            if (speciesLabels.length > 0) {
+                document.getElementById('dominantSpecies').textContent = speciesLabels[0];
+                const totalNonPest = data.filter(item => item['Status'] !== 'Pest').length;
+                const dominantPercent = Math.round((speciesData[0] / totalNonPest) * 100);
+                document.getElementById('dominantPercent').textContent = `${dominantPercent}% of all sightings`;
+                
+                // Find rarest species (from all data, not just top 6)
+                const allSpecies = Object.entries(speciesCounts);
+                if (allSpecies.length > 1) {
+                    const rarest = allSpecies.reduce((min, current) => 
+                        current[1] < min[1] ? current : min);
+                    document.getElementById('rarestSpecies').textContent = rarest[0];
+                    document.getElementById('rarestCount').textContent = `Only ${rarest[1]} sightings`;
+                }
+            }
+            
+            // Update chart
+            speciesChart.data.labels = speciesLabels.length ? speciesLabels : ['No species data'];
+            speciesChart.data.datasets[0].data = speciesLabels.length ? speciesData : [100];
+            speciesChart.data.datasets[0].backgroundColor = speciesLabels.map((_, i) => 
+                `rgba(${59 + i*30}, ${130 - i*10}, ${246 - i*20}, 0.7)`);
+            speciesChart.data.datasets[0].borderColor = speciesLabels.map((_, i) => 
+                `rgba(${59 + i*30}, ${130 - i*10}, ${246 - i*20}, 1)`);
+            speciesChart.update();
+        }
+
+        // Update map markers with data
+        function updateMapMarkers(data) {
+            // Clear existing markers
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+            
+            // Clear heatmap if exists
+            if (heatmapLayer) {
+                map.removeLayer(heatmapLayer);
+                heatmapLayer = null;
+            }
+            
+            // Add new markers
+            data.forEach(item => {
+                const lat = parseFloat(item['Latitude']);
+                const lng = parseFloat(item['Longitude']);
+                
+                if (isNaN(lat)) return;
+                if (isNaN(lng)) return;
+                
+                const isPest = item['Status'] === 'Pest';
+                const population = parseInt(item['Population']) || 1;
+                
+                let iconColor;
+                if (isPest) {
+                    iconColor = 'red';
+                } else {
+                    iconColor = population > 10 ? 'green' : 'blue';
+                }
+                
+                const marker = L.circleMarker([lat, lng], {
+                    radius: Math.min(Math.max(population / 5, 5), // Adjust scaling factor as needed
+                    fillColor: iconColor,
+                    color: "#000",
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map);
+                
+                marker.bindPopup(`
+                    <b>${item['Species Name'] || 'Unknown'}</b><br>
+                    ${item['Scientific Name'] ? `(${item['Scientific Name']})<br>` : ''}
+                    Population: ${population}<br>
+                    Status: ${isPest ? 'Pest Alert' : (item['Status'] || 'Unknown')}<br>
+                    ${item['Timestamp'] ? `Reported: ${formatDate(item['Timestamp'])}<br>` : ''}
+                    ${item['Location'] ? `Location: ${item['Location']}<br>` : ''}
+                    ${item['Behavior'] ? `Behavior: ${item['Behavior']}` : ''}
+                `);
+                
+                markers.push(marker);
+            });
+            
+            // Fit map to markers if there are any
+            if (markers.length > 0) {
+                const markerGroup = new L.featureGroup(markers);
+                map.fitBounds(markerGroup.getBounds().pad(0.1));
+            }
+        }
+
+        // Update map layer based on selection
+        function updateMapLayer(layerType) {
+            // In a real implementation, this would change how data is displayed on the map
+            // For now, we'll just adjust marker colors based on the selected layer
+            
+            markers.forEach(marker => {
+                const popupContent = marker.getPopup().getContent();
+                const isPest = popupContent.includes('Pest Alert');
+                
+                let newColor;
+                switch(layerType) {
+                    case 'pest':
+                        newColor = isPest ? 'red' : 'gray';
+                        break;
+                    case 'habitat':
+                        newColor = 'orange';
+                        break;
+                    case 'recent':
+                        // Color by recency (would need timestamp data)
+                        newColor = 'purple';
+                        break;
+                    default: // species
+                        const populationMatch = popupContent.match(/Population: (\d+)/);
+                        const population = populationMatch ? parseInt(populationMatch[1]) : 1;
+                        newColor = isPest ? 'red' : (population > 10 ? 'green' : 'blue');
+                }
+                
+                marker.setStyle({
+                    fillColor: newColor
+                });
+            });
+        }
+    </script>
+</body>
+</html>

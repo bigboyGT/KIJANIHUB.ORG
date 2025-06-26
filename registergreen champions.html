@@ -1,446 +1,1462 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GKIT Application Form</title>
-   
-  
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GKIT Forms Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3a9d23;
+            --primary-dark: #2f7c1c;
+            --primary-light: #e8f5e9;
+            --secondary-color: #f8f9fa;
+            --text-color: #333333;
+            --light-text: #666666;
+            --border-color: #dddddd;
+            --error-color: #d32f2f;
+            --success-color: #388e3c;
+            --warning-color: #ffa000;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
 
-    .form-container {
-      background-color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 900px;
-      padding: 20px;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .form-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f9;
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
 
-    .form-header img {
-      width: 80px;
-      height: auto;
-    }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            padding: 0 10px; /* Add horizontal padding for small screens */
+        }
 
-    .form-header h1 {
-      text-align: center;
-      color: #3a9d23;
-      font-size: 24px;
-      margin: 0 auto;
-    }
+        /* Form Container Styles */
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
 
-    .form-header p {
-      text-align: center;
-      color: #666666;
-      font-size: 14px;
-    }
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
 
-    .form-group {
-      margin-bottom: 15px;
-    }
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--primary-dark));
+        }
 
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #333333;
-    }
+        /* Header Styles */
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #dddddd;
-      border-radius: 5px;
-      font-size: 14px;
-      color: #333333;
-    }
+        .form-header img {
+            height: 80px;
+            width: auto;
+            object-fit: contain;
+        }
 
-    .form-group textarea {
-      resize: none;
-      height: 100px;
-    }
+        .form-title {
+            text-align: center;
+            flex-grow: 1;
+        }
 
-    .form-actions {
-      text-align: center;
-      margin-top: 20px;
-    }
+        .form-title h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
 
-    .form-actions button {
-      background-color: #3a9d23;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
+        .form-title h2 {
+            color: var(--light-text);
+            font-size: 18px;
+            font-weight: 500;
+        }
 
-    .form-actions button:hover {
-      background-color: #2f7c1c;
-    }
+        /* Form Elements */
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-color);
+        }
 
-    .declaration {
-      margin-top: 30px;
-      font-size: 14px;
-      color: #333;
-    }
+        .form-section:last-child {
+            border-bottom: none;
+        }
 
-    .declaration label {
-      font-weight: bold;
-    }
-  </style>
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group label.required::after {
+            content: ' *';
+            color: var(--error-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--text-color);
+            transition: var(--transition);
+            background-color: var(--secondary-color);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(58, 157, 35, 0.2);
+            background-color: white;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Radio and Checkbox Styles */
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .option-item input[type="radio"],
+        .option-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(58, 157, 35, 0.4);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        /* Footer Styles */
+        .form-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .form-footer p {
+            margin-bottom: 5px;
+        }
+
+        .form-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 50px;
+            padding: 5px;
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tab-btn {
+            padding: 12px 25px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--light-text);
+            transition: var(--transition);
+            border-radius: 50px;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Form Navigation */
+        .form-navigation {
+            display: none;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .form-header img {
+                height: 60px;
+            }
+            
+            .form-title h1 {
+                font-size: 24px;
+            }
+            
+            .form-title h2 {
+                font-size: 16px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+            
+            .tab-btn {
+                border-radius: 0;
+                text-align: center;
+            }
+            
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .btn, .file-input-button {
+                padding: 14px 10px;
+                font-size: 16px;
+            }
+            .form-control {
+                padding: 14px 10px;
+                font-size: 16px;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            animation: fadeIn 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        /* Success Message */
+        .alert-success {
+            background-color: rgba(56, 142, 60, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            color: var(--success-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-success i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        /* Custom Select Arrow */
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
+        }
+
+        /* File Input Customization */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .file-input-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        .file-input-button:hover {
+            background-color: #e9ecef;
+        }
+
+        .file-input-text {
+            margin-left: 10px;
+            color: var(--light-text);
+        }
+
+        /* Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* County/Constituency Selector */
+        .location-selectors {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 992px) {
+            .location-selectors {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Financial Goals Specific Styles */
+        .goal-input-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .goal-input-group label {
+            margin-bottom: 0;
+        }
+
+        .goal-input-group .form-control {
+            text-align: right;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+            
+            .form-container {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 0;
+            }
+            
+            .btn, .tabs {
+                display: none !important;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="form-container">
-    <div class="form-header">
-      <img src="https://i.ibb.co/vVmMCCQ/images.png" alt="Logo 1" border="0"></a
-      <h1>GKIT Application Form</h1>
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showForm('application')">Application Form</button>
+        
+
+        <!-- GKIT Application Form -->
+        <div id="application-form" class="form-container">
+            <div class="form-header">
+                <img src="https://i.ibb.co/vVmMCCQ/images.png" alt="GKIT Logo">
+                <div class="form-title">
+                    <h1>GKIT Application Form</h1>
+                    <h2>Green Kenya Initiative Trust</h2>
+                </div>
+                <img src="https://i.ibb.co/SJWXy40/images.png" alt="Partner Logo">
+            </div>
+            <p style="text-align: center; font-style: italic; color: var(--primary-dark); margin-bottom: 20px;">
+                "Go Green - Save the Future - Kenya Forever"
+            </p>
+
+            <div class="alert-success" style="display: none;">
+                <i class="fas fa-check-circle"></i> Your application has been submitted successfully! We'll contact you shortly.
+            </div>
+
+            <form id="gkitApplicationForm">
+                <!-- Business Information Section -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-building"></i> Business Information</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="business-name" class="required">Business Name</label>
+                            <input type="text" id="business-name" name="business-name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="certificate-no">Certificate Number (if registered)</label>
+                            <input type="text" id="certificate-no" name="certificate-no" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Information Section -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-user"></i> Personal Information</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="family-name" class="required">Family Name</label>
+                            <input type="text" id="family-name" name="family-name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="first-name" class="required">First Name</label>
+                            <input type="text" id="first-name" name="first-name" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name">Middle Name</label>
+                        <input type="text" id="middle-name" name="middle-name" class="form-control">
+                    </div>
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label for="dob" class="required">Date of Birth</label>
+                            <input type="date" id="dob" name="dob" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sex" class="required">Gender</label>
+                            <select id="sex" name="sex" class="form-control" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer-not-to-say">Prefer not to say</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="id-number" class="required">National ID Number</label>
+                            <input type="text" id="id-number" name="id-number" class="form-control" pattern="[0-9]{8}" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Information Section -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-map-marker-alt"></i> Location Information</h3>
+                    <div class="location-selectors">
+                        <div class="form-group">
+                            <label for="county" class="required">County</label>
+                            <select id="county" name="county" class="form-control" required>
+                                <option value="">Select County</option>
+                                <!-- Counties will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="constituency" class="required">Constituency</label>
+                            <select id="constituency" name="constituency" class="form-control" required>
+                                <option value="">Select Constituency</option>
+                                <!-- Constituencies will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ward">Ward</label>
+                            <select id="ward" name="ward" class="form-control">
+                                <option value="">Select Ward</option>
+                                <!-- Wards will be populated by JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-address-book"></i> Contact Information</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="phone" class="required">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="form-control" pattern="[0-9]{10}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="postal-address">Postal Address</label>
+                        <input type="text" id="postal-address" name="postal-address" class="form-control">
+                    </div>
+                </div>
+
+                <!-- Next of Kin Section -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-users"></i> Next of Kin Information</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="kin-name" class="required">Next of Kin's Full Name</label>
+                            <input type="text" id="kin-name" name="kin-name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="kin-relationship" class="required">Relationship</label>
+                            <select id="kin-relationship" name="kin-relationship" class="form-control" required>
+                                <option value="">Select Relationship</option>
+                                <option value="spouse">Spouse</option>
+                                <option value="parent">Parent</option>
+                                <option value="sibling">Sibling</option>
+                                <option value="child">Child</option>
+                                <option value="relative">Relative</option>
+                                <option value="friend">Friend</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="kin-phone" class="required">Next of Kin's Phone Number</label>
+                        <input type="tel" id="kin-phone" name="kin-phone" class="form-control" pattern="[0-9]{10}" required>
+                    </div>
+                </div>
+
+                <!-- GKIT Awareness Section -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-info-circle"></i> GKIT Awareness</h3>
+                    <div class="form-group">
+                        <label class="required">How did you hear about GKIT?</label>
+                        <div class="option-group">
+                            <label class="option-item">
+                                <input type="radio" name="awareness" value="internet" required> Internet (Website, Social Media)
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="awareness" value="pamphlet"> Pamphlet/Brochure
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="awareness" value="radio"> Radio Advertisement
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="awareness" value="tv"> TV Program
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="awareness" value="newspaper"> Newspaper/Magazine
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="awareness" value="friend"> Friend/Family Member
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="awareness" value="event"> Community Event
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="awareness" value="other"> Other
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="awareness-details">Please provide details:</label>
+                        <textarea id="awareness-details" name="awareness-details" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <!-- Support Section -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-hand-holding-heart"></i> Support GKIT</h3>
+                    <div class="form-group">
+                        <label>Would you like to support GKIT?</label>
+                        <div class="option-group">
+                            <label class="option-item">
+                                <input type="checkbox" name="support-financial" value="yes"> Make a financial contribution
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Donation Type</label>
+                        <div class="option-group">
+                            <label class="option-item">
+                                <input type="radio" name="donation-type" value="one-time"> One-time donation
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="donation-type" value="monthly"> Monthly recurring donation
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Donation Amount (Ksh)</label>
+                        <input type="number" name="donation-amount" class="form-control" placeholder="Enter amount">
+                    </div>
+                    <div class="form-group">
+                        <label>Volunteer Opportunities</label>
+                        <div class="option-group">
+                            <label class="option-item">
+                                <input type="checkbox" name="volunteer-parttime" value="yes"> Volunteer part-time
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" name="volunteer-fulltime" value="yes"> Volunteer full-time
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" name="volunteer-skills" value="yes"> Offer professional skills
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="volunteer-skills-details">If offering skills, please specify:</label>
+                        <textarea id="volunteer-skills-details" name="volunteer-skills-details" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <!-- Documents Section -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-file-alt"></i> Documents</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="cv" class="required">Attach CV/Resume</label>
+                            <div class="file-input-wrapper">
+                                <button type="button" class="file-input-button">
+                                    <i class="fas fa-upload"></i>
+                                    <span class="file-input-text">Choose file...</span>
+                                </button>
+                                <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
+                            </div>
+                            <small class="form-note">Accepted formats: PDF, DOC, DOCX (Max 5MB)</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="id-copy">Attach ID Copy (Optional)</label>
+                            <div class="file-input-wrapper">
+                                <button type="button" class="file-input-button">
+                                    <i class="fas fa-upload"></i>
+                                    <span class="file-input-text">Choose file...</span>
+                                </button>
+                                <input type="file" id="id-copy" name="id-copy" accept=".pdf,.jpg,.jpeg,.png">
+                            </div>
+                            <small class="form-note">Accepted formats: PDF, JPG, PNG (Max 5MB)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Goal Setting fields -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-question-circle"></i> Reasons for Building Your Green Enterprise</h3>
+                    <div class="form-group">
+                        <label for="reason1" class="required">Reason 1 for building your Green Enterprise:</label>
+                        <textarea id="reason1" name="reason1" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="reason2" class="required">Reason 2 for building your Green Enterprise:</label>
+                        <textarea id="reason2" name="reason2" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="reason3" class="required">Reason 3 for building your Green Enterprise:</label>
+                        <textarea id="reason3" name="reason3" class="form-control" rows="3" required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-chart-line"></i> Financial Goals</h3>
+                    <div class="form-group">
+                        <label for="currentIncome" class="required">Current monthly income (KES):</label>
+                        <input type="number" id="currentIncome" name="currentIncome" class="form-control" required>
+                    </div>
+                    <div class="goal-input-group">
+                        <label for="income3months" class="required">Monthly income goal in 3 months (KES):</label>
+                        <input type="number" id="income3months" name="income3months" class="form-control" required>
+                    </div>
+                    <div class="goal-input-group">
+                        <label for="income6months" class="required">Monthly income goal in 6 months (KES):</label>
+                        <input type="number" id="income6months" name="income6months" class="form-control" required>
+                    </div>
+                    <div class="goal-input-group">
+                        <label for="income1year" class="required">Monthly income goal in 1 year (KES):</label>
+                        <input type="number" id="income1year" name="income1year" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-handshake"></i> Commitment</h3>
+                    <div class="form-group">
+                        <label for="hours" class="required">Hours per week you commit to your Green Enterprise:</label>
+                        <input type="number" id="hours" name="hours" class="form-control" min="1" max="168" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mentorCommitment" class="required">Mentorship commitment:</label>
+                        <textarea id="mentorCommitment" name="mentorCommitment" class="form-control" rows="2" required>I will commit to mentor another Green Champion to establish a Green Enterprise.</textarea>
+                    </div>
+                </div>
+
+                <!-- Declaration Section -->
+                <div class="form-section" style="background-color: var(--primary-light); padding: 20px; border-radius: 8px;">
+                    <h3 class="section-title"><i class="fas fa-shield-alt"></i> Declaration</h3>
+                    <p style="margin-bottom: 15px;">
+                        I hereby declare that all the information provided in this application is true, complete, and accurate to the best of my knowledge. I understand that any false statements or omissions may lead to disqualification from the program.
+                    </p>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="required">Your Full Name</label>
+                            <input type="text" name="declaration-name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Date</label>
+                            <input type="date" name="declaration-date" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Section -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-block">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                </div>
+            </form>
+
+            <div class="form-footer">
+                <p><strong>The Greening Kenya Initiative Trust</strong></p>
+                <p>P.O. Box 40168 - 00100, Nairobi, Kenya</p>
+                <p>Tel: 0722984992 / 0712062393 / 0713257570 / 0720273218</p>
+                <p>Email: <a href="mailto:greeningkenyainitiativetrust2030@gmail.com">greeningkenyainitiativetrust2030@gmail.com</a></p>
+            </div>
+        </div>
+
+       
+    <script>
+        // County-Constituency-Ward Data
+        const locations = {
+          "Mombasa": {
+            "Changamwe": ["Port Reitz", "Kipevu", "Airport", "Miritini", "Chaani"],
+            "Jomvu": ["Jomvu Kuu", "Mikindani", "Mjambere"],
+            "Kisauni": ["Mtongwe", "Shika Adabu", "Bofu", "Likoni", "Timbwani"],
+            "Nyali": ["Frere Town", "Ziwa La Ng'ombe", "Mkomani", "Kongowea", "Kadzandani"],
+            "Likoni": ["Mtongwe", "Shika Adabu", "Bofu", "Likoni", "Timbwani"],
+            "Mvita": ["Mji Wa Kale", "Tudor", "Tononoka", "Shimanzi", "Majengo"]
+        },
+        "Kwale": {
+            "Msambweni": ["Gombato Bongwe", "Ukunda", "Kinondo", "Mkongani"],
+            "Lunga Lunga": ["Pongwe", "Vanga", "Mkunguni"],
+            "Matuga": ["Tsimba Golini", "Waa", "Tiwi", "Kubo South", "Mkongani"],
+            "Kinango": ["Kinango", "Mackinnon Road", "Chengoni", "Mwavumbo", "Kasemeni"]
+        },
+        "Kilifi": {
+            "Kilifi North": ["Tezo", "Sokoni", "Kibarani", "Ngerenya", "Mtongani"],
+            "Kilifi South": ["Shariani", "Chasimba", "Mavueni", "Mtwapa", "Junju"],
+            "Kaloleni": ["Mazeras", "Mariakani", "Kayafungo", "Kaloleni", "Mwanamwinga"],
+            "Rabai": ["Rabai", "Kinarani", "Mwatate", "Jibana", "Kambe"],
+            "Ganze": ["Ganze", "Bamba", "Jaribuni", "Sokoke"]
+        },
+        "Tana River": {
+            "Garsen": ["Kipini East", "Garsen South", "Kipini West", "Garsen Central", "Garsen West"],
+            "Galole": ["Kinakomba", "Mikinduni", "Chewani"],
+            "Bura": ["Chewele", "Hirimani", "Bangale"]
+        },
+        "Lamu": {
+            "Lamu East": ["Faza", "Kiunga", "Basuba"],
+            "Lamu West": ["Shella", "Mkomani", "Hindi", "Mpeketoni", "Bahari"]
+        },
+        "Taita Taveta": {
+            "Taveta": ["Chala", "Mahoo", "Bomeni", "Mboghoni"],
+            "Wundanyi": ["Wundanyi", "Werugha", "Wumingu", "Mwanda"],
+            "Mwatate": ["Ronge", "Mwatate", "Bura", "Chawia"],
+            "Voi": ["Sagalla", "Kaloleni", "Marungu", "Kasigau"]
+        },
+        "Garissa": {
+            "Garissa Township": ["Ijara", "Masalani", "Ijara"],
+            "Balambala": ["Balambala", "Sala", "Maalimin"],
+            "Lagdera": ["Modogashe", "Benane", "Goreale"],
+            "Dadaab": ["Dadaab", "Labisigale", "Damajale"],
+            "Fafi": ["Bura", "Dekaharia", "Jarajila"],
+            "Ijara": ["Masalani", "Sangailu", "Ijara"]
+        },
+        "Wajir": {
+            "Wajir North": ["Buna", "Wajir Bor", "Griftu"],
+            "Wajir East": ["Tarbaj", "Wajir East", "Wajir South"],
+            "Wajir West": ["Griftu", "Lafey", "Wajir West"],
+            "Wajir South": ["Habasswein", "Sala", "Arbajahan"],
+            "Eldas": ["Eldas", "Della", "Lakoley South"],
+            "Tarbaj": ["Tarbaj", "Wajir North", "Buna"]
+        },
+        "Mandera": {
+            "Mandera West": ["Elwak", "Lafey", "Mandera West"],
+            "Mandera North": ["Rhamu", "Rhamu Dimtu", "Mandera North"],
+            "Mandera South": ["Khalalio", "Banissa", "Mandera South"],
+            "Mandera East": ["Ashabito", "Guticha", "Mandera East"],
+            "Lafey": ["Lafey", "Fino", "Warankara"]
+        },
+        "Marsabit": {
+            "Moyale": ["Moyale", "Sololo", "Butiye"],
+            "North Horr": ["North Horr", "Illeret", "Maikona"],
+            "Saku": ["Saku", "Sagante", "Karare"],
+            "Laisamis": ["Laisamis", "Korr", "Logologo"]
+        },
+        "Isiolo": {
+            "Isiolo North": ["Wabera", "Bulapesa", "Burat"],
+            "Isiolo South": ["Ngare Mara", "Oldonyiro", "Chari"]
+        },
+        "Meru": {
+            "Igembe South": ["Maua", "Kangeta", "Athiru Gaiti"],
+            "Igembe Central": ["Akachiu", "Kanuni", "Antuamburi"],
+            "Igembe North": ["Athiru Ruujine", "Antubetwe Kiongo", "Ntunene"],
+            "Tigania West": ["Mikinduri", "Kiguchwa", "Muthara"],
+            "Tigania East": ["Muthara", "Karama", "Mikinduri"],
+            "North Imenti": ["Timau", "Kibirichia", "Ruiri"],
+            "Buuri": ["Kiegoi", "Athiru Ruujine", "Uringu"],
+            "Central Imenti": ["Gitoro", "Miathene", "Nkuene"],
+            "South Imenti": ["Mitunguu", "Igoji East", "Igoji West"]
+        },
+        "Tharaka Nithi": {
+            "Tharaka": ["Mukothima", "Nkondi", "Chiakariga", "Marimanti"],
+            "Chuka": ["Magumoni", "Karingani", "Mugwe", "Muthambi"],
+            "Maara": ["Mitheru", "Muthambi", "Muthara", "Kanjoro"]
+        },
+        "Embu": {
+            "Manyatta": ["Ruguru/Ngandori", "Kithimu", "Nginda", "Mbeti North"],
+            "Runyenjes": ["Gachoka", "Kaanwa", "Kiriari", "Karurumo"],
+            "Mbeere South": ["Mwea", "Makima", "Mavuria", "Mbeti South"],
+            "Mbeere North": ["Siakago", "Karaba", "Thiba", "Gaturi South"]
+        },
+        "Kitui": {
+            "Kitui West": ["Mutonguni", "Kauwi", "Matinyani", "Kwa Mutonga"],
+            "Kitui Central": ["Kitui Town", "Kyangwithya West", "Mulango", "Kyangwithya East"],
+            "Kitui East": ["Voo/Kyamatu", "Endau/Malalani", "Mutitu", "Ikanga/Kyatune"],
+            "Mwingi North": ["Kyuso", "Tseikuru", "Tharaka", "Mumoni"],
+            "Mwingi West": ["Nguni", "Nuu", "Mui", "Waita"],
+            "Mwingi Central": ["Mwingi Central", "Mumbuni", "Migwani", "Zombe"]
+        },
+        "Machakos": {
+            "Mavoko": ["Athi River", "Kinanie", "Muthwani", "Syokimau"],
+            "Machakos Town": ["Kalama", "Mua", "Mutituni", "Machakos Central"],
+            "Mwala": ["Mbiuni", "Makutano", "Masii", "Muthetheni"],
+            "Yatta": ["Ikombe", "Katangi", "Kangundo North", "Kangundo Central"],
+            "Kangundo": ["Kangundo East", "Kangundo West", "Tala", "Matungulu"],
+            "Matungulu": ["Tala", "Matungulu North", "Matungulu East", "Matungulu West"]
+        },
+        "Makueni": {
+            "Makueni": ["Wote", "Muvau", "Kikumini", "Mbitini"],
+            "Kibwezi West": ["Kibwezi", "Makindu", "Nguu/Masumba", "Emali"],
+            "Kibwezi East": ["Masongaleni", "Mtito Andei", "Thange", "Ivingoni"],
+            "Kilome": ["Kasikeu", "Mukaa", "Kiima Kiu", "Kalanzoni"],
+            "Mbooni": ["Mbooni", "Kithungo", "Kiteta", "Waia"],
+            "Kaiti": ["Ukia", "Kee", "Kilungu", "Ilima"]
+        },
+        "Nyandarua": {
+            "Kinangop": ["Engineer", "Gathara", "North Kinangop", "Murungaru"],
+            "Kipipiri": ["Geta", "Githabai", "Wanjohi", "Kipipiri"],
+            "Ol Kalou": ["Ol Kalou", "Kinangop South", "Kiriita", "Leshau"],
+            "Ndaragwa": ["Ndaragwa", "Kiriita", "Leshau", "Kaimbaga"],
+            "Nyandarua South": ["Gathanji", "Gatimu", "Weru", "Charagita"]
+        },
+        "Nyeri": {
+            "Tetu": ["Dedan Kimathi", "Wamagana", "Aguthi", "Gakawa"],
+            "Kieni": ["Mweiga", "Naromoru", "Kiamathaga", "Gatarakwa"],
+            "Mathira": ["Karati", "Ruguru", "Magutu", "Iriani"],
+            "Othaya": ["Chinga", "Mahiga", "Othaya", "Iria-ini"],
+            "Mukurweini": ["Mukurweini Central", "Mukurweini West", "Mukurweini East", "Gikondi"],
+            "Nyeri Town": ["Rware", "Gatitu", "Kamakwa", "Kiganjo"]
+        },
+        "Kirinyaga": {
+            "Kirinyaga Central": ["Mutithi", "Kangai", "Thiba", "Wamumu"],
+            "Kirinyaga East": ["Kanyekini", "Kerugoya", "Inoi", "Mutira"],
+            "Kirinyaga West": ["Kimbimbi", "Mwea", "Makongoro", "Tebere"],
+            "Mwea": ["Thiba", "Wamumu", "Makutano", "Mugoiri"]
+        },
+        "Murang'a": {
+            "Kandara": ["Gatanga", "Kariara", "Kihumbuini", "Kigumo"],
+            "Kangema": ["Kangema", "Kigumo", "Muthithi", "Kinyona"],
+            "Kigumo": ["Kigumo", "Kangari", "Kinyona", "Muguru"],
+            "Mathioya": ["Kiria", "Kambiti", "Kangari", "Murarandia"],
+            "Murang'a East": ["Gatanga", "Kahumbu", "Kihumbuini", "Kariara"],
+            "Murang'a South": ["Kambiti", "Kangari", "Kigumo", "Muthithi"]
+        },
+        "Kiambu": {
+            "Gatundu North": ["Gatundu", "Gituamba", "Kiamwangi", "Kiganjo"],
+            "Gatundu South": ["Kiganjo", "Ndarugu", "Ngenda", "Gituamba"],
+            "Githunguri": ["Githunguri", "Githiga", "Ikinu", "Ngewa"],
+            "Juja": ["Juja", "Witeithie", "Kalimoni", "Theta"],
+            "Kabete": ["Kabete", "Uthiru", "Kinoo", "Nachu"],
+            "Kiambaa": ["Cianda", "Karuri", "Ndenderu", "Muchatha"],
+            "Kiambu": ["Ting'ang'a", "Ndumberi", "Riabai", "Township"],
+            "Kikuyu": ["Kikuyu", "Kinoo", "Karai", "Nachu"],
+            "Limuru": ["Limuru", "Bibirioni", "Kinale", "Ndeiya"],
+            "Ruiru": ["Ruiru", "Kahawa Sukari", "Kahawa Wendani", "Kiuu"],
+            "Thika Town": ["Thika", "Township", "Kamenu", "Hospital"]
+        },
+        "Turkana": {
+            "Turkana North": ["Kakuma", "Lokichoggio", "Kalobeyei", "Songot"],
+            "Turkana West": ["Lodwar", "Kanamkemer", "Kerio Delta", "Kang'atotha"],
+            "Turkana Central": ["Lodwar", "Kanamkemer", "Kerio Delta", "Kang'atotha"],
+            "Turkana East": ["Lokori", "Kochodin", "Kalapata", "Kotaruk"],
+            "Turkana South": ["Kaputir", "Katilu", "Lobokat", "Kalapata"],
+            "Loima": ["Lokiriama", "Kalokol", "Lomelo", "Kotaruk"]
+        },
+        "West Pokot": {
+            "Kapenguria": ["Kapenguria", "Mnagei", "Siyoi", "Endugh"],
+            "Pokot South": ["Chepareria", "Batei", "Lelan", "Tapach"],
+            "Pokot Central": ["Sigor", "Masol", "Sekerr", "Lomut"],
+            "Kacheliba": ["Kiwawa", "Alale", "Kodich", "Suam"]
+        },
+        // Additional counties not in the above list with expanded data:
+        "Nandi": {
+            "Kapsabet": ["Kapsabet Central", "Kapsabet East", "Kapsabet West", "Kapsabet South"],
+            "Tinderet": ["Tinderet North", "Tinderet South", "Tinderet Central", "Tinderet West"],
+            "Emgwen": ["Emgwen Central", "Emgwen West", "Emgwen East"],
+            "Chesumei": ["Chesumei Central", "Chesumei North", "Chesumei South"],
+            "Aldai": ["Aldai North", "Aldai Central", "Aldai South"],
+            "Nandi Hills": ["Nandi Hills North", "Nandi Hills South"]
+        },
+        "Baringo": {
+            "Baringo Central": ["Kabartonjo", "Chebon", "Tinderet", "Kiptabon"],
+            "Baringo North": ["Kabazi", "Tangulbei", "Katalwo", "Lokitaung"],
+            "Mogotio": ["Mogotio East", "Mogotio West", "Barwot"],
+            "Eldama Ravine": ["Talai", "Ravine", "Baiturong", "Chatul"]
+        },
+        "Laikipia": {
+            "Laikipia North": ["Nyahururu", "Ol-moru", "Kiajio"],
+            "Laikipia West": ["Nyandarua", "Rukura", "Lembus"],
+            "Laikipia East": ["Ndori", "Ol-joro", "Mugirango"]
+        },
+        "Nakuru": {
+            "Nakuru Town East": ["Ngachura", "Bomba", "Madaraka", "Rongai"],
+            "Nakuru Town West": ["Kiamwangi", "Motero", "Gatamaiyu", "Rugunda"],
+            "Rongai": ["Rongai East", "Rongai West"],
+            "Subukia": ["Subukia Central", "Subukia North"],
+            "Kuresoi North": ["Kuresoi Ward 1", "Kuresoi Ward 2"],
+            "Kuresoi South": ["Kuresoi Ward A", "Kuresoi Ward B"],
+            "Njoro": ["Njoro Ward 1", "Njoro Ward 2"]
+        },
+        "Narok": {
+            "Narok North": ["Naikarra", "Naikarra East", "Koko"],
+            "Narok South": ["Emurua Dikirr", "Loita"],
+            "Narok East": ["Kilgoris", "Kisamis", "Olooitikur"],
+            "Narok West": ["Olare", "Oloitokitok"],
+            "Narok Central": ["Central Ward 1", "Central Ward 2"]
+        },
+        "Kajiado": {
+            "Kajiado Central": ["Imaroro", "Olkeri", "Loksir"],
+            "Kajiado North": ["Ngosong", "Oloitoktok North"],
+            "Kajiado East": ["Mashuru", "Azaa", "Keekonyokie East"],
+            "Kajiado West": ["Isinya", "Keekonyokie West"]
+        },
+        "Kericho": {
+            "Ainamoi": ["Kipchumba", "Kipasika", "Chebai"],
+            "Bureti": ["Kaptebeng", "Tobit", "Lelmokwo"],
+            "Belgut": ["Belgut Central", "Belgut North"],
+            "Kipkelion East": ["Kipkelion East A", "Kipkelion East B"],
+            "Kipkelion West": ["Kipkelion West A", "Kipkelion West B"],
+            "Sigowet": ["Sigowet A", "Sigowet B"]
+        },
+        "Bomet": {
+            "Bomet Central": ["Cheptororiet", "Kapsong"],
+            "Chepalungu": ["Chepalungu A", "Chepalungu B"],
+            "Konoin": ["Konoin A", "Konoin B", "Konoin C"]
+        },
+        "Kakamega": {
+            "Lugari": ["Lugari Central", "Lugari North", "Lugari South"],
+            "Butere": ["Butere Town", "Butere Rural", "Butere West"],
+            "Navakholo": ["Navakholo A", "Navakholo B"]
+        },
+        "Vihiga": {
+            "Vihiga": ["Vihiga Central", "Vihiga East"],
+            "Sabatia": ["Sabatia North", "Sabatia South"],
+            "Luanda": ["Luanda Central", "Luanda East"]
+        },
+        "Bungoma": {
+            "Webuye": ["Webuye East", "Webuye West"],
+            "Kimilili": ["Kimilili Central", "Kimilili East", "Kimilili West"],
+            "Tongaren": ["Tongaren North", "Tongaren South"]
+        },
+        "Busia": {
+            "Busia East": ["Busia East A", "Busia East B"],
+            "Busia West": ["Busia West A", "Busia West B"],
+            "Nambale": ["Nambale East", "Nambale West"]
+        },
+        "Siaya": {
+            "Ugenya": ["Ugenya Central", "Ugenya North"],
+            "Bondo": ["Bondo Central", "Bondo West"],
+            "Gem": ["Gem North", "Gem South"]
+        },
+        "Kisumu": {
+            "Kisumu East": ["Kisumu East A", "Kisumu East B"],
+            "Kisumu West": ["Kisumu West A", "Kisumu West B"],
+            "Kisumu Central": ["Kisumu Central A", "Kisumu Central B"]
+        },
+        "Homa Bay": {
+            "Mbita": ["Mbita North", "Mbita South"],
+            "Kasipul": ["Kasipul Central", "Kasipul East"],
+            "Homa Bay Town": ["Homa Bay Central", "Homa Bay West"]
+        },
+        "Migori": {
+            "Migori Central": ["Migori Central A", "Migori Central B"],
+            "Rongo": ["Rongo North", "Rongo South"],
+            "Suna East": ["Suna East A", "Suna East B"],
+            "Suna West": ["Suna West A", "Suna West B"]
+        },
+        "Kisii": {
+            "Kisii Central": ["Kisii Central A", "Kisii Central B"],
+            "Kisii South": ["Kisii South A", "Kisii South B"],
+            "Bonchari": ["Bonchari A", "Bonchari B"],
+            "South Mugirango": ["South Mugirango A", "South Mugirango B"]
+        },
+        "Nyamira": {
+            "Nyamira North": ["Nyamira North A", "Nyamira North B"],
+            "Nyamira South": ["Nyamira South A", "Nyamira South B"]
+        }
+    };
+
+
+// Google Apps Script Deployment URL
+const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbwx4cKiGxeexbkQj4kSVIqJz5P-JaXZLORxAW1i0NKw/dev";
+
+// Utility function to show loading state
+function setLoadingState(loading) {
+    const submitBtn = document.querySelector('#gkitApplicationForm button[type="submit"]');
+    if (loading) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    } else {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+    }
+}
+
+// Utility function to show alert message
+function showAlert(message, type = 'success') {
+    const alertDiv = document.querySelector('.alert-success');
+    alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+    alertDiv.style.display = "flex";
+    alertDiv.style.backgroundColor = type === 'success' ? 'rgba(56, 142, 60, 0.1)' : 'rgba(211, 47, 47, 0.1)';
+    alertDiv.style.borderLeftColor = type === 'success' ? 'var(--success-color)' : 'var(--error-color)';
+    alertDiv.style.color = type === 'success' ? 'var(--success-color)' : 'var(--error-color)';
     
-     <img src="https://i.ibb.co/SJWXy40/images.png" alt="Logo 2">
+    window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+// Enhanced file validation
+function validateFile(file, allowedTypes, maxSizeMB) {
+    if (!file) return true;
+    
+    const fileType = file.type.toLowerCase();
+    const validType = allowedTypes.some(type => fileType.includes(type));
+    const validSize = file.size <= maxSizeMB * 1024 * 1024;
+    
+    return validType && validSize;
+}
+
+// Read file as base64 with error handling
+function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+        if (!file) return resolve({base64: "", name: "", type: ""});
+        
+        const reader = new FileReader();
+        reader.onload = () => resolve({
+            base64: reader.result.split(',')[1],
+            name: file.name,
+            type: file.type
+        });
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+
+// Populate County, Constituency, and Ward dropdowns
+function setupLocationSelectors() {
+    const countySelect = document.getElementById('county');
+    const constituencySelect = document.getElementById('constituency');
+    const wardSelect = document.getElementById('ward');
+
+    // Populate counties
+    countySelect.innerHTML = '<option value="">Select County</option>' +
+        Object.keys(locations).map(county => `<option value="${county}">${county}</option>`).join('');
+
+    // Populate constituencies when county changes
+    countySelect.addEventListener('change', function() {
+        const county = this.value;
+        constituencySelect.innerHTML = '<option value="">Select Constituency</option>';
+        wardSelect.innerHTML = '<option value="">Select Ward</option>';
+        
+        if (county && locations[county]) {
+            constituencySelect.innerHTML += Object.keys(locations[county])
+                .map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+    });
+
+    // Populate wards when constituency changes
+    constituencySelect.addEventListener('change', function() {
+        const county = countySelect.value;
+        const constituency = this.value;
+        wardSelect.innerHTML = '<option value="">Select Ward</option>';
+        
+        if (county && constituency && locations[county][constituency]) {
+            wardSelect.innerHTML += locations[county][constituency]
+                .map(w => `<option value="${w}">${w}</option>`).join('');
+        }
+    });
+}
+
+// Update file input display text
+function setupFileInputs() {
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+        const button = input.closest('.file-input-wrapper').querySelector('.file-input-button');
+        const textSpan = button.querySelector('.file-input-text');
+        
+        input.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                textSpan.textContent = this.files[0].name;
+            } else {
+                textSpan.textContent = "Choose file...";
+            }
+        });
+    });
+    
+    // Handle button clicks
+    document.querySelectorAll('.file-input-button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.parentElement.querySelector('input[type="file"]').click();
+        });
+    });
+}
+
+// Form validation
+function validateForm(form) {
+    // Check required fields
+    const requiredFields = form.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.style.borderColor = 'var(--error-color)';
+            isValid = false;
+            
+            // Add error message
+            if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('error-message')) {
+                const errorMsg = document.createElement('small');
+                errorMsg.className = 'error-message';
+                errorMsg.style.color = 'var(--error-color)';
+                errorMsg.textContent = 'This field is required';
+                field.parentNode.insertBefore(errorMsg, field.nextSibling);
+            }
+        } else {
+            field.style.borderColor = 'var(--border-color)';
+            const errorMsg = field.nextElementSibling;
+            if (errorMsg && errorMsg.classList.contains('error-message')) {
+                errorMsg.remove();
+            }
+        }
+    });
+    
+    // Validate email format if provided
+    const emailField = form.querySelector('[type="email"]');
+    if (emailField && emailField.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) {
+        emailField.style.borderColor = 'var(--error-color)';
+        isValid = false;
+        
+        if (!emailField.nextElementSibling || !emailField.nextElementSibling.classList.contains('error-message')) {
+            const errorMsg = document.createElement('small');
+            errorMsg.className = 'error-message';
+            errorMsg.style.color = 'var(--error-color)';
+            errorMsg.textContent = 'Please enter a valid email address';
+            emailField.parentNode.insertBefore(errorMsg, emailField.nextSibling);
+        }
+    }
+    
+    // Validate phone number format
+    const phoneField = form.querySelector('[name="phone"]');
+    if (phoneField && phoneField.value && !/^[0-9]{10}$/.test(phoneField.value)) {
+        phoneField.style.borderColor = 'var(--error-color)';
+        isValid = false;
+        
+        if (!phoneField.nextElementSibling || !phoneField.nextElementSibling.classList.contains('error-message')) {
+            const errorMsg = document.createElement('small');
+            errorMsg.className = 'error-message';
+            errorMsg.style.color = 'var(--error-color)';
+            errorMsg.textContent = 'Please enter a valid 10-digit phone number';
+            phoneField.parentNode.insertBefore(errorMsg, phoneField.nextSibling);
+        }
+    }
+    
+    // Validate ID number format
+    const idField = form.querySelector('[name="id-number"]');
+    if (idField && idField.value && !/^[0-9]{8}$/.test(idField.value)) {
+        idField.style.borderColor = 'var(--error-color)';
+        isValid = false;
+        
+        if (!idField.nextElementSibling || !idField.nextElementSibling.classList.contains('error-message')) {
+            const errorMsg = document.createElement('small');
+            errorMsg.className = 'error-message';
+            errorMsg.style.color = 'var(--error-color)';
+            errorMsg.textContent = 'Please enter a valid 8-digit ID number';
+            idField.parentNode.insertBefore(errorMsg, idField.nextSibling);
+        }
+    }
+    
+    // Validate file uploads
+    const cvFile = form.querySelector('#cv').files[0];
+    const idCopyFile = form.querySelector('#id-copy').files[0];
+    
+    if (!validateFile(cvFile, ['pdf', 'msword', 'vnd.openxmlformats-officedocument.wordprocessingml.document'], 5)) {
+        showAlert('CV/Resume must be PDF or Word document (max 5MB)', 'error');
+        isValid = false;
+    }
+    
+    if (idCopyFile && !validateFile(idCopyFile, ['pdf', 'image/jpeg', 'image/png'], 5)) {
+        showAlert('ID Copy must be PDF, JPG or PNG (max 5MB)', 'error');
+        isValid = false;
+    }
+    
+    return isValid;
+}
+
+// Form submission handler
+async function handleFormSubmit(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    
+    // Validate form before submission
+    if (!validateForm(form)) {
+        showAlert('Please fill all required fields correctly', 'error');
+        return;
+    }
+    
+    setLoadingState(true);
+    
+    try {
+        // Helper functions to get form values
+        const getVal = id => form.querySelector(`[name="${id}"]`)?.value || "";
+        const getChecked = id => form.querySelector(`[name="${id}"]`)?.checked ? "yes" : "";
+        const getRadio = name => {
+            const checked = form.querySelector(`input[name="${name}"]:checked`);
+            return checked ? checked.value : "";
+        };
+
+        // Handle file uploads (CV and ID Copy)
+        const cvFile = form.querySelector('#cv').files[0];
+        const idCopyFile = form.querySelector('#id-copy').files[0];
+
+        // Read files as base64
+        const [cvData, idCopyData] = await Promise.all([
+            readFileAsBase64(cvFile),
+            readFileAsBase64(idCopyFile)
+        ]);
+
+        // Build payload
+        const payload = {
+            "business-name": getVal("business-name"),
+            "certificate-no": getVal("certificate-no"),
+            "family-name": getVal("family-name"),
+            "first-name": getVal("first-name"),
+            "middle-name": getVal("middle-name"),
+            "dob": getVal("dob"),
+            "sex": getVal("sex"),
+            "id-number": getVal("id-number"),
+            "county": getVal("county"),
+            "constituency": getVal("constituency"),
+            "ward": getVal("ward"),
+            "phone": getVal("phone"),
+            "email": getVal("email"),
+            "postal-address": getVal("postal-address"),
+            "kin-name": getVal("kin-name"),
+            "kin-relationship": getVal("kin-relationship"),
+            "kin-phone": getVal("kin-phone"),
+            "awareness": getRadio("awareness"),
+            "awareness-details": getVal("awareness-details"),
+            "support-financial": getChecked("support-financial"),
+            "donation-type": getRadio("donation-type"),
+            "donation-amount": getVal("donation-amount"),
+            "volunteer-parttime": getChecked("volunteer-parttime"),
+            "volunteer-fulltime": getChecked("volunteer-fulltime"),
+            "volunteer-skills": getChecked("volunteer-skills"),
+            "volunteer-skills-details": getVal("volunteer-skills-details"),
+            cvName: cvData.name,
+            cvType: cvData.type,
+            cvBase64: cvData.base64,
+            idCopyName: idCopyData.name,
+            idCopyType: idCopyData.type,
+            idCopyBase64: idCopyData.base64,
+            "reason1": getVal("reason1"),
+            "reason2": getVal("reason2"),
+            "reason3": getVal("reason3"),
+            "currentIncome": getVal("currentIncome"),
+            "income3months": getVal("income3months"),
+            "income6months": getVal("income6months"),
+            "income1year": getVal("income1year"),
+            "hours": getVal("hours"),
+            "mentorCommitment": getVal("mentorCommitment"),
+            "declaration-name": getVal("declaration-name"),
+            "declaration-date": getVal("declaration-date"),
+            "timestamp": new Date().toISOString()
+        };
+
+        // Send to Apps Script endpoint
+        const response = await fetch(APPSCRIPT_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            // Success - reset form and show success message
+            form.reset();
+            showAlert('Your application has been submitted successfully! We will contact you shortly.');
+            
+            // Reset file input displays
+            document.querySelectorAll('.file-input-text').forEach(el => {
+                el.textContent = "Choose file...";
+            });
+        } else {
+            // Handle server errors
+            const errorData = await response.text();
+            console.error('Submission error:', errorData);
+            showAlert('There was an error submitting your application. Please try again later.', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showAlert('There was an error submitting your application. Please check your connection and try again.', 'error');
+    } finally {
+        setLoadingState(false);
+    }
+}
+
+// Initialize the form when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    setupLocationSelectors();
+    setupFileInputs();
+    
+    // Form submission
+    document.getElementById("gkitApplicationForm").addEventListener("submit", handleFormSubmit);
+    
+    // Real-time validation for certain fields
+    const phoneField = document.querySelector('[name="phone"]');
+    if (phoneField) {
+        phoneField.addEventListener('input', function() {
+            if (!/^[0-9]{0,10}$/.test(this.value)) {
+                this.value = this.value.slice(0, 10);
+            }
+        });
+    }
+    
+    const idField = document.querySelector('[name="id-number"]');
+    if (idField) {
+        idField.addEventListener('input', function() {
+            if (!/^[0-9]{0,8}$/.test(this.value)) {
+                this.value = this.value.slice(0, 8);
+            }
+        });
+    }
+    
+    // Add animation to form sections when they come into view
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = 'fadeIn 0.5s ease-out forwards';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.form-section').forEach(section => {
+        observer.observe(section);
+    });
+});
     </div>
-    <p style="text-align: center;">"Go Green - Save the Future - Kenya Forever"</p>
-    <form>
-      <!-- Business Info -->
-      <div class="form-group">
-        <label for="business-name">Business Name</label>
-        <input type="text" id="business-name" name="business-name">
-      </div>
-      <div class="form-group">
-        <label for="certificate-no">Certificate Number</label>
-        <input type="text" id="certificate-no" name="certificate-no">
-      </div>
-
-      <!-- Personal Information -->
-      <div class="form-group">
-        <label for="family-name">Family Name</label>
-        <input type="text" id="family-name" name="family-name" required>
-      </div>
-      <div class="form-group">
-        <label for="first-name">First Name</label>
-        <input type="text" id="first-name" name="first-name" required>
-      </div>
-      <div class="form-group">
-        <label for="middle-name">Middle Name</label>
-        <input type="text" id="middle-name" name="middle-name">
-      </div>
-      <div class="form-group">
-        <label for="dob">Date of Birth</label>
-        <input type="date" id="dob" name="dob" required>
-      </div>
-      <div class="form-group">
-        <label for="sex">Sex</label>
-        <select id="sex" name="sex" required>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="id-number">National Identity Card Number</label>
-        <input type="text" id="id-number" name="id-number" required>
-      </div>
-      <div class="form-group">
-        <label for="county">County</label>
-        <select id="county" name="county">
-          <option value="Baringo">Baringo</option>
-          <option value="Bomet">Bomet</option>
-          <option value="Bungoma">Bungoma</option>
-          <option value="Busia">Busia</option>
-          <option value="Elgeyo-Marakwet">Elgeyo-Marakwet</option>
-          <option value="Embu">Embu</option>
-          <option value="Garissa">Garissa</option>
-          <option value="Homa Bay">Homa Bay</option>
-          <option value="Isiolo">Isiolo</option>
-          <option value="Kakamega">Kakamega</option>
-          <option value="Kericho">Kericho</option>
-          <option value="Kiambu">Kiambu</option>
-          <option value="Kilifi">Kilifi</option>
-          <option value="Kirinyaga">Kirinyaga</option>
-          <option value="Kisii">Kisii</option>
-          <option value="Kisumu">Kisumu</option>
-          <option value="Kitui">Kitui</option>
-          <option value="Kwale">Kwale</option>
-          <option value="Laikipia">Laikipia</option>
-          <option value="Lamu">Lamu</option>
-          <option value="Machakos">Machakos</option>
-          <option value="Makueni">Makueni</option>
-          <option value="Mandera">Mandera</option>
-          <option value="Meru">Meru</option>
-          <option value="Migori">Migori</option>
-          <option value="Mombasa">Mombasa</option>
-          <option value="Murang’a">Murang’a</option>
-          <option value="Nairobi">Nairobi</option>
-          <option value="Nakuru">Nakuru</option>
-          <option value="Nandi">Nandi</option>
-          <option value="Narok">Narok</option>
-          <option value="Nyamira">Nyamira</option>
-          <option value="Nyandarua">Nyandarua</option>
-          <option value="Samburu">Samburu</option>
-          <option value="Siaya">Siaya</option>
-          <option value="Taita Taveta">Taita Taveta</option>
-          <option value="Tana River">Tana River</option>
-          <option value="Tharaka Nithi">Tharaka Nithi</option>
-          <option value="Trans Nzoia">Trans Nzoia</option>
-          <option value="Turkana">Turkana</option>
-          <option value="Uasin Gishu">Uasin Gishu</option>
-          <option value="Vihiga">Vihiga</option>
-          <option value="Wajir">Wajir</option>
-          <option value="West Pokot">West Pokot</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="constituency">Constituency</label>
-        <select id="constituency" name="constituency">
-          <option value="Lang'ata">Lang'ata</option>
-          <option value="Embu">Embu</option>
-          <option value="Bungoma Central">Bungoma Central</option>
-          <option value="Bungoma South">Bungoma South</option>
-          <option value="Mombasa Town">Mombasa Town</option>
-<option value="Changamwe">Changamwe</option>
-<option value="Jomvu">Jomvu</option>
-<option value="Kisauni">Kisauni</option>
-<option value="Nyali">Nyali</option>
-<option value="Likoni">Likoni</option>
-<option value="Jomvu">Jomvu</option>
-<option value="Bamburi">Bamburi</option>
-<option value="Mvita">Mvita</option>
-<option value="Kilimani">Kilimani</option>
-<option value="Nakuru Town East">Nakuru Town East</option>
-<option value="Nakuru Town West">Nakuru Town West</option>
-<option value="Gilgil">Gilgil</option>
-<option value="Njoro">Njoro</option>
-<option value="Subukia">Subukia</option>
-<option value="Bahati">Bahati</option>
-<option value="Rongai">Rongai</option>
-<option value="Lanet">Lanet</option>
-<option value="Kuresoi South">Kuresoi South</option>
-<option value="Kuresoi North">Kuresoi North</option>
-<option value="Molo">Molo</option>
-<option value="Nakuru">Nakuru</option>
-<option value="Olenguruone">Olenguruone</option>
-<option value="Samburu East">Samburu East</option>
-<option value="Samburu West">Samburu West</option>
-<option value="Samburu Central">Samburu Central</option>
-<option value="Tana River South">Tana River South</option>
-<option value="Tana River North">Tana River North</option>
-<option value="Bura">Bura</option>
-<option value="Lamu">Lamu</option>
-<option value="Lamu West">Lamu West</option>
-<option value="Lamu East">Lamu East</option>
-<option value="Tana River">Tana River</option>
-<option value="Bomet Central">Bomet Central</option>
-<option value="Bomet East">Bomet East</option>
-<option value="Chepalungu">Chepalungu</option>
-<option value="Bomet">Bomet</option>
-<option value="Kajiado West">Kajiado West</option>
-<option value="Kajiado East">Kajiado East</option>
-<option value="Kajiado Central">Kajiado Central</option>
-<option value="Kajiado North">Kajiado North</option>
-<option value="Isinya">Isinya</option>
-<option value="Makueni">Makueni</option>
-<option value="Makueni South">Makueni South</option>
-<option value="Makueni North">Makueni North</option>
-<option value="Makueni Central">Makueni Central</option>
-<option value="Machakos Town">Machakos Town</option>
-<option value="Machakos">Machakos</option>
-<option value="Masinga">Masinga</option>
-<option value="Matungulu">Matungulu</option>
-<option value="Yatta">Yatta</option>
-<option value="Kangundo">Kangundo</option>
-<option value="Matungulu">Matungulu</option>
-<option value="Mavoko">Mavoko</option>
-<option value="Machakos West">Machakos West</option>
-<option value="Kangundo">Kangundo</option>
-<option value="Kitui South">Kitui South</option>
-<option value="Kitui Central">Kitui Central</option>
-<option value="Kitui East">Kitui East</option>
-<option value="Kitui West">Kitui West</option>
-<option value="Kalonzo">Kalonzo</option>
-<option value="Machakos East">Machakos East</option>
-<option value="Meru Town">Meru Town</option>
-<option value="Igembe Central">Igembe Central</option>
-<option value="Igembe South">Igembe South</option>
-<option value="Igembe North">Igembe North</option>
-<option value="Meru">Meru</option>
-<option value="Tigania West">Tigania West</option>
-<option value="Tigania East">Tigania East</option>
-<option value="Buuri">Buuri</option>
-<option value="Kibirichia">Kibirichia</option>
-<option value="Ntonyiri">Ntonyiri</option>
-<option value="Isiolo">Isiolo</option>
-<option value="Isiolo North">Isiolo North</option>
-<option value="Isiolo South">Isiolo South</option>
-<option value="Samburu East">Samburu East</option>
-<option value="Samburu West">Samburu West</option>
-<option value="Samburu Central">Samburu Central</option>
-<option value="Nyeri Town">Nyeri Town</option>
-<option value="Mathira">Mathira</option>
-<option value="Kieni">Kieni</option>
-<option value="Othaya">Othaya</option>
-<option value="Tetu">Tetu</option>
-<option value="Mukurweini">Mukurweini</option>
-<option value="Nyeri">Nyeri</option>
-<option value="Karatina">Karatina</option>
-<option value="Mwea">Mwea</option>
-<option value="Kangundo">Kangundo</option>
-<option value="Mavoko">Mavoko</option>
-<option value="Masinga">Masinga</option>
-<option value="Matungulu">Matungulu</option>
-<option value="Machakos West">Machakos West</option>
-<option value="Kitui West">Kitui West</option>
-<option value="Kitui East">Kitui East</option>
-<option value="Kitui Central">Kitui Central</option>
-<option value="Kitui South">Kitui South</option>
-<option value="Chuka">Chuka</option>
-<option value="Chungungo">Chungungo</option>
-<option value="Dadaab">Dadaab</option>
-<option value="Dagoreti">Dagoreti</option>
-<option value="Dandora">Dandora</option>
-<option value="Dara">Dara</option>
-<option value="Digo">Digo</option>
-<option value="Dundori">Dundori</option>
-<option value="Eastleigh">Eastleigh</option>
-<option value="Eldama Ravine">Eldama Ravine</option>
-<option value="Eldoret">Eldoret</option>
-<option value="Embu Town">Embu Town</option>
-<option value="Gikambura">Gikambura</option>
-<option value="Gikambura Town">Gikambura Town</option>
-<option value="Gikambura Ward">Gikambura Ward</option>
-<option value="Gikondo">Gikondo</option>
-<option value="Gikoyo">Gikoyo</option>
-<option value="Gikuyu">Gikuyu</option>
-<option value="Gikuyu Central">Gikuyu Central</option>
-<option value="Gikunyo">Gikunyo</option>
-<option value="Gisebe">Gisebe</option>
-<option value="Gisero">Gisero</option>
-<option value="Gikunyo">Gikunyo</option>
-<option value="Gikundi">Gikundi</option>
-<option value="Gilgil">Gilgil</option>
-<option value="Githa">Githa</option>
-<option value="Githunguri">Githunguri</option>
-<option value="Gize">Gize</option>
-<option value="Giza">Giza</option>
-<option value="Gituamba">Gituamba</option>
-<option value="Gituwe">Gituwe</option>
-<option value="Gikura">Gikura</option>
-<option value="Gikona">Gikona</option>
-<option value="Gikuyush">Gikuyush</option>
-<option value="Gikuyu Ward">Gikuyu Ward</option>
-<option value="Gikambu">Gikambu</option>
-<option value="Gikambura">Gikambura</option>
-<option value="Gikamburu">Gikamburu</option>
-<option value="Gikuru">Gikuru</option>
-<option value="Gikundi">Gikundi</option>
-<option value="Gikunda">Gikunda</option>
-<option value="Gikuine">Gikuine</option>
-<option value="Gikuni">Gikuni</option>
-<option value="Gikangani">Gikangani</option>
-<option value="Giti">Giti</option>
-<option value="Gituama">Gituama</option>
-<option value="Gim">Gim</option>
-<option value="Giteru">Giteru</option>
-<option value="Gikanzi">Gikanzi</option>
-<option value="Gikere">Gikere</option>
-<option value="Gikunda">Gikunda</option>
-<option value="Gilato">Gilato</option>
-<option value="Gikathe">Gikathe</option>
-<option value="Giteke">Giteke</option>
-<option value="Giwa">Giwa</option>
-<option value="Gongoni">Gongoni</option>
-<option value="Galu">Galu</option>
-<option value="Giritu">Giritu</option>
-<option value="Gikia">Gikia</option>
-<option value="Gikere Town">Gikere Town</option>
-<option value="Gituamba">Gituamba</option>
-<option value="Gikui">Gikui</option>
-<option value="ruiru">ruiru</option>
-<option value="roysambu">roysambu</option>
-
-          <option value="Kakamega Central">Kakamega Central</option>
-          <option value="Kakamega North">Kakamega North</option>
-          <option value="Kisii Town">Kisii Town</option>
-          <option value="Kisumu West">Kisumu West</option>
-          <option value="Kiambu Town">Kiambu Town</option>
-          <option value="Kisumu East">Kisumu East</option>
-          <option value="Mombasa">Mombasa</option>
-          <option value="Nairobi">Nairobi</option>
-          <option value="Mandera">Mandera</option>
-          <option value="Uasin Gishu">Uasin Gishu</option>
-          <option value="Wajir">Wajir</option>
-          <!-- Add more constituencies here -->
-        </select>
-      </div>
-
-      <!-- Other Information -->
-      <div class="form-group">
-        <label for="kin-name">Next of Kin's Name</label>
-        <input type="text" id="kin-name" name="kin-name" required>
-      </div>
-      <div class="form-group">
-        <label for="kin-phone">Next of Kin's Phone Number</label>
-        <input type="tel" id="kin-phone" name="kin-phone" required>
-      </div>
-
-      <!-- How did you know about GKIT -->
-      <div class="form-group">
-        <label>How did you know about GKIT?</label>
-        <label><input type="radio" name="awareness" value="internet"> Internet</label><br>
-        <label><input type="radio" name="awareness" value="pamphlet"> Pamphlet</label><br>
-        <label><input type="radio" name="awareness" value="radio"> Radio</label><br>
-        <label><input type="radio" name="awareness" value="other"> Other</label>
-      </div>
-
-      <!-- Donations -->
-      <div class="form-group">
-        <label>Do you want to make a donation?</label>
-        <label>One-off Amount: <input type="text" name="oneoff-donation"></label><br>
-        <label>Monthly Amount: <input type="text" name="monthly-donation"></label><br>
-        <label><input type="checkbox" name="volunteer" value="parttime"> Volunteer Part-Time</label><br>
-        <label><input type="checkbox" name="volunteer" value="fulltime"> Volunteer Full-Time</label>
-      </div>
-
-      <!-- Attach CV -->
-      <div class="form-group">
-        <label for="cv">Attach CV</label>
-        <input type="file" id="cv" name="cv" required>
-      </div>
-
-      <!-- Declaration -->
-      <div class="declaration">
-        <p>
-          <label for="declaration">
-            Declaration: I declare that this information is true, complete, and correct to the best of my knowledge and belief.
-          </label>
-        </p>
-        <input type="text" placeholder="Name" required>
-        <input type="date" required>
-      </div>
-
-      <!-- Submit -->
-      <div class="form-actions">
-        <button type="submit">Submit Application</button>
-      </div>
-    </form>
-  </div>
-</body>
-</html>
+    
+    </script>

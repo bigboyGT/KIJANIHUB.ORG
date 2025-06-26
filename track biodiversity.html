@@ -1,57 +1,1358 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biodiversity Tracking</title>
-    <link rel="stylesheet" href="track biodiversity.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title>Global Biodiversity Observation Network</title>
+    
+    <!-- Leaflet.js Map Library -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet Plugins -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <!-- Taxonomy Autocomplete -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Roboto+Slab:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4a6741;
+            --primary-dark: #2d3a25;
+            --primary-light: #b8c9b1;
+            --secondary-color: #7c6a0a;
+            --danger-color: #c62828;
+            --warning-color: #f9a825;
+            --success-color: #2e7d32;
+            --dark-text: #263238;
+            --light-text: #eceff1;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --map-height: 500px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--dark-text);
+            background: linear-gradient(135deg, #f4f8f5 0%, #d8e4da 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        /* Header with Navigation */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--light-text);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+            color: #fff;
+        }
+        
+        .logo-text {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Main Content Layout */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Card Styling */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--primary-light);
+        }
+        
+        .card-title {
+            font-family: 'Roboto Slab', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .card-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .required:after {
+            content: " *";
+            color: var(--danger-color);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 103, 65, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* Taxonomy Autocomplete */
+        .autoComplete_wrapper {
+            position: relative;
+        }
+        
+        /* Range Slider */
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            flex: 1;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: var(--primary-dark);
+        }
+        
+        /* File Upload Styling */
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload-btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border: 1px dashed var(--primary-color);
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload-btn:hover {
+            background: rgba(184, 201, 177, 0.5);
+        }
+        
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-preview {
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .file-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+        
+        /* Button Styling */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary-color);
+        }
+        
+        .btn-secondary:hover {
+            background: #5a4e08;
+        }
+        
+        .btn-danger {
+            background: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+        
+        .btn-success {
+            background: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background: #1b5e20;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        /* Map Styling */
+        #map {
+            height: var(--map-height);
+            width: 100%;
+            border-radius: 8px;
+            z-index: 1;
+        }
+        
+        /* Species Conservation Status Indicators */
+        .status-indicator {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-LC { background-color: #4caf50; } /* Least Concern */
+        .status-NT { background-color: #8bc34a; } /* Near Threatened */
+        .status-VU { background-color: #ffc107; } /* Vulnerable */
+        .status-EN { background-color: #ff9800; } /* Endangered */
+        .status-CR { background-color: #f44336; } /* Critically Endangered */
+        .status-EW { background-color: #9e9e9e; } /* Extinct in the Wild */
+        .status-EX { background-color: #212121; } /* Extinct */
+        
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0.5rem 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #757575;
+        }
+        
+        /* Observation List */
+        .observation-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .observation-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s ease;
+        }
+        
+        .observation-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .observation-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .observation-species {
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .observation-date {
+            color: #757575;
+            font-size: 0.9rem;
+        }
+        
+        .observation-location {
+            font-size: 0.9rem;
+            color: #616161;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #757575;
+        }
+        
+        /* Species Detail View */
+        .species-detail {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+        
+        .species-image {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .species-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .scientific-name {
+            font-style: italic;
+            color: #666;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .species-detail {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animation Classes */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(74, 103, 65, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(74, 103, 65, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 103, 65, 0); }
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
-
 <body>
+    <!-- Header with Navigation -->
     <header>
-        <h1>Biodiversity Tracking</h1>
+        <div class="logo">
+            <i class="fas fa-leaf"></i>
+            <span class="logo-text">BioTrack Network</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#" class="active"><i class="fas fa-binoculars"></i> Observations</a></li>
+                <li><a href="#"><i class="fas fa-map-marked-alt"></i> Species Map</a></li>
+                <li><a href="#"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <main>
-        <!-- Form Section -->
-        <section>
-            <h2>Track a Species</h2>
-            <form id="biodiversityForm">
-                <label for="speciesName">Species Name:</label>
-                <input type="text" id="speciesName" name="speciesName" placeholder="e.g., African Elephant" required>
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Left Column -->
+        <div class="left-column">
+            <!-- Observation Form -->
+            <div class="card pulse">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-plus-circle card-icon"></i> Record New Observation</h2>
+                </div>
+                
+                <form id="observationForm" enctype="multipart/form-data">
+                    <!-- Species Information -->
+                    <div class="form-group">
+                        <label for="speciesName" class="required">Species Name</label>
+                        <input type="text" id="speciesName" name="speciesName" placeholder="Search for a species..." required>
+                        <div id="speciesInfo" style="display: none; margin-top: 10px; padding: 10px; background: #f5f5f5; border-radius: 6px;">
+                            <span id="speciesScientificName" class="scientific-name"></span>
+                            <span id="speciesConservationStatus" style="margin-left: 10px;"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Observation Details -->
+                    <div class="form-group">
+                        <label for="observationDetails" class="required">Observation Details</label>
+                        <textarea id="observationDetails" name="observationDetails" placeholder="Describe your observation including behavior, habitat, and any notable characteristics..." required></textarea>
+                    </div>
+                    
+                    <!-- Date and Time -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="observationDate" class="required">Date Observed</label>
+                            <input type="datetime-local" id="observationDate" name="observationDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reportDate">Reporting Date</label>
+                            <input type="datetime-local" id="reportDate" name="reportDate" readonly>
+                        </div>
+                    </div>
+                    
+                    <!-- Location Information -->
+                    <div class="form-group">
+                        <label class="required">Location Information</label>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="latitude" name="latitude" placeholder="Latitude" readonly>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="longitude" name="longitude" placeholder="Longitude" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <button type="button" id="getLocation" class="btn btn-secondary">
+                                    <i class="fas fa-location-arrow"></i> Get Current Location
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="selectOnMap" class="btn btn-secondary">
+                                    <i class="fas fa-map-marker-alt"></i> Select on Map
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="address" name="address" placeholder="Or enter address manually">
+                        </div>
+                    </div>
+                    
+                    <!-- Population and Behavior -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="populationCount">Estimated Population</label>
+                            <input type="number" id="populationCount" name="populationCount" min="1" placeholder="Number of individuals">
+                        </div>
+                        <div class="form-group">
+                            <label for="behavior">Observed Behavior</label>
+                            <select id="behavior" name="behavior">
+                                <option value="">Select behavior</option>
+                                <option value="feeding">Feeding</option>
+                                <option value="breeding">Breeding</option>
+                                <option value="migrating">Migrating</option>
+                                <option value="resting">Resting</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Habitat Information -->
+                    <div class="form-group">
+                        <label for="habitatType">Habitat Type</label>
+                        <select id="habitatType" name="habitatType">
+                            <option value="">Select habitat type</option>
+                            <option value="forest">Forest</option>
+                            <option value="grassland">Grassland</option>
+                            <option value="wetland">Wetland</option>
+                            <option value="marine">Marine</option>
+                            <option value="desert">Desert</option>
+                            <option value="urban">Urban</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Media Upload -->
+                    <div class="form-group">
+                        <label for="mediaUpload" class="required">Upload Evidence</label>
+                        <div class="file-upload">
+                            <button type="button" class="file-upload-btn">
+                                <i class="fas fa-cloud-upload-alt"></i> Click to upload photos or audio recordings
+                            </button>
+                            <input type="file" id="mediaUpload" name="media" accept="image/*,audio/*" multiple required>
+                        </div>
+                        <div class="file-preview" id="filePreview"></div>
+                    </div>
+                    
+                    <!-- Reporter Information -->
+                    <div class="form-group">
+                        <label>Reporter Information (optional)</label>
+                        <input type="text" id="reporterName" name="reporterName" placeholder="Your name">
+                        <input type="email" id="reporterEmail" name="reporterEmail" placeholder="Your email" class="mt-1">
+                        <div class="form-check mt-1">
+                            <input type="checkbox" id="anonymous" name="anonymous">
+                            <label for="anonymous">Submit anonymously</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Form Actions -->
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success btn-block">
+                            <i class="fas fa-paper-plane"></i> Submit Observation
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Recent Observations -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-history card-icon"></i> Recent Observations</h2>
+                </div>
+                <div class="observation-list" id="recentObservations">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div class="right-column">
+            <!-- Species Map -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-map-marked-alt card-icon"></i> Observation Location</h2>
+                </div>
+                <div id="map"></div>
+                <div class="map-actions mt-2">
+                    <button id="clearMarker" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-trash-alt"></i> Clear Marker
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Species Statistics -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-chart-pie card-icon"></i> Biodiversity Statistics</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-binoculars" style="color: var(--primary-color);"></i>
+                        <div class="stat-value" id="totalObservations">0</div>
+                        <div class="stat-label">Total Observations</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-dove" style="color: #2196f3;"></i>
+                        <div class="stat-value" id="birdCount">0</div>
+                        <div class="stat-label">Bird Species</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-paw" style="color: #795548;"></i>
+                        <div class="stat-value" id="mammalCount">0</div>
+                        <div class="stat-label">Mammals</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-frog" style="color: #4caf50;"></i>
+                        <div class="stat-value" id="amphibianCount">0</div>
+                        <div class="stat-label">Amphibians</div>
+                    </div>
+                </div>
+                <canvas id="speciesChart" height="200"></canvas>
+            </div>
+            
+            <!-- Conservation Resources -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-book card-icon"></i> Conservation Resources</h2>
+                </div>
+                <div class="conservation-resources">
+                    <button class="btn btn-secondary btn-block mb-1">
+                        <i class="fas fa-external-link-alt"></i> IUCN Red List
+                    </button>
+                    <button class="btn btn-secondary btn-block mb-1">
+                        <i class="fas fa-external-link-alt"></i> CITES Species Database
+                    </button>
+                    <button class="btn btn-secondary btn-block">
+                        <i class="fas fa-external-link-alt"></i> GBIF Data Portal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Submission Modal -->
+    <div class="modal" id="submissionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Observation Submission</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="modalBody">
+                <p>Your observation is being processed...</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Species Detail Modal -->
+    <div class="modal" id="speciesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Species Information</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="species-detail">
+                <div>
+                    <img id="speciesModalImage" src="https://via.placeholder.com/300" alt="Species Image" class="species-image">
+                </div>
+                <div class="species-info">
+                    <h3 id="speciesModalName"></h3>
+                    <p id="speciesModalScientific" class="scientific-name"></p>
+                    <p id="speciesModalStatus"></p>
+                    <p id="speciesModalDescription"></p>
+                    <div class="mt-2">
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-book"></i> View Full Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <label for="observationDetails">Observation Details:</label>
-                <textarea id="observationDetails" name="observationDetails" placeholder="Details about the observation" required></textarea>
+    <script>
+async function submitToGoogleSheets(payload) {
+  await fetch("https://script.google.com/macros/s/AKfycbxgN6upp9HbhCLA9nYIrAb_9pDZNBXGuudQburdRDBzoeXeG4CTe5gK4Hnv-Sp0xoSX/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(payload)
+  });
+  // Always return success since we can't read the response in no-cors mode
+  return { result: "success" };
+}
 
-                <label for="location">Location Coordinates:</label>
-                <input type="text" id="latitude" name="latitude" placeholder="Latitude" readonly>
-                <input type="text" id="longitude" name="longitude" placeholder="Longitude" readonly>
+let map, observationMarkers, currentMarker, recentObservations, speciesChart;
 
-                <button type="button" id="getLocation">Get Current Location</button>
+document.addEventListener("DOMContentLoaded", () => {
+    observationMarkers = L.markerClusterGroup();
+    currentMarker = null;
+    recentObservations = [];
+    
+    initMap();
+    initDatePickers();
+    setupFileUpload();
+    setupGeolocation();
+    setupFormHandler();
+    loadSpeciesDatabase();
+    setupSpeciesAutocomplete();
+    loadRecentObservations();
+    updateStatistics();
+    
+    document.getElementById("reportDate").value = formatDateTime(new Date());
+});
 
-                <label for="imageUpload">Upload Image:</label>
-                <input type="file" id="imageUpload" name="imageUpload" accept="image/*" required>
+function initMap() {
+    map = L.map("map").setView([20, 0], 2);
+    const osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19, 
+        attribution: "&copy; OSM"
+    }).addTo(map);
+    
+    const sat = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        { attribution: "&copy; Esri" }
+    );
+    
+    L.control.layers({ "Map": osm, "Satellite": sat }).addTo(map);
+    L.control.scale().addTo(map);
 
-                <button type="submit">Submit Observation</button>
-            </form>
-        </section>
+    map.on("click", e => {
+        if (currentMarker) map.removeLayer(currentMarker);
+        currentMarker = L.marker(e.latlng, { draggable: true }).addTo(map)
+            .bindPopup("Observation Location").openPopup();
+        updateCoordinates(e.latlng.lat, e.latlng.lng);
+        reverseGeocode(e.latlng.lat, e.latlng.lng);
+    });
 
-        <!-- Map Section -->
-        <section>
-            <h2>Map</h2>
-            <div id="map" style="height: 400px;"></div>
-        </section>
-    </main>
+    document.getElementById("selectOnMap").onclick = () =>
+        alert("Click on the map to select the observation location");
+        
+    document.getElementById("clearMarker").onclick = () => {
+        if (currentMarker) { 
+            map.removeLayer(currentMarker); 
+            currentMarker = null; 
+        }
+        ["latitude","longitude","address"].forEach(id => 
+            document.getElementById(id).value = "");
+    };
+}
 
-    <footer>
-        <p>&copy; 2024 Kijanihub. All rights reserved.</p>
-    </footer>
+function initDatePickers() {
+    flatpickr("#observationDate", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        defaultDate: new Date(),
+        maxDate: new Date()
+    });
+}
 
-    <script src="track biodiversity.js"></script>
-</body>
+function setupFileUpload() {
+    const inp = document.getElementById("mediaUpload"),
+          prev = document.getElementById("filePreview");
+          
+    inp.addEventListener("change", function() {
+        prev.innerHTML = "";
+        prev.style.display = this.files.length ? "flex" : "none";
+        
+        Array.from(this.files).slice(0,3).forEach(file => {
+            if (file.type.startsWith("image/")) {
+                const r = new FileReader();
+                r.onload = e => {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.style.maxWidth = "100px";
+                    img.style.marginRight = "10px";
+                    prev.appendChild(img);
+                };
+                r.readAsDataURL(file);
+            } else if (file.type.startsWith("audio/")) {
+                const icon = document.createElement("i");
+                icon.className = "fas fa-volume-up";
+                icon.style.fontSize = "48px";
+                icon.style.marginRight = "10px";
+                prev.appendChild(icon);
+            }
+        });
+        
+        if (this.files.length > 3) {
+            const more = document.createElement("span");
+            more.textContent = `+${this.files.length - 3} more`;
+            prev.appendChild(more);
+        }
+    });
+}
 
-</html>
+function setupGeolocation() {
+    document.getElementById("getLocation").onclick = () => {
+        if (!navigator.geolocation) {
+            alert("Geolocation not supported");
+            return;
+        }
+        
+        navigator.geolocation.getCurrentPosition(
+            pos => {
+                const {latitude: lat, longitude: lng} = pos.coords;
+                if (currentMarker) map.removeLayer(currentMarker);
+                currentMarker = L.marker([lat, lng], {draggable: true}).addTo(map)
+                    .bindPopup("Your Location").openPopup();
+                map.setView([lat, lng], 13);
+                updateCoordinates(lat, lng);
+                reverseGeocode(lat, lng);
+            },
+            err => alert(`Error getting location: ${err.message}`),
+            {enableHighAccuracy: true, timeout: 5000, maximumAge: 0}
+        );
+    };
+}
+
+function loadSpeciesDatabase() {
+    // Sample data - in a real app you would fetch this from an API
+    window.speciesDatabase = [
+        { common: "African Elephant", scientific: "Loxodonta africana", status: "VU", category: "mammal" },
+        { common: "Bald Eagle", scientific: "Haliaeetus leucocephalus", status: "LC", category: "bird" },
+        { common: "Poison Dart Frog", scientific: "Dendrobatidae", status: "NT", category: "amphibian" },
+        { common: "Bengal Tiger", scientific: "Panthera tigris tigris", status: "EN", category: "mammal" },
+        { common: "Monarch Butterfly", scientific: "Danaus plexippus", status: "EN", category: "insect" }
+    ];
+}
+
+function setupSpeciesAutocomplete() {
+    new autoComplete({
+        selector: "#speciesName",
+        placeHolder: "Search for a species...",
+        data: {
+            src: window.speciesDatabase.map(species => species.common),
+            cache: true
+        },
+        resultsList: {
+            element: (list, data) => {
+                if (!data.results.length) {
+                    const message = document.createElement("div");
+                    message.setAttribute("class", "no_result");
+                    message.innerHTML = `<span>No results found for "${data.query}"</span>`;
+                    list.appendChild(message);
+                }
+            },
+            noResults: true,
+            maxResults: 15,
+        },
+        resultItem: {
+            highlight: true
+        },
+        events: {
+            input: {
+                selection: (event) => {
+                    const selection = event.detail.selection.value;
+                    document.getElementById("speciesName").value = selection;
+                    
+                    const selectedSpecies = window.speciesDatabase.find(s => s.common === selection);
+                    if (selectedSpecies) {
+                        document.getElementById("speciesScientificName").textContent = selectedSpecies.scientific;
+                        
+                        const statusText = getConservationStatusText(selectedSpecies.status);
+                        const statusElement = document.getElementById("speciesConservationStatus");
+                        statusElement.innerHTML = `
+                            <span class="status-indicator status-${selectedSpecies.status}"></span>
+                            ${statusText}
+                        `;
+                        
+                        document.getElementById("speciesInfo").style.display = 'block';
+                    }
+                }
+            }
+        }
+    });
+}
+
+function getConservationStatusText(code) {
+    const statusMap = {
+        'LC': 'Least Concern',
+        'NT': 'Near Threatened',
+        'VU': 'Vulnerable',
+        'EN': 'Endangered',
+        'CR': 'Critically Endangered',
+        'EW': 'Extinct in the Wild',
+        'EX': 'Extinct'
+    };
+    return statusMap[code] || 'Unknown';
+}
+
+function setupFormHandler() {
+    const form = document.getElementById("observationForm");
+    const modal = document.getElementById("submissionModal");
+    const body = document.getElementById("modalBody");
+
+    form.onsubmit = e => {
+        e.preventDefault();
+        
+        // Validate required fields
+        if (!form.checkValidity()) {
+            showModalMessage("Please fill in all required fields", "error");
+            return;
+        }
+        
+        if (!document.getElementById("latitude").value ||
+            !document.getElementById("longitude").value) {
+            showModalMessage("Please set the observation location", "error");
+            return;
+        }
+        
+        modal.style.display = "flex";
+        body.innerHTML = `
+            <div style="text-align: center;">
+                <div class="spinner"></div>
+                <p>Your observation is being processed...</p>
+            </div>
+        `;
+
+        const files = document.getElementById("mediaUpload").files;
+        if (!files.length) {
+            body.innerHTML = '<p style="color:red;">❗ Please upload at least one photo.</p>';
+            return;
+        }
+
+        // Read first file only (for simplicity)
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+            const payload = {
+                speciesName: document.getElementById("speciesName").value,
+                scientificName: document.getElementById("speciesScientificName").textContent,
+                observationDetails: document.getElementById("observationDetails").value,
+                observationDate: document.getElementById("observationDate").value,
+                latitude: document.getElementById("latitude").value,
+                longitude: document.getElementById("longitude").value,
+                address: document.getElementById("address").value,
+                populationCount: document.getElementById("populationCount").value || '',
+                behavior: document.getElementById("behavior").value || '',
+                habitatType: document.getElementById("habitatType").value || '',
+                reporterName: document.getElementById("anonymous").checked
+                    ? "Anonymous"
+                    : (document.getElementById("reporterName").value || "Anonymous"),
+                reporterEmail: document.getElementById("reporterEmail").value || '',
+                mediaName: files[0].name,
+                mediaType: files[0].type,
+                mediaBase64: reader.result.split(',')[1]  // Remove data URL prefix
+            };
+
+            try {
+                const response = await submitToGoogleSheets(payload);
+                // Always treat as success in no-cors mode
+                submitObservation(payload);
+            } catch(err) {
+                // Optionally, you can log the error but do not show the error modal
+                console.error(err);
+            }
+        };
+        reader.readAsDataURL(files[0]);
+    };
+
+    document.querySelector(".close-modal").onclick = () =>
+        (modal.style.display = "none");
+}
+
+function submitObservation(data) {
+    const observation = {
+        id: Date.now(),
+        species: data.speciesName,
+        scientificName: data.scientificName,
+        description: data.observationDetails,
+        date: data.observationDate,
+        lat: parseFloat(data.latitude),
+        lng: parseFloat(data.longitude),
+        population: data.populationCount || 1,
+        behavior: data.behavior,
+        habitat: data.habitatType,
+        reporter: data.reporterName,
+        timestamp: new Date().toISOString(),
+    };
+
+    recentObservations.unshift(observation);
+    if (recentObservations.length > 5) recentObservations.pop();
+    
+    updateModalSuccess(observation);
+    loadRecentObservations();
+    updateStatistics();
+    addObservationToMap(observation);
+    resetForm();
+}
+
+function updateModalSuccess(obs) {
+    document.getElementById("modalBody").innerHTML = `
+        <div style="text-align:center;padding:1rem;">
+            <i class="fas fa-check-circle" style="font-size:3rem;color:var(--success-color);margin-bottom:1rem;"></i>
+            <h3 style="color:var(--success-color);">Observation Submitted!</h3>
+            <p>Species: <strong>${obs.species}</strong></p>
+            <p>ID: <strong>BIO-${obs.id}</strong></p>
+            <button class="btn btn-success" onclick="document.getElementById('submissionModal').style.display='none'">Close</button>
+        </div>`;
+}
+
+function loadRecentObservations() {
+    const c = document.getElementById("recentObservations");
+    c.innerHTML = "";
+    
+    if (!recentObservations.length) {
+        c.innerHTML = '<p style="text-align:center;color:#757575;padding:1rem;">No recent observations</p>';
+        return;
+    }
+    
+    recentObservations.forEach(obs => {
+        const d = document.createElement("div");
+        d.className = "observation-item";
+        d.innerHTML = `
+            <div class="observation-header">
+                <span class="observation-species">${obs.species}</span>
+                <span class="observation-date">${new Date(obs.date).toLocaleDateString()}</span>
+            </div>
+            <div class="observation-location"><i class="fas fa-map-marker-alt"></i> ${obs.lat.toFixed(4)}, ${obs.lng.toFixed(4)}</div>
+            <div class="observation-description">${obs.description.substring(0,100)}...</div>
+        `;
+        c.appendChild(d);
+    });
+}
+
+function updateStatistics() {
+    document.getElementById("totalObservations").textContent = recentObservations.length;
+    
+    const counts = {
+        birds: recentObservations.filter(o => 
+            o.species.toLowerCase().includes('eagle') || 
+            o.species.toLowerCase().includes('owl')).length,
+        mammals: recentObservations.filter(o => 
+            o.species.toLowerCase().includes('elephant') || 
+            o.species.toLowerCase().includes('tiger')).length,
+        amphibians: recentObservations.filter(o => 
+            o.species.toLowerCase().includes('frog') || 
+            o.species.toLowerCase().includes('toad')).length
+    };
+    
+    document.getElementById("birdCount").textContent = counts.birds;
+    document.getElementById("mammalCount").textContent = counts.mammals;
+    document.getElementById("amphibianCount").textContent = counts.amphibians;
+    
+    updateChart();
+}
+
+function updateChart() {
+    const ctx = document.getElementById("speciesChart").getContext("2d");
+    if (speciesChart) speciesChart.destroy();
+    
+    const data = {
+        "Birds": recentObservations.filter(o => 
+            o.species.toLowerCase().includes('eagle') || 
+            o.species.toLowerCase().includes('owl')).length,
+        "Mammals": recentObservations.filter(o => 
+            o.species.toLowerCase().includes('elephant') || 
+            o.species.toLowerCase().includes('tiger')).length,
+        "Amphibians": recentObservations.filter(o => 
+            o.species.toLowerCase().includes('frog') || 
+            o.species.toLowerCase().includes('toad')).length,
+        "Insects": recentObservations.filter(o => 
+            o.species.toLowerCase().includes('butterfly')).length,
+        "Other": recentObservations.length - 
+            (recentObservations.filter(o => 
+                o.species.toLowerCase().includes('eagle') || 
+                o.species.toLowerCase().includes('owl')).length +
+            recentObservations.filter(o => 
+                o.species.toLowerCase().includes('elephant') || 
+                o.species.toLowerCase().includes('tiger')).length +
+            recentObservations.filter(o => 
+                o.species.toLowerCase().includes('frog') || 
+                o.species.toLowerCase().includes('toad')).length +
+            recentObservations.filter(o => 
+                o.species.toLowerCase().includes('butterfly')).length)
+    };
+    
+    speciesChart = new Chart(ctx, {
+        type: "doughnut",
+        data: { 
+            labels: Object.keys(data), 
+            datasets: [{ 
+                data: Object.values(data), 
+                backgroundColor: [
+                    "#2196f3", "#795548", "#4caf50", "#ffc107", "#9e9e9e"
+                ],
+                borderWidth: 1 
+            }] 
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { 
+                legend: { 
+                    position: "right" 
+                } 
+            } 
+        }
+    });
+}
+
+function addObservationToMap(obs) {
+    const marker = L.marker([obs.lat, obs.lng], { 
+        icon: getMarkerIcon(obs.species) 
+    }).bindPopup(`
+        <b>${obs.species}</b><br>
+        <i>${obs.scientificName}</i><br>
+        ${obs.description.substring(0,100)}...
+    `);
+    
+    observationMarkers.addLayer(marker);
+    map.addLayer(observationMarkers);
+    map.fitBounds(observationMarkers.getBounds());
+}
+
+function getMarkerIcon(species) {
+    let iconClass, color;
+    
+    if (species.toLowerCase().includes('eagle') || species.toLowerCase().includes('owl')) {
+        iconClass = "fa-dove";
+        color = "#2196f3"; // Blue for birds
+    } else if (species.toLowerCase().includes('elephant') || species.toLowerCase().includes('tiger')) {
+        iconClass = "fa-paw";
+        color = "#795548"; // Brown for mammals
+    } else if (species.toLowerCase().includes('frog') || species.toLowerCase().includes('toad')) {
+        iconClass = "fa-frog";
+        color = "#4caf50"; // Green for amphibians
+    } else if (species.toLowerCase().includes('butterfly')) {
+        iconClass = "fa-bug";
+        color = "#ffc107"; // Yellow for insects
+    } else {
+        iconClass = "fa-leaf";
+        color = "#4a6741"; // Default green
+    }
+    
+    return L.divIcon({
+        html: `
+            <div style="
+                background: ${color};
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 14px;
+                border: 2px solid white;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2)
+            ">
+                <i class="fas ${iconClass}"></i>
+            </div>
+        `,
+        className: "",
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+    });
+}
+
+function resetForm() {
+    document.getElementById("observationForm").reset();
+    document.getElementById("filePreview").style.display = "none";
+    document.getElementById("filePreview").innerHTML = "";
+    document.getElementById("speciesInfo").style.display = "none";
+    document.getElementById("reportDate").value = formatDateTime(new Date());
+    
+    if (currentMarker) {
+        map.removeLayer(currentMarker);
+        currentMarker = null;
+    }
+}
+
+function updateCoordinates(lat, lng) {
+    document.getElementById("latitude").value = lat.toFixed(6);
+    document.getElementById("longitude").value = lng.toFixed(6);
+}
+
+function reverseGeocode(lat, lng) {
+    setTimeout(() => {
+        document.getElementById("address").value = `Approximate location: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    }, 500);
+}
+
+function showModalMessage(message, type = "info") {
+    const modal = document.getElementById("submissionModal");
+    const modalBody = document.getElementById("modalBody");
+    
+    modalBody.innerHTML = message;
+    
+    if (type === "error") {
+        modalBody.style.color = "var(--danger-color)";
+    } else if (type === "success") {
+        modalBody.style.color = "var(--success-color)";
+    }
+    
+    modal.style.display = "flex";
+}
+
+function formatDateTime(d) {
+    const pad = n => n.toString().padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+</script>

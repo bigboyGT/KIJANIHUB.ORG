@@ -3,177 +3,796 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online GIS Course | Kijani Hub</title>
+    <title>Advanced GIS Certification | Kijani Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Roboto+Slab:wght@400;600;700&display=swap');
+        
+        :root {
+            --primary: #7c6a0a;
+            --secondary: #fa9500;
+            --accent: #eb6424;
+            --light: #f4f4f9;
+            --dark: #333;
+            --success: #4CAF50;
+            --info: #2196F3;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1), 0 5px 10px rgba(0,0,0,0.05);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
         }
+        
         header {
-            background: linear-gradient(135deg, #7c6a0a, #fa9500);
-            color: #ffffff;
-            padding: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text-light);
+            padding: 2rem 1rem;
             text-align: center;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-        }
-        header h1 {
-            font-size: 3.5rem;
-            margin: 0;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        header p {
-            font-size: 1.3rem;
-            margin: 10px 0 0;
-        }
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #babd8d;
-            padding: 15px;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        nav a {
-            color: #ffffff;
-            text-decoration: none;
-            margin: 0 20px;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: color 0.3s, transform 0.3s;
-        }
-        nav a:hover {
-            color: #ffdac6;
-            transform: scale(1.1);
-        }
-        .content {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .module {
-            background: linear-gradient(135deg, #ffffff, #f4f4f9);
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .module:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        .module h3 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            color: #fa9500;
-            display: flex;
-            align-items: center;
-        }
-        .module h3::before {
-            content: '\2713';
-            margin-right: 10px;
-            color: #7c6a0a;
-        }
-        .module p {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            line-height: 1.7;
-        }
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #fa9500, #eb6424);
-            color: white;
-            padding: 12px 25px;
-            margin: 10px 0;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: background 0.3s, transform 0.3s;
-        }
-        .btn:hover {
-            background: linear-gradient(135deg, #eb6424, #fa9500);
-            transform: scale(1.05);
-        }
-        footer {
-            background-color: #7c6a0a;
-            color: #ffffff;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            font-size: 0.9rem;
-        }
-        footer a {
-            color: #ffdac6;
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
-        .hero {
-            background: url('https://source.unsplash.com/1200x400/?mapping,environment') no-repeat center center/cover;
-            color: #ffffff;
-            text-align: center;
-            padding: 120px 20px;
+            box-shadow: var(--shadow-md);
             position: relative;
             overflow: hidden;
         }
-        .hero::after {
+        
+        header::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z" /></svg>');
+            background-size: cover;
+            z-index: 0;
         }
-        .hero h1, .hero p {
+        
+        .header-content {
             position: relative;
             z-index: 1;
-            text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        .hero h1 {
-            font-size: 4rem;
+        
+        header h1 {
+            font-family: 'Roboto Slab', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             animation: fadeInDown 1s ease;
         }
+        
+        header p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            margin: 1rem 0 0;
+            font-weight: 300;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .logo {
+            width: 190px;
+            height: 180px;
+            margin-bottom: 1rem;
+            animation: bounceIn 1s ease;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: rgba(186, 189, 141, 0.95);
+            padding: 1rem;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--text-light);
+            transition: var(--transition);
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-cta {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .nav-cta::after {
+            display: none;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://source.unsplash.com/1920x1080/?gis,mapping,geography') no-repeat center center/cover;
+            color: var(--text-light);
+            text-align: center;
+            padding: 8rem 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-family: 'Roboto Slab', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            animation: fadeInDown 1s ease;
+        }
+        
         .hero p {
-            font-size: 1.4rem;
-            animation: fadeInUp 1s ease;
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
         }
+        
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
         section {
-            margin-bottom: 40px;
+            margin-bottom: 3rem;
+            scroll-margin-top: 100px;
         }
-        ul {
-            list-style: none;
-            padding: 0;
+        
+        h2 {
+            font-family: 'Roboto Slab', serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
         }
-        ul li {
-            margin: 10px 0;
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            border-radius: 2px;
+        }
+        
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .module {
+            background: linear-gradient(135deg, #ffffff, #f4f4f9);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .module:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .module-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text-light);
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .module-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background-color: var(--accent);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .module h3 {
+            font-size: 1.5rem;
+            margin: 0;
+            padding-right: 2rem;
+        }
+        
+        .module-body {
+            padding: 1.5rem;
+        }
+        
+        .module p {
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        
+        .module-footer {
+            padding: 0 1.5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .module-duration {
+            font-size: 0.9rem;
+            color: #777;
             display: flex;
             align-items: center;
         }
-        ul li::before {
-            content: '\2022';
-            color: #fa9500;
-            margin-right: 10px;
-            font-size: 1.5rem;
+        
+        .module-duration i {
+            margin-right: 5px;
         }
-        ul li a {
-            color: #fa9500;
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: white;
+            padding: 0.8rem 1.8rem;
             text-decoration: none;
-            font-weight: bold;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1.2rem;
+            font-size: 0.9rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .testimonials {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 4rem 2rem;
+            margin: 3rem 0;
+            border-radius: 15px;
+        }
+        
+        .testimonial-slider {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .testimonial {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            margin: 1rem;
+            position: relative;
+        }
+        
+        .testimonial::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(250, 149, 0, 0.1);
+            font-family: serif;
+            line-height: 1;
+        }
+        
+        .testimonial-content {
+            position: relative;
+            z-index: 1;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+        
+        .author-info h4 {
+            margin: 0;
+            color: var(--primary);
+        }
+        
+        .author-info p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        .resource-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .resource-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .resource-img {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .resource-body {
+            padding: 1.5rem;
+        }
+        
+        .resource-body h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        
+        .resource-body p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .community-channels {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .channel-card {
+            flex: 1 1 200px;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            text-align: center;
+        }
+        
+        .channel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .channel-icon {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .channel-card h3 {
+            margin: 0 0 1rem;
+            color: var(--primary);
+        }
+        
+        .faq-container {
+            margin-top: 2rem;
+        }
+        
+        .faq-item {
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+        
+        .faq-question:hover {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 1.5rem;
+            max-height: 500px;
+        }
+        
+        .faq-toggle {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+        
+        .newsletter {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .newsletter h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+        
+        .newsletter h2::after {
+            background: white;
+        }
+        
+        .newsletter p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 50px 0 0 50px;
+            font-size: 1rem;
+        }
+        
+        .newsletter-btn {
+            padding: 0 1.5rem;
+            border-radius: 0 50px 50px 0;
+            border: none;
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .newsletter-btn:hover {
+            background: #d4531a;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary), #5a4f08);
+            color: var(--text-light);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--secondary);
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
             transition: color 0.3s;
+            display: flex;
+            align-items: center;
         }
-        ul li a:hover {
-            color: #eb6424;
+        
+        .footer-links a:hover {
+            color: var(--secondary);
         }
+        
+        .footer-links i {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .footer-bottom a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: var(--shadow-md);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 999;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+        }
+        
+        /* Animations */
         @keyframes fadeInDown {
             from {
                 opacity: 0;
@@ -184,6 +803,7 @@
                 transform: translateY(0);
             }
         }
+        
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -194,85 +814,580 @@
                 transform: translateY(0);
             }
         }
+        
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                margin-top: 1rem;
+            }
+            
+            .nav-links.show {
+                display: flex;
+            }
+            
+            .nav-links a {
+                margin: 0.5rem 0;
+                padding: 0.5rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+            
+            .hero {
+                padding: 6rem 1rem;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-input {
+                border-radius: 50px;
+                margin-bottom: 0.5rem;
+            }
+            
+            .newsletter-btn {
+                border-radius: 50px;
+                padding: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Welcome to KijaniHub's Online GIS Course</h1>
-        <p>Empowering Communities with Open GIS Solutions</p>
+        <div class="header-content">
+            <img src="images\kijanihub logo without background.png" alt="Kijani Hub Logo" class="logo">
+            <h1>Advanced GIS Certification Program</h1>
+            <p>Master Geospatial Technologies for Sustainable Development</p>
+        </div>
     </header>
 
-    <div class="hero">
-        <h1>Learn GIS and get certified </h1>
-        <p>Master GIS tools to map your world and drive sustainable change.</p>
-    </div>
-
     <nav>
-        <a href="#about">About</a>
-        <a href="#modules">Modules</a>
-        <a href="#resources">Resources</a>
-        <a href="#community">Community</a>
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#modules"><i class="fas fa-book-open"></i> Curriculum</a>
+                <a href="#features"><i class="fas fa-star"></i> Why Choose Us</a>
+                <a href="#resources"><i class="fas fa-tools"></i> Resources</a>
+                <a href="#testimonials"><i class="fas fa-quote-left"></i> Testimonials</a>
+                <a href="#faq"><i class="fas fa-question-circle"></i> FAQ</a>
+            </div>
+            <a href="#enroll" class="nav-cta">Enroll Now</a>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
     </nav>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Become a Certified GIS Professional</h1>
+            <p>Learn cutting-edge geospatial technologies with hands-on projects and expert mentorship</p>
+            <div class="hero-btns">
+                <a href="#enroll" class="btn btn-lg pulse"><i class="fas fa-play"></i> Start Learning</a>
+                <a href="#modules" class="btn btn-outline"><i class="fas fa-search"></i> Explore Curriculum</a>
+            </div>
+        </div>
+        <div class="particles" id="particles-js"></div>
+    </div>
 
     <div class="content">
         <section id="about">
-            <h2>About the Course</h2>
-            <p>This online GIS course by Kijani Hub is designed to teach environmental enthusiasts, students, and community members how to use GIS tools for sustainable development and biodiversity mapping. Learn at your own pace using open-source tools like QGIS and OpenStreetMap.</p>
+            <h2>About the Program</h2>
+            <p>Our Advanced GIS Certification Program is designed to transform beginners into proficient geospatial professionals. This comprehensive course combines theoretical knowledge with practical applications, focusing on open-source tools like QGIS, PostGIS, and OpenStreetMap while also covering industry-standard software.</p>
+            <p>The curriculum is developed by GIS experts with decades of field experience in environmental conservation, urban planning, and disaster management. You'll graduate with a professional portfolio showcasing your skills in spatial analysis, cartography, and geodatabase management.</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">120+</div>
+                    <div class="stat-label">Hours of Instruction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Hands-on Projects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Practical Skills</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Mentor Support</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2>Why Choose Our Program</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3>Industry-Recognized Certification</h3>
+                    <p>Earn a certificate endorsed by leading GIS organizations and environmental agencies worldwide.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3>Hands-on Learning</h3>
+                    <p>Work with real-world datasets and solve actual spatial problems throughout the course.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-user-tie"></i></div>
+                    <h3>Expert Instructors</h3>
+                    <p>Learn from GIS professionals with field experience in diverse sectors and applications.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-briefcase"></i></div>
+                    <h3>Career Support</h3>
+                    <p>Access our job placement assistance and professional network upon completion.</p>
+                </div>
+            </div>
         </section>
 
         <section id="modules">
-            <h2>Course Modules</h2>
-            <div class="module">
-                <h3>Module 1: Introduction to GIS</h3>
-                <p>Understand the basics of GIS and its applications in environmental science and community mapping.</p>
-                <a class="btn" href="#">Watch Lesson</a>
+            <h2>Curriculum Overview</h2>
+            <p>Our comprehensive curriculum covers all aspects of modern GIS from fundamentals to advanced spatial analysis techniques.</p>
+            
+            <div class="module-grid">
+                <div class="module">
+                    <div class="module-number">1</div>
+                    <div class="module-header">
+                        <h3>GIS Foundations</h3>
+                    </div>
+                    <div class="module-body">
+                        <p>Understand core GIS concepts, coordinate systems, and data models. Learn to navigate QGIS interface and perform basic operations.</p>
+                        <ul>
+                            <li>Spatial data types</li>
+                            <li>Map projections</li>
+                            <li>Data collection methods</li>
+                            <li>Basic cartography</li>
+                        </ul>
+                    </div>
+                    <div class="module-footer">
+                        <span class="module-duration"><i class="far fa-clock"></i> 15 hours</span>
+                        <a href="#" class="btn btn-sm">View Details</a>
+                    </div>
+                </div>
+                
+                <div class="module">
+                    <div class="module-number">2</div>
+                    <div class="module-header">
+                        <h3>Data Acquisition & Management</h3>
+                    </div>
+                    <div class="module-body">
+                        <p>Master techniques for collecting, creating, and managing spatial data from various sources including OpenStreetMap and satellite imagery.</p>
+                        <ul>
+                            <li>GPS data collection</li>
+                            <li>Web scraping</li>
+                            <li>Data conversion</li>
+                            <li>Quality control</li>
+                        </ul>
+                    </div>
+                    <div class="module-footer">
+                        <span class="module-duration"><i class="far fa-clock"></i> 20 hours</span>
+                        <a href="#" class="btn btn-sm">View Details</a>
+                    </div>
+                </div>
+                
+                <div class="module">
+                    <div class="module-number">3</div>
+                    <div class="module-header">
+                        <h3>Spatial Analysis</h3>
+                    </div>
+                    <div class="module-body">
+                        <p>Learn powerful analytical techniques to extract meaningful insights from spatial data for decision making.</p>
+                        <ul>
+                            <li>Buffer and overlay</li>
+                            <li>Network analysis</li>
+                            <li>Interpolation</li>
+                            <li>Spatial statistics</li>
+                        </ul>
+                    </div>
+                    <div class="module-footer">
+                        <span class="module-duration"><i class="far fa-clock"></i> 25 hours</span>
+                        <a href="#" class="btn btn-sm">View Details</a>
+                    </div>
+                </div>
+                
+                <div class="module">
+                    <div class="module-number">4</div>
+                    <div class="module-header">
+                        <h3>Web GIS Development</h3>
+                    </div>
+                    <div class="module-body">
+                        <p>Build interactive web mapping applications using Leaflet, OpenLayers, and GeoServer.</p>
+                        <ul>
+                            <li>Web mapping basics</li>
+                            <li>Tile services</li>
+                            <li>Geospatial APIs</li>
+                            <li>Mobile mapping</li>
+                        </ul>
+                    </div>
+                    <div class="module-footer">
+                        <span class="module-duration"><i class="far fa-clock"></i> 18 hours</span>
+                        <a href="#" class="btn btn-sm">View Details</a>
+                    </div>
+                </div>
+                
+                <div class="module">
+                    <div class="module-number">5</div>
+                    <div class="module-header">
+                        <h3>Remote Sensing</h3>
+                    </div>
+                    <div class="module-body">
+                        <p>Process and analyze satellite imagery for environmental monitoring and change detection.</p>
+                        <ul>
+                            <li>Image classification</li>
+                            <li>NDVI analysis</li>
+                            <li>Change detection</li>
+                            <li>Lidar processing</li>
+                        </ul>
+                    </div>
+                    <div class="module-footer">
+                        <span class="module-duration"><i class="far fa-clock"></i> 22 hours</span>
+                        <a href="#" class="btn btn-sm">View Details</a>
+                    </div>
+                </div>
+                
+                <div class="module">
+                    <div class="module-number">6</div>
+                    <div class="module-header">
+                        <h3>Capstone Project</h3>
+                    </div>
+                    <div class="module-body">
+                        <p>Apply all learned skills to solve a real-world spatial problem in your community or area of interest.</p>
+                        <ul>
+                            <li>Project planning</li>
+                            <li>Data collection</li>
+                            <li>Analysis</li>
+                            <li>Presentation</li>
+                        </ul>
+                    </div>
+                    <div class="module-footer">
+                        <span class="module-duration"><i class="far fa-clock"></i> 30 hours</span>
+                        <a href="#" class="btn btn-sm">View Details</a>
+                    </div>
+                </div>
             </div>
-            <div class="module">
-<h3>Module 2: Installing and Using QGIS</h3>
-                <p>Learn how to download, install, and navigate QGIS, a free and open-source GIS tool.</p>
-                <a class="btn" href="#">Watch Lesson</a>
-            </div>
-            <div class="module">
-                <h3>Module 3: Data Collection and Management</h3>
-                <p>Explore methods for collecting and managing GIS data using OpenStreetMap and other tools.</p>
-                <a class="btn" href="#">Watch Lesson</a>
-            </div>
-            <div class="module">
-                <h3>Module 4: Environmental Mapping</h3>
-                <p>Create environmental maps for biodiversity tracking and sustainable development projects.</p>
-                <a class="btn" href="#">Watch Lesson</a>
-            </div>
-            <div class="module">
-                <h3>Module 5: Hands-on Project</h3>
-                <p>Apply your skills in a real-world mapping project focused on your local community.</p>
-                <a class="btn" href="#">Start Project</a>
+        </section>
+
+        <section id="testimonials">
+            <h2>Success Stories</h2>
+            <div class="testimonials">
+                <div class="testimonial-slider">
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <p>"This program completely transformed my career. Within three months of completing the course, I landed a GIS analyst position with a conservation NGO. The hands-on projects were exactly what employers were looking for."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Sarah J.">
+                            <div class="author-info">
+                                <h4>Sarah J.</h4>
+                                <p>GIS Analyst, Conservation International</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <section id="resources">
-            <h2> Resources</h2>
-            <ul>
-                <li><a href="https://qgis.org">QGIS Official Website</a></li>
-                <li><a href="https://www.openstreetmap.org">OpenStreetMap</a></li>
-                <li><a href="https://www.youtube.com">YouTube Tutorials</a></li>
-                <li><a href="https://classroom.google.com">Google Classroom</a></li>
-            </ul>
+            <h2>Learning Resources</h2>
+            <p>Access our curated collection of tools, datasets, and reference materials to support your learning journey.</p>
+            
+            <div class="resource-list">
+                <div class="resource-card">
+                    <div class="resource-img" style="background-image: url('https://source.unsplash.com/600x400/?gis,software')"></div>
+                    <div class="resource-body">
+                        <h3>Software Tools</h3>
+                        <p>Download links and setup guides for QGIS, GDAL, PostGIS, and other essential GIS software.</p>
+                        <a href="#" class="btn btn-sm"><i class="fas fa-download"></i> Download</a>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-img" style="background-image: url('https://source.unsplash.com/600x400/?data,map')"></div>
+                    <div class="resource-body">
+                        <h3>Sample Datasets</h3>
+                        <p>Practice with real-world datasets covering demographics, environment, and infrastructure.</p>
+                        <a href="#" class="btn btn-sm"><i class="fas fa-database"></i> Access Data</a>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-img" style="background-image: url('https://source.unsplash.com/600x400/?books,library')"></div>
+                    <div class="resource-body">
+                        <h3>Reading Materials</h3>
+                        <p>E-books, research papers, and technical documentation for deeper learning.</p>
+                        <a href="#" class="btn btn-sm"><i class="fas fa-book-open"></i> Read</a>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section id="community">
             <h2>Join Our Community</h2>
-            <p>Connect with other learners through our community channels:</p>
-            <ul>
-                <li><a href="https://wa.me/">WhatsApp Group</a></li>
-                <li><a href="https://t.me/">Telegram Channel</a></li>
-                <li><a href="https://www.linkedin.com/in/george-boge-7a61a9269">LinkedIn</a></li>
-            </ul>
+            <p>Connect with fellow learners, alumni, and instructors through our active community channels.</p>
+            
+            <div class="community-channels">
+                <div class="channel-card">
+                    <div class="channel-icon"><i class="fab fa-slack"></i></div>
+                    <h3>Slack Workspace</h3>
+                    <p>Real-time discussions and Q&A with instructors</p>
+                    <a href="#" class="btn btn-sm"><i class="fas fa-sign-in-alt"></i> Join</a>
+                </div>
+                
+                <div class="channel-card">
+                    <div class="channel-icon"><i class="fab fa-discord"></i></div>
+                    <h3>Discord Server</h3>
+                    <p>Live events, study groups, and networking</p>
+                    <a href="#" class="btn btn-sm"><i class="fas fa-sign-in-alt"></i> Join</a>
+                </div>
+                
+                <div class="channel-card">
+                    <div class="channel-icon"><i class="fab fa-github"></i></div>
+                    <h3>GitHub</h3>
+                    <p>Open-source projects and code sharing</p>
+                    <a href="#" class="btn btn-sm"><i class="fas fa-code"></i> Contribute</a>
+                </div>
+                
+                <div class="channel-card">
+                    <div class="channel-icon"><i class="fab fa-linkedin"></i></div>
+                    <h3>LinkedIn Group</h3>
+                    <p>Professional networking and job opportunities</p>
+                    <a href="#" class="btn btn-sm"><i class="fas fa-users"></i> Connect</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What are the prerequisites for this course?</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>This course is designed for beginners with no prior GIS experience. Basic computer skills and familiarity with spreadsheet software (like Excel) are helpful. For advanced modules, some programming knowledge (Python) is beneficial but not required.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How long does it take to complete the program?</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The program is self-paced, but most students complete it in 3-6 months by dedicating 8-10 hours per week. You'll have access to all materials for 12 months from enrollment.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What kind of certification will I receive?</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Upon successful completion, you'll receive a digital certificate with a unique verification code that employers can use to validate your credentials. Our certification is recognized by several professional organizations in the geospatial field.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What hardware/software do I need?</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You'll need a computer (Windows, Mac, or Linux) with at least 8GB RAM (16GB recommended for some modules). All required software is open-source and we provide installation guides. A stable internet connection is required for accessing course materials.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Is there any financial aid available?</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we offer need-based scholarships for up to 50% of tuition costs. We also have payment plans available. Contact our admissions team for more information.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="enroll">
+            <div class="newsletter">
+                <h2>Ready to Start Your GIS Journey?</h2>
+                <p>Join our next cohort of aspiring geospatial professionals. Enter your email to receive detailed program information and enrollment options.</p>
+                <form class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                    <button type="submit" class="newsletter-btn">Get Started</button>
+                </form>
+            </div>
         </section>
     </div>
 
     <footer>
-        <p>Kijani Hub © 2025 | Empowering Communities Through Technology</p>
-        <p>Contact: <a href="mailto:kijanihub@gmail.com">kijanihub@gmail.com</a></p>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Kijani Hub</h3>
+                <p>Empowering communities through geospatial technology education and sustainable development solutions.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                    <li><a href="#modules"><i class="fas fa-chevron-right"></i> Curriculum</a></li>
+                    <li><a href="#testimonials"><i class="fas fa-chevron-right"></i> Success Stories</a></li>
+                    <li><a href="#faq"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Tutorials</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Webinars</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Case Studies</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Research Papers</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:info@kijanihub.org"><i class="fas fa-envelope"></i> info@kijanihub.org</a></li>
+                    <li><a href="tel:+1234567890"><i class="fas fa-phone"></i> +1 (234) 567-890</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</a></li>
+                    <li><a href="#"><i class="fas fa-clock"></i> Mon-Fri: 9AM-5PM</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Kijani Hub. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
     </footer>
+    
+    <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('show');
+        });
+        
+        // FAQ accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                item.classList.toggle('active');
+                
+                // Close other open items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+            });
+        });
+        
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    document.querySelector('.nav-links').classList.remove('show');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
