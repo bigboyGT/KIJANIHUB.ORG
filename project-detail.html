@@ -1,178 +1,420 @@
-<!doctype html> 
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="KijaniHub Blog - Latest green news, environmental innovations, and sustainable technology updates">
+    <meta name="keywords" content="green technology, environmental conservation, sustainability, renewable energy, eco-friendly">
+    <meta name="author" content="KijaniHub">
+    <meta property="og:title" content="KijaniHub Blog - Green News and Environmental Innovations">
+    <meta property="og:description" content="Stay updated with the latest in environmental conservation, green technology, and biodiversity tracking">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.kijanihub.com/blog">
+    <title>KijaniHub Blog | Green Technology & Environmental News</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="https://www.kijanihub.com/blog">
 
-        <meta name="description" content="">
-        <meta name="author" content="Tooplate">
-        <title>KijaniHub Blog</title>
-
-        <!-- CSS FILES -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/bootstrap-icons.css" rel="stylesheet">
-        <link href="css/magnific-popup.css" rel="stylesheet">
-        <link href="css/tooplate-barista.css" rel="stylesheet">
-    </head>
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/magnific-popup.css" rel="stylesheet">
+    <link href="css/tooplate-barista.css" rel="stylesheet">
     
-    <body class="projects-detail-page" id="section_1">
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "KijaniHub Blog",
+      "url": "https://www.kijanihub.com/blog",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.kijanihub.com/blog/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+</head>
 
-        <header class="site-header">
+<body class="projects-detail-page" id="section_1">
+    <!-- Skip to Content Link for Accessibility -->
+    <a class="skip-link visually-hidden-focusable" href="#main-content">Skip to main content</a>
+
+    <header class="site-header" role="banner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-3 col-md-5 col-7">
+                    <p class="text-white mb-0">
+                        <i class="bi-clock site-header-icon me-2" aria-hidden="true"></i>
+                        Mon-Fri 10:00-19:00
+                    </p>
+                </div>
+                <div class="col-lg-2 col-md-3 col-5">
+                    <p class="text-white mb-0">
+                        <a href="tel:+2404809600" class="text-white">
+                            <i class="bi-telephone site-header-icon me-2" aria-hidden="true"></i>
+                            <span class="visually-hidden">Call us at</span>
+                            240-480-9600
+                        </a>
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-3 col-12 ms-auto">
+                    <ul class="social-icon" role="list">
+                        <li role="listitem"><a href="https://facebook.com/KijaniHub" class="social-icon-link bi-facebook" aria-label="Facebook"><span class="visually-hidden">Facebook</span></a></li>
+                        <li role="listitem"><a href="https://pinterest.com/KijaniHub" class="social-icon-link bi-pinterest" aria-label="Pinterest"><span class="visually-hidden">Pinterest</span></a></li>
+                        <li role="listitem"><a href="https://twitter.com/KijaniHub" class="social-icon-link bi-twitter" aria-label="Twitter"><span class="visually-hidden">Twitter</span></a></li>
+                        <li role="listitem"><a href="https://www.youtube.com/KijaniHub" class="social-icon-link bi-youtube" aria-label="YouTube"><span class="visually-hidden">YouTube</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg bg-white shadow-lg" aria-label="Main navigation">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">
+                <span class="visually-hidden">KijaniHub</span>
+                KijaniHub <span class="text-success">Blog</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html" aria-current="page">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="categories.html">Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+                <form class="d-flex ms-3" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <section class="hero section-hero section-padding" aria-labelledby="hero-heading">
             <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-3 col-md-5 col-7">
-                        <p class="text-white mb-0">
-                            <i class="bi-clock site-header-icon me-2"></i>
-                            Mon-Fri 10:00-19:00
-                        </p>
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-5">
-                        <p class="text-white mb-0">
-                            <a href="tel: 240-480-9600" class="text-white">
-                                <i class="bi-telephone site-header-icon me-2"></i>
-                                240-480-9600
-                            </a>
-                        </p>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-12 ms-auto">
-                        <ul class="social-icon">
-                            <li><a href="https://facebook.com/tooplate" class="social-icon-link bi-facebook"></a></li>
-                            <li><a href="https://pinterest.com/tooplate" class="social-icon-link bi-pinterest"></a></li>
-                            <li><a href="https://twitter.com/minthu" class="social-icon-link bi-twitter"></a></li>
-                            <li><a href="https://www.youtube.com/tooplate" class="social-icon-link bi-youtube"></a></li>
-                        </ul>
+                <div class="row">
+                    <div class="col-lg-6 col-12 text-center mx-auto">
+                        <div class="section-hero-text">
+                            <small class="small-title text-success">Green News</small>
+                            <h1 id="hero-heading" class="text-white">KijaniHub Blog</h1>
+                            <p class="text-white-50 mt-3">Stay updated with the latest in environmental conservation, green technology, and biodiversity tracking.</p>
+                            <a href="#featured-posts" class="btn btn-success mt-3">Explore Articles</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </header>
+        </section>
 
-        <nav class="navbar navbar-expand-lg bg-white shadow-lg">
+        <!-- Featured Posts Section -->
+        <section class="projects section-padding" id="featured-posts" aria-labelledby="featured-heading">
             <div class="container">
-                <a href="index.html" class="navbar-brand">KijaniHub Blog<span class="text-danger">green news</span></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <div class="section-header mb-5">
+                    <h2 id="featured-heading" class="text-center">Featured Articles</h2>
+                    <p class="text-center text-muted">Discover our latest insights on green technology and sustainability</p>
+                </div>
                 
-            </div>
-        </nav>
-
-        <main>
-            <section class="hero section-hero section-padding">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-6 col-12 text-center mx-auto">
-                            <div class="section-hero-text">
-                                <small class="small-title text-warning">Projects Detail</small>
-                                <h1 class="text-white">KijaniHub Blog</h1>
+                <div class="row g-4">
+                    <!-- Blog Post 1 -->
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <article class="card h-100 shadow-sm">
+                            <a href="blog-post-1.html" aria-label="Read more about SolarEdge">
+                                <img src="images/projects/pngtree-d-rendering-of-a-hydrogen-energy-storage-system-for-environmentally-sustainable-image_3811682.jpg" 
+                                     class="card-img-top" 
+                                     alt="SolarEdge hydrogen energy storage system"
+                                     loading="lazy">
+                            </a>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <small class="text-success">Renewable Energy</small>
+                                    <small class="text-muted">May 15, 2023</small>
+                                </div>
+                                <h3 class="card-title h5">
+                                    <a href="blog-post-1.html" class="text-decoration-none text-dark">SolarEdge: Revolutionizing Solar Energy Storage</a>
+                                </h3>
+                                <p class="card-text">Discover innovative solar energy solutions with cutting-edge technology for efficient energy storage and distribution...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="blog-post-1.html" class="btn btn-success btn-sm">Read More</a>
+                                    <small class="text-muted">5 min read</small>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    
+                    <!-- Blog Post 2 -->
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <article class="card h-100 shadow-sm">
+                            <a href="blog-post-2.html" aria-label="Read more about EcoSync">
+                                <img src="images/FinancingCleanEnergyinAfrica-shutterstock_785799979.jpg" 
+                                     class="card-img-top" 
+                                     alt="Clean energy project in Africa"
+                                     loading="lazy">
+                            </a>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <small class="text-success">Clean Energy</small>
+                                    <small class="text-muted">June 2, 2023</small>
+                                </div>
+                                <h3 class="card-title h5">
+                                    <a href="blog-post-2.html" class="text-decoration-none text-dark">EcoSync: Financing Clean Energy in Africa</a>
+                                </h3>
+                                <p class="card-text">EcoSync is designed to streamline financing and operational strategies for clean energy projects in Africa...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="blog-post-2.html" class="btn btn-success btn-sm">Read More</a>
+                                    <small class="text-muted">7 min read</small>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    
+                    <!-- Blog Post 3 -->
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <article class="card h-100 shadow-sm">
+                            <a href="blog-post-3.html" aria-label="Read more about GreenVibe">
+                                <img src="images/projects/vmsign-x9yGe7wnvKQ-unsplash.jpg" 
+                                     class="card-img-top" 
+                                     alt="Renewable energy integration"
+                                     loading="lazy">
+                            </a>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <small class="text-success">Energy Integration</small>
+                                    <small class="text-muted">June 10, 2023</small>
+                                </div>
+                                <h3 class="card-title h5">
+                                    <a href="blog-post-3.html" class="text-decoration-none text-dark">GreenVibe: Maximizing Renewable Integration</a>
+                                </h3>
+                                <p class="card-text">GreenVibe focuses on maximizing renewable energy integration with eco-friendly initiatives...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="blog-post-3.html" class="btn btn-success btn-sm">Read More</a>
+                                    <small class="text-muted">6 min read</small>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    
+                    <!-- Blog Post 4 -->
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <article class="card h-100 shadow-sm">
+                            <a href="blog-post-4.html" aria-label="Read more about TechNova">
+                                <img src="images/projects/ai-generated-green-natural-eco-friendly-tree-and-computer-technology-on-an-abstract-high-tech-futuristic-background-of-microchips-and-computer-circuit-boards-with-transistors-free-photo.jpg" 
+                                     class="card-img-top" 
+                                     alt="Green technology concept"
+                                     loading="lazy">
+                            </a>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <small class="text-success">Green Tech</small>
+                                    <small class="text-muted">June 18, 2023</small>
+                                </div>
+                                <h3 class="card-title h5">
+                                    <a href="blog-post-4.html" class="text-decoration-none text-dark">TechNova: Futuristic Green Technologies</a>
+                                </h3>
+                                <p class="card-text">TechNova harnesses futuristic technologies to drive innovation in energy management and digital infrastructure...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="blog-post-4.html" class="btn btn-success btn-sm">Read More</a>
+                                    <small class="text-muted">8 min read</small>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    
+                    <!-- Blog Post 5 -->
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <article class="card h-100 shadow-sm">
+                            <a href="blog-post-5.html" aria-label="Read more about EnergyConnect">
+                                <img src="images/projects/evangeline-shaw-nwLTVwb7DbU-unsplash.jpg" 
+                                     class="card-img-top" 
+                                     alt="Smart grid technology"
+                                     loading="lazy">
+                            </a>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <small class="text-success">Smart Grids</small>
+                                    <small class="text-muted">June 25, 2023</small>
+                                </div>
+                                <h3 class="card-title h5">
+                                    <a href="blog-post-5.html" class="text-decoration-none text-dark">EnergyConnect: Smart Grid Connectivity</a>
+                                </h3>
+                                <p class="card-text">EnergyConnect bridges the gap between renewable energy production and smart grid connectivity for optimal efficiency...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="blog-post-5.html" class="btn btn-success btn-sm">Read More</a>
+                                    <small class="text-muted">9 min read</small>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    
+                    <!-- Newsletter Signup Card -->
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="card h-100 shadow-sm bg-light">
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <h3 class="h5 card-title text-center mb-3">Stay Updated</h3>
+                                <p class="card-text text-center mb-4">Subscribe to our newsletter for the latest green tech news and updates</p>
+                                <form class="newsletter-form">
+                                    <div class="mb-3">
+                                        <input type="email" class="form-control" placeholder="Your email address" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-success w-100">Subscribe</button>
+                                </form>
+                                <p class="small text-muted mt-3 text-center">We respect your privacy. Unsubscribe at any time.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <section class="projects section-padding">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-10 col-12 mb-5">
-                            <h2 class="mb-3">Brands we've crafted so far</h2>
-                        </div>
-
-                        <!-- SolarEdge Project (was "Ways to start a project") -->
-                        <div class="col-lg-6 col-12 mb-5">
-                            
-                            <img src="images/projects/pngtree-d-rendering-of-a-hydrogen-energy-storage-system-for-environmentally-sustainable-image_3811682.jpg" 
-                            class="img-fluid projects-image" 
-                            alt="EcoSync Project" 
-                            style="width: 600px; height: 650px;">
-                            <h2 class="mt-3 mb-1">SolarEdge</h2>
-                            <p>Discover innovative solar energy solutions with cutting-edge technology for efficient energy storage and distribution.</p>
-                            <p>Our SolarEdge project represents a fusion of advanced renewable energy systems and smart management strategies.</p>
-                        </div>
-
-                        <!-- EcoSync Project (was "Strategies for next move") -->
-                        <div class="col-lg-6 col-12 mb-5">
-                            
-                            <img src="images/FinancingCleanEnergyinAfrica-shutterstock_785799979.jpg" 
-                            class="img-fluid projects-image" 
-                            alt="EcoSync Project" 
-                            style="width: 600px; height: 650px;">
-                       
-                            <h2 class="mt-3 mb-1">EcoSync</h2>
-                            <p>EcoSync is designed to streamline financing and operational strategies for clean energy projects in Africa.</p>
-                            <p>Leveraging smart technology and sustainable practices, EcoSync is at the forefront of green energy innovation.</p>
-                        </div>
-
-                        <!-- GreenVibe Project (was "Banana Team") -->
-                        <div class="col-lg-4 col-12">
-                            
-                            <img src="images/projects/vmsign-x9yGe7wnvKQ-unsplash.jpg" 
-                            class="img-fluid projects-image" 
-                            alt="EcoSync Project" 
-                            style="width: 400px; height: 400px;">
-                            <h3 class="mt-3 mb-1">GreenVibe</h3>
-                            <p>GreenVibe focuses on maximizing renewable energy integration with eco-friendly initiatives.</p>
-                        </div>
-
-                        <!-- TechNova Project (was "Meeting Time") -->
-                        <div class="col-lg-4 col-12 my-lg-0 my-5">
-                            
-                            <img src="images/projects/ai-generated-green-natural-eco-friendly-tree-and-computer-technology-on-an-abstract-high-tech-futuristic-background-of-microchips-and-computer-circuit-boards-with-transistors-free-photo.jpg" 
-                            class="img-fluid projects-image" 
-                            alt="EcoSync Project" 
-                            style="width: 400px; height: 400px;">
-                            <h3 class="mt-3 mb-1">TechNova</h3>
-                            <p>TechNova harnesses futuristic technologies to drive innovation in energy management and digital infrastructure.</p>
-                        </div>
-
-                        <!-- EnergyConnect Project (was "Avocado Work") -->
-                        <div class="col-lg-4 col-12">
-                            <img src="images/projects/evangeline-shaw-nwLTVwb7DbU-unsplash.jpg" 
-                            class="img-fluid projects-image" 
-                            alt="EcoSync Project" 
-                            style="width: 400px; height: 400px;">
-                            <h3 class="mt-3 mb-1">EnergyConnect</h3>
-                            <p>EnergyConnect bridges the gap between renewable energy production and smart grid connectivity for optimal efficiency.</p>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
-
-        </main>
-
-        <footer class="site-footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-12">
-                        <div class="site-footer-wrap d-flex align-items-center">
-                            <p class="copyright-text mb-0 me-4">Copyright © 2036 Waso Strategy Co., Ltd.</p>
-                            <ul class="social-icon">
-                                <li><a href="https://facebook.com/KijaniHub" class="social-icon-link bi-facebook"></a></li>
-                                <li><a href="https://pinterest.com/KijaniHub" class="social-icon-link bi-pinterest"></a></li>
-                                <li><a href="https://twitter.com/KijaniHub" class="social-icon-link bi-twitter"></a></li>
-                                <li><a href="https://www.youtube.com/KijaniHub" class="social-icon-link bi-youtube"></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6 col-12">
-                    </div>
-                    
+                
+                <div class="text-center mt-5">
+                    <a href="archive.html" class="btn btn-outline-success">View All Articles</a>
                 </div>
             </div>
-        </footer>
+        </section>
+        
+        <!-- Categories Section -->
+        <section class="bg-light py-5" aria-labelledby="categories-heading">
+            <div class="container">
+                <h2 id="categories-heading" class="text-center mb-5">Explore Categories</h2>
+                <div class="row g-3 justify-content-center">
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <a href="category-renewable-energy.html" class="btn btn-outline-success w-100">Renewable Energy</a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <a href="category-sustainability.html" class="btn btn-outline-success w-100">Sustainability</a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <a href="category-green-tech.html" class="btn btn-outline-success w-100">Green Tech</a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <a href="category-conservation.html" class="btn btn-outline-success w-100">Conservation</a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <a href="category-policy.html" class="btn btn-outline-success w-100">Policy</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-        <!-- JAVASCRIPT FILES -->
-        <script src="js/jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery.sticky.js"></script>
-        <script src="js/jquery.magnific-popup.min.js"></script>
-        <script src="js/magnific-popup-options.js"></script>
-        <script src="js/click-scroll.js"></script>
-        <script src="js/custom.js"></script>
+    <footer class="site-footer py-5 bg-dark text-white" role="contentinfo">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h3 class="h5 mb-3">KijaniHub Blog</h3>
+                    <p>Your trusted source for green technology news, environmental conservation updates, and sustainable living tips.</p>
+                    <div class="mt-4">
+                        <a href="about.html" class="btn btn-outline-light btn-sm me-2">About Us</a>
+                        <a href="contact.html" class="btn btn-outline-light btn-sm">Contact</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h4 class="h6 mb-3">Quick Links</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html" class="text-white-50">Home</a></li>
+                        <li class="mb-2"><a href="archive.html" class="text-white-50">Articles</a></li>
+                        <li class="mb-2"><a href="categories.html" class="text-white-50">Categories</a></li>
+                        <li class="mb-2"><a href="authors.html" class="text-white-50">Authors</a></li>
+                        <li><a href="privacy.html" class="text-white-50">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+                    <h4 class="h6 mb-3">Categories</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="category-renewable-energy.html" class="text-white-50">Renewable Energy</a></li>
+                        <li class="mb-2"><a href="category-sustainability.html" class="text-white-50">Sustainability</a></li>
+                        <li class="mb-2"><a href="category-green-tech.html" class="text-white-50">Green Technology</a></li>
+                        <li><a href="category-conservation.html" class="text-white-50">Conservation</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-4">
+                    <h4 class="h6 mb-3">Connect With Us</h4>
+                    <ul class="social-icon" role="list">
+                        <li role="listitem" class="d-inline-block me-2"><a href="https://facebook.com/KijaniHub" class="social-icon-link bi-facebook text-white" aria-label="Facebook"></a></li>
+                        <li role="listitem" class="d-inline-block me-2"><a href="https://twitter.com/KijaniHub" class="social-icon-link bi-twitter text-white" aria-label="Twitter"></a></li>
+                        <li role="listitem" class="d-inline-block me-2"><a href="https://pinterest.com/KijaniHub" class="social-icon-link bi-pinterest text-white" aria-label="Pinterest"></a></li>
+                        <li role="listitem" class="d-inline-block"><a href="https://www.youtube.com/KijaniHub" class="social-icon-link bi-youtube text-white" aria-label="YouTube"></a></li>
+                    </ul>
+                    <div class="mt-3">
+                        <p class="small mb-1"><i class="bi-envelope me-2"></i> info@kijanihub.com</p>
+                        <p class="small mb-1"><i class="bi-telephone me-2"></i> 240-480-9600</p>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-4 bg-secondary">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">© 2023 KijaniHub. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="terms.html" class="text-white-50">Terms</a></li>
+                        <li class="list-inline-item"><a href="privacy.html" class="text-white-50">Privacy</a></li>
+                        <li class="list-inline-item"><a href="sitemap.html" class="text-white-50">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-    </body>
+    <!-- Back to Top Button -->
+    <a href="#section_1" class="back-to-top" aria-label="Back to top">
+        <i class="bi-arrow-up"></i>
+    </a>
+
+    <!-- JAVASCRIPT FILES -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/magnific-popup-options.js"></script>
+    <script src="js/click-scroll.js"></script>
+    <script src="js/custom.js"></script>
+    
+    <script>
+        // Back to top button functionality
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 300) {
+                $('.back-to-top').fadeIn('slow');
+            } else {
+                $('.back-to-top').fadeOut('slow');
+            }
+        });
+        
+        // Smooth scrolling for all links
+        $('a[href*="#"]').not('[href="#"]').not('[href="#0"]').click(function(event) {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    event.preventDefault();
+                    $('html, body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000, function() {
+                        var $target = $(target);
+                        $target.focus();
+                        if ($target.is(":focus")) {
+                            return false;
+                        } else {
+                            $target.attr('tabindex','-1');
+                            $target.focus();
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
 </html>

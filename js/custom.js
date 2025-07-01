@@ -11,8 +11,8 @@
     $(function() {
       $('.hero-slides').vegas({
           slides: [
-              { src: 'images/team/pexels-couleur-2317904.jpg' },
-              { src: 'images/team/stringray  hd.jpg' },
+              { src: 'https://images.pexels.com/photos/2317904/pexels-photo-2317904.jpeg' },
+              { src: 'https://www.treehugger.com/thmb/sfXYAnDdo5jb5ShROj5uWTZz1T8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1084272706-67e82d99d00447dd9cd0567739e51e18.jpg' },
               { src: 'images/team/Grevys-zebra.jpg' }
           ],
           timer: false,
