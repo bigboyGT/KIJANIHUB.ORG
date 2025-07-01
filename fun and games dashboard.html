@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KijaniHub - Eco-Games for Kids</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2e8b57;
+            --secondary-green: #3cb371;
+            --light-green: #e0f7e0;
+            --dark-green: #1e5631;
+            --accent-blue: #3498db;
+            --accent-orange: #e67e22;
+            --accent-yellow: #f1c40f;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--light-green);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.1)" d="M0,0 L100,0 L100,100 Q50,80 0,100 Z"/></svg>');
+            background-size: 100% 100%;
+            opacity: 0.3;
+        }
+        
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .intro {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .game-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        
+        .game-card::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-orange), var(--accent-yellow));
+        }
+        
+        .game-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .game-content {
+            padding: 1.5rem;
+        }
+        
+        .game-title {
+            font-family: 'Fredoka One', cursive;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+        
+        .game-desc {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        
+        .game-category {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background-color: var(--light-green);
+            color: var(--dark-green);
+        }
+        
+        footer {
+            background-color: var(--dark-green);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-green);
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .game-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">🌿</div>
+        <h1>KijaniHub</h1>
+        <p class="tagline">Play, Learn, and Protect Our Planet!</p>
+    </header>
+    
+    <main>
+        <section class="intro">
+            <h2>Welcome to Your Eco-Adventure!</h2>
+            <p>Discover 10 fun games that teach you how to recycle, save water and energy, protect wildlife, and live sustainably. Every game you play helps you become an Earth Hero!</p>
+        </section>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="games-played">0</div>
+                <div class="stat-label">Games Played</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="trees-planted">0</div>
+                <div class="stat-label">Virtual Trees Planted</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="co2-saved">0</div>
+                <div class="stat-label">Lbs of CO₂ Saved</div>
+            </div>
+        </div>
+        
+        <h2 style="text-align: center; margin-bottom: 1rem; color: var(--primary-green);">Choose Your Game</h2>
+        
+        <div class="game-grid">
+            <!-- Recycling & Waste Management -->
+            <div class="game-card" onclick="window.location.href='trash-sorter.html'">
+                <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="game-content">
+                    <div class="game-category">Recycling</div>
+                    <h3 class="game-title">🗑️ Trash Sorter Challenge</h3>
+                    <p class="game-desc">Drag & drop waste into the right bins (Recycle, Compost, Landfill). Learn proper waste sorting!</p>
+                </div>
+            </div>
+            
+            <div class="game-card" onclick="window.location.href='eco-factory.html'">
+                <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="game-content">
+                    <div class="game-category">Recycling</div>
+                    <h3 class="game-title">🔄 Eco-Factory Simulator</h3>
+                    <p class="game-desc">Turn recycled materials into new products! See how recycling creates valuable items.</p>
+                </div>
+            </div>
+            
+            <!-- Water & Energy Conservation -->
+            <div class="game-card" onclick="window.location.href='water-saver.html'">
+                <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1551224402-36b5a5c5f0b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="game-content">
+                    <div class="game-category">Water Conservation</div>
+                    <h3 class="game-title">🚰 Water Saver Hero</h3>
+                    <p class="game-desc">Fix leaky taps & choose water-saving actions. Become a water conservation expert!</p>
+                </div>
+            </div>
+            
+            <div class="game-card" onclick="window.location.href='power-patrol.html'">
+                <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="game-content">
+                    <div class="game-category">Energy Conservation</div>
+                    <h3 class="game-title">⚡ Power Patrol</h3>
+                    <p class="game-desc">Turn off unused lights & appliances to save energy. Learn about electricity conservation!</p>
+                </div>
+            </div>
+            
+            <!-- Nature & Wildlife Protection -->
+            <div class="game-card" onclick="window.location.href='animal-rescue.html'">
+                <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="game-content">
+                    <div class="game-category">Wildlife</div>
+                    <h3 class="game-title">🐾 Animal Rescue Adventure</h3>
+                    <p class="game-desc">Help endangered animals by restoring habitats. Learn about biodiversity and ecosystems!</p>
+                </div>
+            </div>
+            
+            <div class="game-card" onclick="window.location.href='tree-planter.html'">
+                <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1468276311594-df7cb65d8df6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="game-content">
+                    <div class="game-category">Nature</div>
+                    <h3 class="game-title">🌱 Tree Planter</h3>
+                    <p class="game-desc">Grow virtual trees & see their real-world impact. Discover how trees help our planet!</p>
+                </div>
+            </div>
+            
+            <!-- Climate Action -->
+            <div class="game-card" onclick="window.location.href='weather-defender.html'">
+                <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="game-content">
+                    <div class="game-category">Climate</div>
+                    <h3 class="game-title">🌤️ Weather Defender</h3>
+                    <p class="game-desc">Stop pollution to protect the climate. Learn how human actions affect weather patterns!</p>
+                </div>
+            </div>
+            
+            <div class="game-card" onclick="window.location.href='carbon-race.html'">
+                <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="game-content">
+                    <div class="game-category">Climate</div>
+                    <h3 class="game-title">🚲 Carbon Footprint Race</h3>
+                    <p class="game-desc">Choose eco-friendly transport to win! Compare carbon footprints of different vehicles.</p>
+                </div>
+            </div>
+            
+            <!-- Sustainable Living -->
+            <div class="game-card" onclick="window.location.href='green-shopper.html'">
+                <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="game-content">
+                    <div class="game-category">Sustainable Living</div>
+                    <h3 class="game-title">🛒 Green Shopper</h3>
+                    <p class="game-desc">Pick eco-friendly products in a supermarket game. Learn sustainable shopping habits!</p>
+                </div>
+            </div>
+            
+            <div class="game-card" onclick="window.location.href='eco-house.html'">
+                <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="game-content">
+                    <div class="game-category">Sustainable Living</div>
+                    <h3 class="game-title">🏡 Eco-House Designer</h3>
+                    <p class="game-desc">Build a sustainable home with solar panels & gardens! Design your dream green house.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>© 2023 KijaniHub - Teaching Kids Environmental Conservation Through Play</p>
+        <p style="margin-top: 1rem;">Made with ♥ for our planet Earth</p>
+    </footer>
+
+    <script>
+        // Load stats from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const gamesPlayed = localStorage.getItem('gamesPlayed') || 0;
+            const treesPlanted = localStorage.getItem('treesPlanted') || 0;
+            const co2Saved = localStorage.getItem('co2Saved') || 0;
+            
+            document.getElementById('games-played').textContent = gamesPlayed;
+            document.getElementById('trees-planted').textContent = treesPlanted;
+            document.getElementById('co2-saved').textContent = co2Saved;
+            
+            // Animate numbers
+            animateValue('games-played', 0, gamesPlayed, 1000);
+            animateValue('trees-planted', 0, treesPlanted, 1000);
+            animateValue('co2-saved', 0, co2Saved, 1000);
+        });
+        
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+    </script>
+</body>
+</html>
