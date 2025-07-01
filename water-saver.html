@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚰 Water Saver Hero | KijaniHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --water-blue: #3498db;
+            --leak-red: #e74c3c;
+            --save-green: #2ecc71;
+            --light-bg: #f9f9f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #2e8b57;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0f7f0;
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .house-container {
+            position: relative;
+            height: 400px;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/619/619153.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 2rem 0;
+        }
+        
+        .leak {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/3081/3081989.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            animation: drip 1s infinite;
+            filter: drop-shadow(0 0 5px rgba(231, 76, 60, 0.7));
+        }
+        
+        @keyframes drip {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+            100% { transform: translateY(0); }
+        }
+        
+        .water-drop {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/3081/3081989.png');
+            background-size: contain;
+            animation: fall linear;
+        }
+        
+        .water-meter {
+            width: 100%;
+            height: 30px;
+            background-color: #ecf0f1;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .water-level {
+            height: 100%;
+            background: linear-gradient(90deg, var(--water-blue), #2980b9);
+            width: 100%;
+            transition: width 0.3s;
+        }
+        
+        .water-amount {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+        
+        .tips-container {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border-left: 5px solid var(--water-blue);
+        }
+        
+        .tips-container h3 {
+            margin-bottom: 0.5rem;
+            color: var(--water-blue);
+        }
+        
+        .tips-container ul {
+            padding-left: 1.5rem;
+        }
+        
+        .tips-container li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background-color: #2e8b57;
+            color: white;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            background-color: #3cb371;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .feedback {
+            text-align: center;
+            min-height: 2rem;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        
+        .save-message {
+            color: var(--save-green);
+        }
+        
+        .leak-message {
+            color: var(--leak-red);
+        }
+        
+        @media (max-width: 768px) {
+            .house-container {
+                height: 300px;
+            }
+            
+            .stat-value {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚰 Water Saver Hero</h1>
+        <p>Fix leaky taps and learn water-saving habits to conserve this precious resource!</p>
+    </header>
+    
+    <div class="game-container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="leaks-fixed">0</div>
+                <div class="stat-label">Leaks Fixed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="water-saved">0</div>
+                <div class="stat-label">Gallons Saved</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="time-left">60</div>
+                <div class="stat-label">Seconds Left</div>
+            </div>
+        </div>
+        
+        <div class="water-meter">
+            <div class="water-level" id="water-level" style="width: 100%;"></div>
+            <div class="water-amount" id="water-amount">100%</div>
+        </div>
+        
+        <div class="feedback" id="feedback">
+            Click START to begin fixing leaks in the house!
+        </div>
+        
+        <div class="house-container" id="house-container">
+            <!-- Leaks will be generated here -->
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn">Start Game</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+        
+        <div class="tips-container">
+            <h3>Water Saving Tips:</h3>
+            <ul>
+                <li>Fix leaky faucets - they can waste hundreds of gallons per year</li>
+                <li>Turn off the tap while brushing teeth or washing hands</li>
+                <li>Take shorter showers - each minute saves 2-5 gallons</li>
+                <li>Only run full loads in dishwashers and washing machines</li>
+                <li>Water plants early in the morning to reduce evaporation</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let leaksFixed = 0;
+        let waterSaved = 0;
+        let timeLeft = 60;
+        let waterLevel = 100;
+        let gameActive = false;
+        let timerInterval;
+        let leakInterval;
+        let activeLeaks = [];
+        let waterDrops = [];
+        
+        // DOM elements
+        const houseContainer = document.getElementById('house-container');
+        const leaksFixedDisplay = document.getElementById('leaks-fixed');
+        const waterSavedDisplay = document.getElementById('water-saved');
+        const timeLeftDisplay = document.getElementById('time-left');
+        const waterLevelDisplay = document.getElementById('water-level');
+        const waterAmountDisplay = document.getElementById('water-amount');
+        const feedbackDisplay = document.getElementById('feedback');
+        const startBtn = document.getElementById('start-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        
+        // Initialize game
+        function initGame() {
+            leaksFixed = 0;
+            waterSaved = 0;
+            timeLeft = 60;
+            waterLevel = 100;
+            gameActive = false;
+            
+            leaksFixedDisplay.textContent = leaksFixed;
+            waterSavedDisplay.textContent = waterSaved;
+            timeLeftDisplay.textContent = timeLeft;
+            waterLevelDisplay.style.width = '100%';
+            waterAmountDisplay.textContent = '100%';
+            feedbackDisplay.textContent = 'Click START to begin fixing leaks in the house!';
+            feedbackDisplay.className = 'feedback';
+            
+            houseContainer.innerHTML = '';
+            activeLeaks = [];
+            waterDrops = [];
+            
+            clearInterval(timerInterval);
+            clearInterval(leakInterval);
+            
+            startBtn.textContent = 'Start Game';
+        }
+        
+        // Start game
+        function startGame() {
+            if (gameActive) {
+                pauseGame();
+                return;
+            }
+            
+            gameActive = true;
+            startBtn.textContent = 'Pause Game';
+            
+            // Start timer
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timeLeftDisplay.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+            
+            // Start generating leaks
+            leakInterval = setInterval(generateLeak, 2000);
+        }
+        
+        // Pause game
+        function pauseGame() {
+            gameActive = false;
+            startBtn.textContent = 'Resume Game';
+            clearInterval(timerInterval);
+            clearInterval(leakInterval);
+        }
+        
+        // End game
+        function endGame() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            clearInterval(leakInterval);
+            startBtn.textContent = 'Play Again';
+            
+            // Remove all leaks
+            houseContainer.innerHTML = '';
+            activeLeaks = [];
+            
+            // Show final feedback
+            const gallonsPerLeak = 10;
+            const totalSaved = leaksFixed * gallonsPerLeak;
+            
+            let feedback = `Game Over! You fixed ${leaksFixed} leaks and saved about ${totalSaved} gallons of water! `;
+            
+            if (leaksFixed >= 8) {
+                feedback += "You're a Water Hero! 💧";
+            } else if (leaksFixed >= 5) {
+                feedback += "Good job! Keep practicing to save more water.";
+            } else {
+                feedback += "Try again to save more water! Every drop counts.";
+            }
+            
+            feedbackDisplay.textContent = feedback;
+            feedbackDisplay.className = 'feedback save-message';
+            
+            // Update global stats
+            updateGlobalStats(totalSaved);
+        }
+        
+        // Generate a new leak
+        function generateLeak() {
+            if (!gameActive || activeLeaks.length >= 5) return;
+            
+            const leak = document.createElement('div');
+            leak.className = 'leak';
+            
+            // Random position in house container
+            const posX = Math.floor(Math.random() * (houseContainer.offsetWidth - 40));
+            const posY = Math.floor(Math.random() * (houseContainer.offsetHeight - 40));
+            
+            leak.style.left = `${posX}px`;
+            leak.style.top = `${posY}px`;
+            leak.dataset.id = Date.now(); // Unique ID
+            
+            // Add click handler
+            leak.addEventListener('click', fixLeak);
+            
+            houseContainer.appendChild(leak);
+            activeLeaks.push({
+                element: leak,
+                id: leak.dataset.id
+            });
+            
+            // Start water dripping
+            startDripping(leak);
+            
+            // Reduce water level
+            waterLevel -= 5;
+            if (waterLevel < 0) waterLevel = 0;
+            
+            waterLevelDisplay.style.width = `${waterLevel}%`;
+            waterAmountDisplay.textContent = `${waterLevel}%`;
+            
+            if (waterLevel <= 20) {
+                waterLevelDisplay.style.background = 'linear-gradient(90deg, #e74c3c, #c0392b)';
+                feedbackDisplay.textContent = 'Warning! Very low water level! Fix leaks quickly!';
+                feedbackDisplay.className = 'feedback leak-message';
+            } else if (waterLevel <= 50) {
+                waterLevelDisplay.style.background = 'linear-gradient(90deg, #f39c12, #d35400)';
+                feedbackDisplay.textContent = 'Water level getting low - fix those leaks!';
+                feedbackDisplay.className = 'feedback leak-message';
+            }
+        }
+        
+        // Start water dripping animation
+        function startDripping(leak) {
+            const leakRect = leak.getBoundingClientRect();
+            const containerRect = houseContainer.getBoundingClientRect();
+            
+            const startX = leakRect.left - containerRect.left + leakRect.width / 2;
+            const startY = leakRect.top - containerRect.top + leakRect.height;
+            
+            const drop = document.createElement('div');
+            drop.className = 'water-drop';
+            drop.style.left = `${startX}px`;
+            drop.style.top = `${startY}px`;
+            
+            // Random animation duration
+            const duration = Math.random() * 2 + 1;
+            drop.style.animationDuration = `${duration}s`;
+            
+            houseContainer.appendChild(drop);
+            waterDrops.push(drop);
+            
+            // Remove drop after animation
+            setTimeout(() => {
+                drop.remove();
+                waterDrops = waterDrops.filter(d => d !== drop);
+            }, duration * 1000);
+        }
+        
+        // Fix a leak
+        function fixLeak(e) {
+            if (!gameActive) return;
+            
+            const leakId = e.target.dataset.id;
+            const leakIndex = activeLeaks.findIndex(l => l.id === leakId);
+            
+            if (leakIndex !== -1) {
+                // Remove leak
+                activeLeaks[leakIndex].element.remove();
+                activeLeaks.splice(leakIndex, 1);
+                
+                // Update stats
+                leaksFixed++;
+                waterSaved += 10; // Each fixed leak saves 10 gallons
+                
+                leaksFixedDisplay.textContent = leaksFixed;
+                waterSavedDisplay.textContent = waterSaved;
+                
+                // Increase water level
+                waterLevel += 10;
+                if (waterLevel > 100) waterLevel = 100;
+                
+                waterLevelDisplay.style.width = `${waterLevel}%`;
+                waterAmountDisplay.textContent = `${waterLevel}%`;
+                
+                if (waterLevel > 50) {
+                    waterLevelDisplay.style.background = 'linear-gradient(90deg, var(--water-blue), #2980b9)';
+                }
+                
+                // Show feedback
+                const messages = [
+                    "Great job! You fixed a leak!",
+                    "Nice work! That's 10 gallons saved!",
+                    "Leak fixed! You're a water hero!",
+                    "Perfect! Keep fixing those leaks!"
+                ];
+                
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                feedbackDisplay.textContent = randomMessage;
+                feedbackDisplay.className = 'feedback save-message';
+            }
+        }
+        
+        // Update global stats
+        function updateGlobalStats(gallonsSaved) {
+            // Update games played
+            let gamesPlayed = parseInt(localStorage.getItem('gamesPlayed')) || 0;
+            gamesPlayed++;
+            localStorage.setItem('gamesPlayed', gamesPlayed);
+            
+            // Calculate trees planted based on water saved (1 tree per 100 gallons)
+            let treesPlanted = parseInt(localStorage.getItem('treesPlanted')) || 0;
+            treesPlanted += Math.floor(gallonsSaved / 100);
+            localStorage.setItem('treesPlanted', treesPlanted);
+            
+            // Calculate CO2 saved (1lb per 50 gallons)
+            let co2Saved = parseInt(localStorage.getItem('co2Saved')) || 0;
+            co2Saved += Math.floor(gallonsSaved / 50);
+            localStorage.setItem('co2Saved', co2Saved);
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', startGame);
+        resetBtn.addEventListener('click', initGame);
+        
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛒 Green Shopper | KijaniHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --eco-green: #2ecc71;
+            --ok-yellow: #f1c40f;
+            --bad-red: #e74c3c;
+            --light-bg: #f9f9f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #2e8b57;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0f7f0;
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .aisles {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .aisle-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            background-color: #ecf0f1;
+            font-family: 'Comic Neue', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .aisle-btn:hover {
+            background-color: #d5dbdb;
+        }
+        
+        .aisle-btn.active {
+            background-color: #2e8b57;
+            color: white;
+        }
+        
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .product {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            text-align: center;
+        }
+        
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .product-image {
+            width: 80px;
+            height: 80px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0 auto 0.5rem;
+        }
+        
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+        
+        .product-price {
+            color: #2e8b57;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+        
+        .eco-rating {
+            width: 100%;
+            height: 5px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .eco-bar {
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .eco-1 { background-color: var(--bad-red); width: 33%; }
+        .eco-2 { background-color: var(--ok-yellow); width: 66%; }
+        .eco-3 { background-color: var(--eco-green); width: 100%; }
+        
+        .cart {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-left: 5px solid #2e8b57;
+        }
+        
+        .cart h3 {
+            margin-bottom: 0.5rem;
+            color: #2e8b57;
+        }
+        
+        .cart-items {
+            min-height: 100px;
+            margin-bottom: 1rem;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-total {
+            font-weight: bold;
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+        
+        .eco-score {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .score-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        
+        .score-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background-color: #2e8b57;
+            color: white;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            background-color: #3cb371;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .feedback {
+            text-align: center;
+            min-height: 2rem;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        
+        .good {
+            color: var(--eco-green);
+        }
+        
+        .bad {
+            color: var(--bad-red);
+        }
+        
+        @media (max-width: 768px) {
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .product-image {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .stat-value {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🛒 Green Shopper</h1>
+        <p>Choose eco-friendly products and learn sustainable shopping habits!</p>
+    </header>
+    
+    <div class="game-container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="items-purchased">0</div>
+                <div class="stat-label">Items Purchased</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="eco-items">0</div>
+                <div class="stat-label">Eco Choices</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="money-saved">$0</div>
+                <div class="stat-label">Money Saved</div>
+            </div>
+        </div>
+        
+        <div class="aisles">
+            <button class="aisle-btn active" data-aisle="all">All Items</button>
+            <button class="aisle-btn" data-aisle="produce">Produce</button>
+            <button class="aisle-btn" data-aisle="dairy">Dairy</button>
+            <button class="aisle-btn" data-aisle="meat">Meat</button>
+            <button class="aisle-btn" data-aisle="bakery">Bakery</button>
+            <button class="aisle-btn" data-aisle="packaged">Packaged</button>
+        </div>
+        
+        <div class="feedback" id="feedback">
+            Select products to add to your cart. Look for eco-friendly options!
+        </div>
+        
+        <div class="products" id="products">
+            <!-- Products will be loaded here -->
+        </div>
+        
+        <div class="cart">
+            <h3>Your Shopping Cart</h3>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will appear here -->
+            </div>
+            <div class="cart-total" id="cart-total">Total: $0.00</div>
+            
+            <div class="eco-score">
+                <div>
+                    <div class="score-value" id="eco-score">0%</div>
+                    <div class="score-label">Eco Score</div>
+                </div>
+                <div>
+                    <div class="score-value" id="co2-saved">0</div>
+                    <div class="score-label">CO₂ Saved (lbs)</div>
+                </div>
+                <div>
+                    <div class="score-value" id="waste-reduced">0</div>
+                    <div class="score-label">Waste Reduced (lbs)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="checkout-btn">Checkout</button>
+            <button id="reset-btn">New Cart</button>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const productsData = [
+            // Produce
+            { 
+                id: 1, 
+                name: "Organic Apples", 
+                aisle: "produce", 
+                price: 3.99, 
+                ecoRating: 3,
+                image: "url('https://cdn-icons-png.flaticon.com/512/415/415682.png')",
+                ecoInfo: "Organic farming avoids harmful pesticides and protects soil health."
+            },
+            { 
+                id: 2, 
+                name: "Conventional Apples", 
+                aisle: "produce", 
+                price: 2.99, 
+                ecoRating: 1,
+                image: "url('https://cdn-icons-png.flaticon.com/512/415/415733.png')",
+                ecoInfo: "Grown with synthetic pesticides that can harm ecosystems."
+            },
+            { 
+                id: 3, 
+                name: "Local Seasonal Fruit", 
+                aisle: "produce", 
+                price: 4.49, 
+                ecoRating: 3,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082383.png')",
+                ecoInfo: "Local produce reduces transportation emissions and supports local farmers."
+            },
+            { 
+                id: 4, 
+                name: "Plastic-Wrapped Veggies", 
+                aisle: "produce", 
+                price: 2.49, 
+                ecoRating: 1,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082391.png')",
+                ecoInfo: "Unnecessary plastic packaging creates waste that lasts centuries."
+            },
+            { 
+                id: 5, 
+                name: "Loose Bulk Veggies", 
+                aisle: "produce", 
+                price: 1.99, 
+                ecoRating: 3,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082387.png')",
+                ecoInfo: "Package-free reduces waste and often costs less!"
+            },
+            
+            // Dairy
+            { 
+                id: 6, 
+                name: "Almond Milk", 
+                aisle: "dairy", 
+                price: 3.49, 
+                ecoRating: 3,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082401.png')",
+                ecoInfo: "Plant-based milks have much lower carbon footprints than dairy."
+            },
+            { 
+                id: 7, 
+                name: "Conventional Milk", 
+                aisle: "dairy", 
+                price: 2.99, 
+                ecoRating: 1,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082402.png')",
+                ecoInfo: "Dairy production generates significant methane emissions."
+            },
+            { 
+                id: 8, 
+                name: "Organic Yogurt", 
+                aisle: "dairy", 
+                price: 3.99, 
+                ecoRating: 2,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082403.png')",
+                ecoInfo: "Organic dairy is better but still has environmental impacts."
+            },
+            { 
+                id: 9, 
+                name: "Cheese (small package)", 
+                aisle: "dairy", 
+                price: 4.49, 
+                ecoRating: 2,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082404.png')",
+                ecoInfo: "Cheese has a high carbon footprint - buy only what you'll use."
+            },
+            
+            // Meat
+            { 
+                id: 10, 
+                name: "Grass-Fed Beef", 
+                aisle: "meat", 
+                price: 8.99, 
+                ecoRating: 1,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082411.png')",
+                ecoInfo: "Beef has the highest environmental impact of any food."
+            },
+            { 
+                id: 11, 
+                name: "Free-Range Chicken", 
+                aisle: "meat", 
+                price: 6.49, 
+                ecoRating: 2,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082412.png')",
+                ecoInfo: "Better than beef but still significant resource use."
+            },
+            { 
+                id: 12, 
+                name: "Plant-Based Burger", 
+                aisle: "meat", 
+                price: 5.99, 
+                ecoRating: 3,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082413.png')",
+                ecoInfo: "Plant-based meats use far fewer resources than animal products."
+            },
+            { 
+                id: 13, 
+                name: "Wild-Caught Fish", 
+                aisle: "meat", 
+                price: 9.99, 
+                ecoRating: 2,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082414.png')",
+                ecoInfo: "Sustainable fisheries are better than farmed options."
+            },
+            
+            // Bakery
+            { 
+                id: 14, 
+                name: "Fresh Baked Bread", 
+                aisle: "bakery", 
+                price: 3.49, 
+                ecoRating: 3,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082415.png')",
+                ecoInfo: "Fresh bakery items often use less packaging."
+            },
+            { 
+                id: 15, 
+                name: "Plastic-Wrapped Bread", 
+                aisle: "bakery", 
+                price: 2.99, 
+                ecoRating: 1,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082416.png')",
+                ecoInfo: "Excess packaging creates unnecessary waste."
+            },
+            { 
+                id: 16, 
+                name: "Organic Pastries", 
+                aisle: "bakery", 
+                price: 4.99, 
+                ecoRating: 2,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082417.png')",
+                ecoInfo: "Organic ingredients are better but still consider packaging."
+            },
+            
+            // Packaged
+            { 
+                id: 17, 
+                name: "Bulk Rice", 
+                aisle: "packaged", 
+                price: 1.99, 
+                ecoRating: 3,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082421.png')",
+                ecoInfo: "Buying in bulk reduces packaging waste."
+            },
+            { 
+                id: 18, 
+                name: "Canned Beans", 
+                aisle: "packaged", 
+                price: 0.99, 
+                ecoRating: 2,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082422.png')",
+                ecoInfo: "Cans are recyclable but production is energy-intensive."
+            },
+            { 
+                id: 19, 
+                name: "Plastic Snacks", 
+                aisle: "packaged", 
+                price: 3.49, 
+                ecoRating: 1,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082423.png')",
+                ecoInfo: "Single-use plastic packaging is hard to recycle."
+            },
+            { 
+                id: 20, 
+                name: "Reusable Container", 
+                aisle: "packaged", 
+                price: 12.99, 
+                ecoRating: 3,
+                image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082424.png')",
+                ecoInfo: "Reusables eliminate single-use waste over time."
+            }
+        ];
+        
+        // Game state
+        let cart = [];
+        let itemsPurchased = 0;
+        let ecoItems = 0;
+        let moneySaved = 0;
+        
+        // DOM elements
+        const productsContainer = document.getElementById('products');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotalDisplay = document.getElementById('cart-total');
+        const ecoScoreDisplay = document.getElementById('eco-score');
+        const co2SavedDisplay = document.getElementById('co2-saved');
+        const wasteReducedDisplay = document.getElementById('waste-reduced');
+        const itemsPurchasedDisplay = document.getElementById('items-purchased');
+        const ecoItemsDisplay = document.getElementById('eco-items');
+        const moneySavedDisplay = document.getElementById('money-saved');
+        const feedbackDisplay = document.getElementById('feedback');
+        const aisleBtns = document.querySelectorAll('.aisle-btn');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        
+        // Initialize game
+        function initGame() {
+            cart = [];
+            itemsPurchased = 0;
+            ecoItems = 0;
+            moneySaved = 0;
+            
+            itemsPurchasedDisplay.textContent = itemsPurchased;
+            ecoItemsDisplay.textContent = ecoItems;
+            moneySavedDisplay.textContent = `$${moneySaved}`;
+            
+            cartItemsContainer.innerHTML = '';
+            cartTotalDisplay.textContent = 'Total: $0.00';
+            ecoScoreDisplay.textContent = '0%';
+            co2SavedDisplay.textContent = '0';
+            wasteReducedDisplay.textContent = '0';
+            
+            feedbackDisplay.textContent = 'Select products to add to your cart. Look for eco-friendly options!';
+            feedbackDisplay.className = 'feedback';
+            
+            loadProducts('all');
+        }
+        
+        // Load products by aisle
+        function loadProducts(aisle) {
+            productsContainer.innerHTML = '';
+            
+            const filteredProducts = aisle === 'all' 
+                ? productsData 
+                : productsData.filter(p => p.aisle === aisle);
+            
+            filteredProducts.forEach(product => {
+                const productEl = document.createElement('div');
+                productEl.className = 'product';
+                productEl.dataset.id = product.id;
+                
+                productEl.innerHTML = `
+                    <div class="product-image" style="background-image: ${product.image}"></div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                    <div class="eco-rating">
+                        <div class="eco-bar eco-${product.ecoRating}"></div>
+                    </div>
+                `;
+                
+                productEl.addEventListener('click', () => addToCart(product));
+                
+                productsContainer.appendChild(productEl);
+            });
+        }
+        
+        // Add product to cart
+        function addToCart(product) {
+            cart.push(product);
+            updateCart();
+            
+            // Show eco info for educational purposes
+            if (product.ecoRating === 3) {
+                feedbackDisplay.textContent = `Great choice! ${product.ecoInfo}`;
+                feedbackDisplay.className = 'feedback good';
+            } else if (product.ecoRating === 1) {
+                feedbackDisplay.textContent = `Consider alternatives: ${product.ecoInfo}`;
+                feedbackDisplay.className = 'feedback bad';
+            } else {
+                feedbackDisplay.textContent = product.ecoInfo;
+                feedbackDisplay.className = 'feedback';
+            }
+        }
+        
+        // Update cart display
+        function updateCart() {
+            cartItemsContainer.innerHTML = '';
+            
+            let total = 0;
+            let ecoScore = 0;
+            let co2Saved = 0;
+            let wasteReduced = 0;
+            
+            // Group items by type and count quantities
+            const itemCounts = {};
+            cart.forEach(item => {
+                if (!itemCounts[item.id]) {
+                    itemCounts[item.id] = { ...item, quantity: 0 };
+                }
+                itemCounts[item.id].quantity++;
+            });
+            
+            // Display each unique item with quantity
+            Object.values(itemCounts).forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                
+                cartItem.innerHTML = `
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                
+                cartItemsContainer.appendChild(cartItem);
+                
+                total += item.price * item.quantity;
+                ecoScore += item.ecoRating * item.quantity;
+                
+                // Calculate environmental impact
+                if (item.ecoRating === 3) {
+                    co2Saved += 2 * item.quantity; // lbs CO2 saved
+                    wasteReduced += 0.5 * item.quantity; // lbs waste reduced
+                }
+            });
+            
+            // Update totals
+            cartTotalDisplay.textContent = `Total: $${total.toFixed(2)}`;
+            
+            // Calculate eco score (average rating)
+            if (cart.length > 0) {
+                const averageScore = Math.round((ecoScore / cart.length) * 33.33);
+                ecoScoreDisplay.textContent = `${averageScore}%`;
+                co2SavedDisplay.textContent = co2Saved;
+                wasteReducedDisplay.textContent = wasteReduced.toFixed(1);
+            } else {
+                ecoScoreDisplay.textContent = '0%';
+                co2SavedDisplay.textContent = '0';
+                wasteReducedDisplay.textContent = '0';
+            }
+        }
+        
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) {
+                feedbackDisplay.textContent = 'Your cart is empty! Add some items first.';
+                feedbackDisplay.className = 'feedback bad';
+                return;
+            }
+            
+            itemsPurchased += cart.length;
+            
+            // Count eco items (rating 3)
+            const newEcoItems = cart.filter(item => item.ecoRating === 3).length;
+            ecoItems += newEcoItems;
+            
+            // Calculate money saved (eco items often cost more, so this is hypothetical)
+            const savings = cart.reduce((sum, item) => {
+                // For demonstration, assume eco items save $0.50 compared to conventional
+                return sum + (item.ecoRating === 3 ? 0.5 : 0);
+            }, 0);
+            moneySaved += savings;
+            
+            itemsPurchasedDisplay.textContent = itemsPurchased;
+            ecoItemsDisplay.textContent = ecoItems;
+            moneySavedDisplay.textContent = `$${moneySaved.toFixed(2)}`;
+            
+            // Show checkout feedback
+            const ecoPercentage = Math.round((newEcoItems / cart.length) * 100);
+            let feedback = `Purchased ${cart.length} items (${ecoPercentage}% eco-friendly)! `;
+            
+            if (ecoPercentage >= 70) {
+                feedback += "Excellent sustainable shopping! 🌱";
+                feedbackDisplay.className = 'feedback good';
+            } else if (ecoPercentage >= 40) {
+                feedback += "Good effort! Try for more eco choices next time.";
+                feedbackDisplay.className = 'feedback';
+            } else {
+                feedback += "Consider more sustainable options for your next shop.";
+                feedbackDisplay.className = 'feedback bad';
+            }
+            
+            feedbackDisplay.textContent = feedback;
+            
+            // Update global stats
+            updateGlobalStats(newEcoItems);
+            
+            // Clear cart
+            cart = [];
+            updateCart();
+        }
+        
+        // Update global stats
+        function updateGlobalStats(ecoItems) {
+            // Update games played
+            let gamesPlayed = parseInt(localStorage.getItem('gamesPlayed')) || 0;
+            gamesPlayed++;
+            localStorage.setItem('gamesPlayed', gamesPlayed);
+            
+            // Calculate trees planted based on eco items (1 tree per 5 eco items)
+            let treesPlanted = parseInt(localStorage.getItem('treesPlanted')) || 0;
+            treesPlanted += Math.floor(ecoItems / 5);
+            localStorage.setItem('treesPlanted', treesPlanted);
+            
+            // Calculate CO2 saved (1lb per eco item)
+            let co2Saved = parseInt(localStorage.getItem('co2Saved')) || 0;
+            co2Saved += ecoItems;
+            localStorage.setItem('co2Saved', co2Saved);
+        }
+        
+        // Event listeners
+        aisleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                aisleBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                loadProducts(btn.dataset.aisle);
+            });
+        });
+        
+        checkoutBtn.addEventListener('click', checkout);
+        resetBtn.addEventListener('click', initGame);
+        
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>

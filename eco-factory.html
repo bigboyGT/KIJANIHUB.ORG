@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔄 Eco-Factory Simulator | KijaniHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --factory-orange: #e67e22;
+            --conveyor-gray: #bdc3c7;
+            --machine-blue: #3498db;
+            --product-green: #2ecc71;
+            --light-bg: #f9f9f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #2e8b57;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0f7f0;
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .factory-area {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .recycling-station {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 1rem;
+        }
+        
+        .recyclable-item {
+            width: 80px;
+            height: 80px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 5px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+        
+        .recyclable-item:hover {
+            transform: scale(1.1);
+        }
+        
+        .conveyor-belt {
+            height: 100px;
+            background-color: var(--conveyor-gray);
+            border-radius: 10px;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .conveyor-belt::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: repeating-linear-gradient(
+                90deg,
+                #7f8c8d,
+                #7f8c8d 20px,
+                #95a5a6 20px,
+                #95a5a6 40px
+            );
+        }
+        
+        .machine {
+            width: 120px;
+            height: 120px;
+            background-color: var(--machine-blue);
+            border-radius: 10px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .machine::after {
+            content: "♻️";
+            font-size: 3rem;
+        }
+        
+        .products-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .product {
+            width: 100px;
+            height: 100px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .feedback {
+            text-align: center;
+            min-height: 2rem;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #e67e22, #d35400);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background-color: #2e8b57;
+            color: white;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            background-color: #3cb371;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .tutorial {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border-left: 5px solid #2e8b57;
+        }
+        
+        .tutorial h3 {
+            margin-bottom: 0.5rem;
+            color: #2e8b57;
+        }
+        
+        .tutorial ul {
+            padding-left: 1.5rem;
+        }
+        
+        .tutorial li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-info {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 100;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .product-info.show {
+            display: block;
+        }
+        
+        .product-info img {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1rem;
+            display: block;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 99;
+        }
+        
+        .overlay.show {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .recycling-station {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .stat-value {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔄 Eco-Factory Simulator</h1>
+        <p>Turn recycled materials into new products! See the recycling process in action.</p>
+    </header>
+    
+    <div class="game-container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="materials-recycled">0</div>
+                <div class="stat-label">Materials Recycled</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="products-made">0</div>
+                <div class="stat-label">Products Made</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="energy-saved">0</div>
+                <div class="stat-label">Energy Saved (kWh)</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="feedback" id="feedback">Click on a material to start recycling!</div>
+        
+        <div class="factory-area">
+            <h3 style="text-align: center; color: var(--factory-orange);">Recycling Materials</h3>
+            <div class="recycling-station" id="recycling-station">
+                <!-- Materials will be added by JavaScript -->
+            </div>
+            
+            <h3 style="text-align: center; color: var(--machine-blue);">Recycling Machine</h3>
+            <div class="conveyor-belt" id="conveyor-belt">
+                <!-- Items on conveyor belt will be added by JavaScript -->
+            </div>
+            <div class="machine" id="machine">Recycling Machine</div>
+            
+            <h3 style="text-align: center; color: var(--product-green);">New Products</h3>
+            <div class="products-area" id="products-area">
+                <!-- Products will be added by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="new-materials-btn">Get New Materials</button>
+            <button id="reset-btn">Reset Factory</button>
+        </div>
+        
+        <div class="tutorial">
+            <h3>How Recycling Works:</h3>
+            <ul>
+                <li><strong>Plastic Bottles</strong> can become new bottles, clothing, or playground equipment</li>
+                <li><strong>Aluminum Cans</strong> can be recycled endlessly into new cans</li>
+                <li><strong>Paper</strong> becomes new paper products, saving trees</li>
+                <li><strong>Glass</strong> can be melted down and reused indefinitely</li>
+                <li>Recycling saves energy and reduces pollution compared to making new materials</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Product Info Popup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="product-info" id="product-info">
+        <button class="close-btn" id="close-btn">×</button>
+        <img id="product-info-img" src="" alt="">
+        <h3 id="product-info-title">Product</h3>
+        <p id="product-info-desc">Description</p>
+        <div class="stat">
+            <div class="stat-value" id="product-info-energy">0</div>
+            <div class="stat-label">Energy Saved</div>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const materials = [
+            { 
+                name: "Plastic Bottles", 
+                type: "plastic", 
+                image: "url('https://cdn-icons-png.flaticon.com/512/3144/3144456.png')",
+                products: [
+                    { 
+                        name: "Recycled T-Shirt", 
+                        image: "https://cdn-icons-png.flaticon.com/512/3083/3083313.png",
+                        description: "5 plastic bottles can make a new t-shirt!",
+                        energySaved: 10 
+                    },
+                    { 
+                        name: "Playground Equipment", 
+                        image: "https://cdn-icons-png.flaticon.com/512/3048/3048127.png",
+                        description: "100 plastic bottles can make part of a playground slide!",
+                        energySaved: 50 
+                    },
+                    { 
+                        name: "New Bottle", 
+                        image: "https://cdn-icons-png.flaticon.com/512/3144/3144456.png",
+                        description: "Recycled plastic can become new bottles and containers.",
+                        energySaved: 8 
+                    }
+                ]
+            },
+            { 
+                name: "Aluminum Cans", 
+                type: "metal", 
+                image: "url('https://cdn-icons-png.flaticon.com/512/3144/3144460.png')",
+                products: [
+                    { 
+                        name: "New Can", 
+                        image: "https://cdn-icons-png.flaticon.com/512/3144/3144460.png",
+                        description: "Aluminum can be recycled endlessly without losing quality!",
+                        energySaved: 15 
+                    },
+                    { 
+                        name: "Bicycle Part", 
+                        image: "https://cdn-icons-png.flaticon.com/512/2906/2906194.png",
+                        description: "Recycled aluminum is used to make bike frames and parts.",
+                        energySaved: 30 
+                    }
+                ]
+            },
+            { 
+                name: "Newspaper", 
+                type: "paper", 
+                image: "url('https://cdn-icons-png.flaticon.com/512/3392/3392952.png')",
+                products: [
+                    { 
+                        name: "Recycled Paper", 
+                        image: "https://cdn-icons-png.flaticon.com/512/3392/3392952.png",
+                        description: "Recycled paper saves trees and uses less water to produce.",
+                        energySaved: 5 
+                    },
+                    { 
+                        name: "Cardboard Box", 
+                        image: "https://cdn-icons-png.flaticon.com/512/3144/3144462.png",
+                        description: "Old newspapers can become new cardboard packaging.",
+                        energySaved: 7 
+                    }
+                ]
+            },
+            { 
+                name: "Glass Jars", 
+                type: "glass", 
+                image: "url('https://cdn-icons-png.flaticon.com/512/3144/3144457.png')",
+                products: [
+                    { 
+                        name: "New Glass Jar", 
+                        image: "https://cdn-icons-png.flaticon.com/512/3144/3144457.png",
+                        description: "Glass can be recycled endlessly without losing purity!",
+                        energySaved: 12 
+                    },
+                    { 
+                        name: "Fiberglass", 
+                        image: "https://cdn-icons-png.flaticon.com/512/3144/3144459.png",
+                        description: "Crushed glass is used for insulation and fiberglass.",
+                        energySaved: 20 
+                    }
+                ]
+            }
+        ];
+        
+        // Game state
+        let materialsRecycled = 0;
+        let productsMade = 0;
+        let totalEnergySaved = 0;
+        let currentMaterials = [];
+        let currentProducts = [];
+        
+        // DOM elements
+        const recyclingStation = document.getElementById('recycling-station');
+        const conveyorBelt = document.getElementById('conveyor-belt');
+        const machine = document.getElementById('machine');
+        const productsArea = document.getElementById('products-area');
+        const materialsRecycledDisplay = document.getElementById('materials-recycled');
+        const productsMadeDisplay = document.getElementById('products-made');
+        const energySavedDisplay = document.getElementById('energy-saved');
+        const feedbackDisplay = document.getElementById('feedback');
+        const progressBar = document.getElementById('progress-bar');
+        const newMaterialsBtn = document.getElementById('new-materials-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        
+        // Product info popup elements
+        const productInfo = document.getElementById('product-info');
+        const overlay = document.getElementById('overlay');
+        const closeBtn = document.getElementById('close-btn');
+        const productInfoImg = document.getElementById('product-info-img');
+        const productInfoTitle = document.getElementById('product-info-title');
+        const productInfoDesc = document.getElementById('product-info-desc');
+        const productInfoEnergy = document.getElementById('product-info-energy');
+        
+        // Initialize game
+        function initGame() {
+            materialsRecycled = 0;
+            productsMade = 0;
+            totalEnergySaved = 0;
+            currentMaterials = [];
+            currentProducts = [];
+            
+            materialsRecycledDisplay.textContent = materialsRecycled;
+            productsMadeDisplay.textContent = productsMade;
+            energySavedDisplay.textContent = totalEnergySaved;
+            feedbackDisplay.textContent = 'Click on a material to start recycling!';
+            progressBar.style.width = '0%';
+            
+            recyclingStation.innerHTML = '';
+            conveyorBelt.innerHTML = '';
+            productsArea.innerHTML = '';
+            
+            generateMaterials();
+        }
+        
+        // Generate random materials
+        function generateMaterials() {
+            recyclingStation.innerHTML = '';
+            
+            // Shuffle materials array
+            const shuffledMaterials = [...materials].sort(() => 0.5 - Math.random());
+            
+            // Select first 4 materials
+            for (let i = 0; i < 4 && i < shuffledMaterials.length; i++) {
+                const material = shuffledMaterials[i];
+                currentMaterials.push(material);
+                
+                const materialElement = document.createElement('div');
+                materialElement.className = 'recyclable-item';
+                materialElement.style.backgroundImage = material.image;
+                materialElement.textContent = material.name;
+                materialElement.dataset.type = material.type;
+                materialElement.dataset.index = i;
+                
+                materialElement.addEventListener('click', () => startRecycling(material, materialElement));
+                
+                recyclingStation.appendChild(materialElement);
+            }
+        }
+        
+        // Start recycling process for a material
+        function startRecycling(material, materialElement) {
+            // Remove material from station
+            materialElement.style.transform = 'scale(0)';
+            setTimeout(() => materialElement.remove(), 300);
+            
+            // Add to conveyor belt
+            const conveyorItem = document.createElement('div');
+            conveyorItem.className = 'recyclable-item';
+            conveyorItem.style.backgroundImage = material.image;
+            conveyorItem.textContent = material.name;
+            conveyorItem.style.position = 'absolute';
+            conveyorItem.style.left = '20px';
+            conveyorBelt.appendChild(conveyorItem);
+            
+            // Animate to machine
+            let position = 20;
+            const animation = setInterval(() => {
+                position += 2;
+                conveyorItem.style.left = `${position}px`;
+                
+                if (position >= (conveyorBelt.offsetWidth - 100)) {
+                    clearInterval(animation);
+                    processMaterial(material, conveyorItem);
+                }
+            }, 20);
+        }
+        
+        // Process material in the machine
+        function processMaterial(material, conveyorItem) {
+            // Remove from conveyor
+            conveyorItem.remove();
+            
+            // Show machine working
+            machine.style.transform = 'scale(1.1)';
+            machine.style.backgroundColor = '#e74c3c';
+            
+            feedbackDisplay.textContent = `Processing ${material.name}...`;
+            
+            setTimeout(() => {
+                machine.style.transform = 'scale(1)';
+                machine.style.backgroundColor = 'var(--machine-blue)';
+                
+                // Update recycled count
+                materialsRecycled++;
+                materialsRecycledDisplay.textContent = materialsRecycled;
+                
+                // Create products
+                createProducts(material);
+                
+                // Update progress
+                const progress = Math.min((productsMade / 10) * 100, 100);
+                progressBar.style.width = `${progress}%`;
+                
+                // Check for new level
+                if (productsMade > 0 && productsMade % 5 === 0) {
+                    feedbackDisplay.textContent = `Great job! You've made ${productsMade} products! Keep going!`;
+                }
+            }, 1000);
+        }
+        
+        // Create products from recycled material
+        function createProducts(material) {
+            // Choose a random product from this material's possible products
+            const randomProductIndex = Math.floor(Math.random() * material.products.length);
+            const product = material.products[randomProductIndex];
+            
+            // Create product element
+            const productElement = document.createElement('div');
+            productElement.className = 'product';
+            productElement.style.backgroundImage = `url('${product.image}')`;
+            productElement.textContent = product.name;
+            productElement.dataset.energy = product.energySaved;
+            
+            productElement.addEventListener('click', () => showProductInfo(product));
+            
+            productsArea.appendChild(productElement);
+            
+            // Update stats
+            productsMade++;
+            totalEnergySaved += product.energySaved;
+            
+            productsMadeDisplay.textContent = productsMade;
+            energySavedDisplay.textContent = totalEnergySaved;
+            
+            feedbackDisplay.textContent = `You made a ${product.name} from ${material.name}!`;
+            
+            // Add to current products
+            currentProducts.push(product);
+            
+            // Update global stats
+            updateGlobalStats(product.energySaved);
+        }
+        
+        // Show product info popup
+        function showProductInfo(product) {
+            productInfoImg.src = product.image;
+            productInfoTitle.textContent = product.name;
+            productInfoDesc.textContent = product.description;
+            productInfoEnergy.textContent = product.energySaved;
+            
+            overlay.classList.add('show');
+            productInfo.classList.add('show');
+        }
+        
+        // Close product info popup
+        function closeProductInfo() {
+            overlay.classList.remove('show');
+            productInfo.classList.remove('show');
+        }
+        
+        // Update global stats
+        function updateGlobalStats(energy) {
+            // Update games played
+            let gamesPlayed = parseInt(localStorage.getItem('gamesPlayed')) || 0;
+            gamesPlayed++;
+            localStorage.setItem('gamesPlayed', gamesPlayed);
+            
+            // Calculate trees planted based on energy saved (1 tree per 50 kWh)
+            let treesPlanted = parseInt(localStorage.getItem('treesPlanted')) || 0;
+            treesPlanted += Math.floor(energy / 50);
+            localStorage.setItem('treesPlanted', treesPlanted);
+            
+            // Calculate CO2 saved (1lb per 10 kWh)
+            let co2Saved = parseInt(localStorage.getItem('co2Saved')) || 0;
+            co2Saved += Math.floor(energy / 10);
+            localStorage.setItem('co2Saved', co2Saved);
+        }
+        
+        // Event listeners
+        newMaterialsBtn.addEventListener('click', generateMaterials);
+        resetBtn.addEventListener('click', initGame);
+        closeBtn.addEventListener('click', closeProductInfo);
+        overlay.addEventListener('click', closeProductInfo);
+        
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>

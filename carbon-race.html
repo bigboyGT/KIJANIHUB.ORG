@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚲 Carbon Footprint Race | KijaniHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --car-red: #e74c3c;
+            --bus-orange: #e67e22;
+            --bike-green: #2ecc71;
+            --walk-blue: #3498db;
+            --light-bg: #f9f9f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #2e8b57;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0f7f0;
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .race-track {
+            height: 300px;
+            background-image: linear-gradient(to bottom, #f5f5f5, #e0e0e0);
+            border-radius: 10px;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .lane {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .lane::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: white;
+            opacity: 0.5;
+        }
+        
+        .lane-1 { top: 30px; }
+        .lane-2 { top: 100px; }
+        .lane-3 { top: 170px; }
+        .lane-4 { top: 240px; }
+        
+        .vehicle {
+            width: 60px;
+            height: 40px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: absolute;
+            left: 20px;
+            transition: left 0.5s linear;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .vehicle.car { color: var(--car-red); }
+        .vehicle.bus { color: var(--bus-orange); }
+        .vehicle.bike { color: var(--bike-green); }
+        .vehicle.walk { color: var(--walk-blue); }
+        
+        .finish-line {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 10px;
+            background: repeating-linear-gradient(
+                to bottom,
+                black,
+                black 10px,
+                white 10px,
+                white 20px
+            );
+            z-index: 1;
+        }
+        
+        .transport-options {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .transport-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            background-color: white;
+        }
+        
+        .transport-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .transport-btn.selected {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px 5px rgba(46, 204, 113, 0.5);
+        }
+        
+        .transport-btn.car { color: var(--car-red); }
+        .transport-btn.bus { color: var(--bus-orange); }
+        .transport-btn.bike { color: var(--bike-green); }
+        .transport-btn.walk { color: var(--walk-blue); }
+        
+        .transport-label {
+            text-align: center;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+        
+        .co2-meter {
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(90deg, #2ecc71, #f1c40f, #e74c3c);
+            border-radius: 15px;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .co2-amount {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+        
+        .feedback {
+            text-align: center;
+            min-height: 2rem;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        
+        .good {
+            color: #2ecc71;
+        }
+        
+        .bad {
+            color: #e74c3c;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background-color: #2e8b57;
+            color: white;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            background-color: #3cb371;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .tutorial {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border-left: 5px solid #2e8b57;
+        }
+        
+        .tutorial h3 {
+            margin-bottom: 0.5rem;
+            color: #2e8b57;
+        }
+        
+        .tutorial ul {
+            padding-left: 1.5rem;
+        }
+        
+        .tutorial li {
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .race-track {
+                height: 250px;
+            }
+            
+            .lane {
+                height: 50px;
+            }
+            
+            .lane-1 { top: 25px; }
+            .lane-2 { top: 85px; }
+            .lane-3 { top: 145px; }
+            .lane-4 { top: 205px; }
+            
+            .transport-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .stat-value {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚲 Carbon Footprint Race</h1>
+        <p>Choose eco-friendly transportation and reduce your carbon footprint!</p>
+    </header>
+    
+    <div class="game-container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="distance">0</div>
+                <div class="stat-label">Distance (miles)</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="co2-emitted">0</div>
+                <div class="stat-label">CO₂ Emitted (lbs)</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="trips-completed">0</div>
+                <div class="stat-label">Trips Completed</div>
+            </div>
+        </div>
+        
+        <div class="co2-meter">
+            <div class="co2-amount" id="co2-amount">0 lbs CO₂</div>
+        </div>
+        
+        <div class="feedback" id="feedback">
+            Select a transportation method and race to the finish!
+        </div>
+        
+        <div class="race-track" id="race-track">
+            <div class="finish-line"></div>
+            <div class="lane lane-1"></div>
+            <div class="lane lane-2"></div>
+            <div class="lane lane-3"></div>
+            <div class="lane lane-4"></div>
+            <div class="vehicle car" id="car">🚗</div>
+            <div class="vehicle bus" id="bus">🚌</div>
+            <div class="vehicle bike" id="bike">🚲</div>
+            <div class="vehicle walk" id="walk">🚶</div>
+        </div>
+        
+        <div class="transport-options">
+            <div>
+                <div class="transport-btn car" id="car-btn" title="Car (1 lb CO₂ per mile)">🚗</div>
+                <div class="transport-label">Car</div>
+            </div>
+            <div>
+                <div class="transport-btn bus" id="bus-btn" title="Bus (0.5 lb CO₂ per mile)">🚌</div>
+                <div class="transport-label">Bus</div>
+            </div>
+            <div>
+                <div class="transport-btn bike" id="bike-btn" title="Bicycle (0 lb CO₂)">🚲</div>
+                <div class="transport-label">Bike</div>
+            </div>
+            <div>
+                <div class="transport-btn walk" id="walk-btn" title="Walking (0 lb CO₂)">🚶</div>
+                <div class="transport-label">Walk</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn">Start Trip</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+        
+        <div class="tutorial">
+            <h3>Transportation Carbon Footprint:</h3>
+            <ul>
+                <li><strong>Car:</strong> 1 lb CO₂ per mile (worst)</li>
+                <li><strong>Bus:</strong> 0.5 lb CO₂ per mile (better)</li>
+                <li><strong>Bicycle:</strong> 0 lb CO₂ (great!)</li>
+                <li><strong>Walking:</strong> 0 lb CO₂ (best!)</li>
+            </ul>
+            <p>Choose lower-carbon options to reduce your environmental impact!</p>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const transportData = {
+            car: { speed: 10, co2: 1, icon: "🚗" },
+            bus: { speed: 6, co2: 0.5, icon: "🚌" },
+            bike: { speed: 4, co2: 0, icon: "🚲" },
+            walk: { speed: 2, co2: 0, icon: "🚶" }
+        };
+        
+        // Game state
+        let distance = 0;
+        let co2Emitted = 0;
+        let tripsCompleted = 0;
+        let currentTransport = null;
+        let raceInterval;
+        let raceActive = false;
+        let trackWidth = 0;
+        
+        // DOM elements
+        const raceTrack = document.getElementById('race-track');
+        const distanceDisplay = document.getElementById('distance');
+        const co2EmittedDisplay = document.getElementById('co2-emitted');
+        const tripsCompletedDisplay = document.getElementById('trips-completed');
+        const co2AmountDisplay = document.getElementById('co2-amount');
+        const feedbackDisplay = document.getElementById('feedback');
+        const startBtn = document.getElementById('start-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const transportBtns = {
+            car: document.getElementById('car-btn'),
+            bus: document.getElementById('bus-btn'),
+            bike: document.getElementById('bike-btn'),
+            walk: document.getElementById('walk-btn')
+        };
+        const vehicles = {
+            car: document.getElementById('car'),
+            bus: document.getElementById('bus'),
+            bike: document.getElementById('bike'),
+            walk: document.getElementById('walk')
+        };
+        
+        // Initialize game
+        function initGame() {
+            distance = 0;
+            co2Emitted = 0;
+            tripsCompleted = 0;
+            currentTransport = null;
+            raceActive = false;
+            
+            distanceDisplay.textContent = distance;
+            co2EmittedDisplay.textContent = co2Emitted;
+            tripsCompletedDisplay.textContent = tripsCompleted;
+            co2AmountDisplay.textContent = '0 lbs CO₂';
+            feedbackDisplay.textContent = 'Select a transportation method and race to the finish!';
+            feedbackDisplay.className = 'feedback';
+            
+            // Reset vehicle positions
+            Object.values(vehicles).forEach(vehicle => {
+                vehicle.style.left = '20px';
+            });
+            
+            // Reset transport buttons
+            Object.values(transportBtns).forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            clearInterval(raceInterval);
+            startBtn.textContent = 'Start Trip';
+            
+            // Get track width
+            trackWidth = raceTrack.offsetWidth - 80;
+        }
+        
+        // Select transport method
+        function selectTransport(transport) {
+            if (raceActive) return;
+            
+            currentTransport = transport;
+            
+            // Update button states
+            Object.keys(transportBtns).forEach(key => {
+                if (key === transport) {
+                    transportBtns[key].classList.add('selected');
+                } else {
+                    transportBtns[key].classList.remove('selected');
+                }
+            });
+            
+            feedbackDisplay.textContent = `Selected ${transport}. Ready to race!`;
+        }
+        
+        // Start race
+        function startRace() {
+            if (!currentTransport || raceActive) return;
+            
+            raceActive = true;
+            startBtn.textContent = 'Racing...';
+            
+            // Reset vehicle positions
+            Object.values(vehicles).forEach(vehicle => {
+                vehicle.style.left = '20px';
+            });
+            
+            // Start race interval
+            let progress = 0;
+            const tripDistance = 10; // 10 miles per trip
+            
+            raceInterval = setInterval(() => {
+                // Move all vehicles according to their speed
+                Object.keys(transportData).forEach(transport => {
+                    const vehicle = vehicles[transport];
+                    const data = transportData[transport];
+                    
+                    const currentPos = parseInt(vehicle.style.left) || 20;
+                    const newPos = currentPos + (data.speed * 0.5);
+                    
+                    vehicle.style.left = `${newPos}px`;
+                    
+                    // Check if this vehicle finished
+                    if (newPos >= trackWidth && transport === currentTransport) {
+                        finishRace();
+                    }
+                });
+                
+                // Update distance and CO2 for selected transport
+                if (progress % transportData[currentTransport].speed === 0) {
+                    distance += 0.5;
+                    co2Emitted += transportData[currentTransport].co2 * 0.5;
+                    
+                    distanceDisplay.textContent = distance.toFixed(1);
+                    co2EmittedDisplay.textContent = co2Emitted.toFixed(1);
+                    
+                    // Update CO2 meter color
+                    updateCO2Meter();
+                }
+                
+                progress++;
+            }, 100);
+        }
+        
+        // Finish race
+        function finishRace() {
+            clearInterval(raceInterval);
+            raceActive = false;
+            tripsCompleted++;
+            tripsCompletedDisplay.textContent = tripsCompleted;
+            
+            // Show feedback based on transport choice
+            let feedback = `Trip completed! `;
+            let feedbackClass = 'good';
+            
+            switch(currentTransport) {
+                case 'car':
+                    feedback += "You emitted CO₂ - try a greener option next time!";
+                    feedbackClass = 'bad';
+                    break;
+                case 'bus':
+                    feedback += "Better than a car, but can you do even better?";
+                    break;
+                case 'bike':
+                    feedback += "Great choice! Zero emissions and healthy exercise!";
+                    break;
+                case 'walk':
+                    feedback += "Perfect! No emissions and great for your health!";
+                    break;
+            }
+            
+            feedbackDisplay.textContent = feedback;
+            feedbackDisplay.className = `feedback ${feedbackClass}`;
+            
+            startBtn.textContent = 'Start Next Trip';
+            
+            // Update global stats
+            updateGlobalStats();
+        }
+        
+        // Update CO2 meter
+        function updateCO2Meter() {
+            co2AmountDisplay.textContent = `${co2Emitted.toFixed(1)} lbs CO₂`;
+            
+            // Change color based on CO2
+            const co2Color = co2Emitted < 5 ? '#2ecc71' : 
+                            co2Emitted < 10 ? '#f1c40f' : '#e74c3c';
+            
+            document.querySelector('.co2-meter').style.backgroundColor = co2Color;
+        }
+        
+        // Update global stats
+        function updateGlobalStats() {
+            // Update games played
+            let gamesPlayed = parseInt(localStorage.getItem('gamesPlayed')) || 0;
+            gamesPlayed++;
+            localStorage.setItem('gamesPlayed', gamesPlayed);
+            
+            // Calculate trees needed to offset CO2 (1 tree per 50 lbs)
+            let treesPlanted = parseInt(localStorage.getItem('treesPlanted')) || 0;
+            treesPlanted += Math.floor(co2Emitted / 50);
+            localStorage.setItem('treesPlanted', treesPlanted);
+            
+            // Calculate CO2 saved (tracking emitted here)
+            let co2Saved = parseInt(localStorage.getItem('co2Saved')) || 0;
+            co2Saved += Math.floor(co2Emitted * 0.5); // Count half as "saved" for learning
+            localStorage.setItem('co2Saved', co2Saved);
+        }
+        
+        // Event listeners
+        Object.keys(transportBtns).forEach(transport => {
+            transportBtns[transport].addEventListener('click', () => selectTransport(transport));
+        });
+        
+        startBtn.addEventListener('click', () => {
+            if (raceActive) return;
+            
+            if (startBtn.textContent === 'Start Next Trip') {
+                // Reset for next trip
+                Object.values(vehicles).forEach(vehicle => {
+                    vehicle.style.left = '20px';
+                });
+            }
+            
+            startRace();
+        });
+        
+        resetBtn.addEventListener('click', initGame);
+        
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>

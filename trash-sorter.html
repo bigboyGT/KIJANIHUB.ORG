@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗑️ Trash Sorter Challenge | KijaniHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --recycle-blue: #3498db;
+            --compost-green: #27ae60;
+            --landfill-gray: #7f8c8d;
+            --hazard-red: #e74c3c;
+            --light-bg: #f9f9f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #2e8b57;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0f7f0;
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .bins-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+        
+        .bin {
+            width: 23%;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            position: relative;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        .bin-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        #recycle-bin {
+            background-color: var(--recycle-blue);
+        }
+        
+        #compost-bin {
+            background-color: var(--compost-green);
+        }
+        
+        #landfill-bin {
+            background-color: var(--landfill-gray);
+        }
+        
+        #hazard-bin {
+            background-color: var(--hazard-red);
+        }
+        
+        .items-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            min-height: 120px;
+        }
+        
+        .trash-item {
+            width: 80px;
+            height: 80px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: grab;
+            transition: transform 0.2s;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 5px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+        
+        .trash-item:hover {
+            transform: scale(1.1);
+        }
+        
+        .feedback {
+            text-align: center;
+            min-height: 2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        
+        .correct {
+            color: #27ae60;
+        }
+        
+        .incorrect {
+            color: #e74c3c;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background-color: #2e8b57;
+            color: white;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            background-color: #3cb371;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .tutorial {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border-left: 5px solid #2e8b57;
+        }
+        
+        .tutorial h3 {
+            margin-bottom: 0.5rem;
+            color: #2e8b57;
+        }
+        
+        .tutorial ul {
+            padding-left: 1.5rem;
+        }
+        
+        .tutorial li {
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .bins-container {
+                flex-wrap: wrap;
+            }
+            
+            .bin {
+                width: 48%;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🗑️ Trash Sorter Challenge</h1>
+        <p>Drag each item to the correct bin! Learn proper waste sorting.</p>
+    </header>
+    
+    <div class="game-container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="score">0</div>
+                <div class="stat-label">Score</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="streak">0</div>
+                <div class="stat-label">Streak</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="timer">60</div>
+                <div class="stat-label">Seconds Left</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="feedback" id="feedback"></div>
+        
+        <div class="bins-container">
+            <div class="bin" id="recycle-bin" data-type="recyclable">
+                <div class="bin-icon">♻️</div>
+                <div>Recycling</div>
+            </div>
+            <div class="bin" id="compost-bin" data-type="compostable">
+                <div class="bin-icon">🍂</div>
+                <div>Compost</div>
+            </div>
+            <div class="bin" id="landfill-bin" data-type="landfill">
+                <div class="bin-icon">🗑️</div>
+                <div>Landfill</div>
+            </div>
+            <div class="bin" id="hazard-bin" data-type="hazardous">
+                <div class="bin-icon">☢️</div>
+                <div>Hazardous</div>
+            </div>
+        </div>
+        
+        <div class="items-container" id="items-container">
+            <!-- Items will be generated by JavaScript -->
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn">Start Game</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+        
+        <div class="tutorial">
+            <h3>How to Play:</h3>
+            <ul>
+                <li>Drag each waste item to the correct bin</li>
+                <li><strong>Recycling:</strong> Paper, plastic bottles, aluminum cans, glass</li>
+                <li><strong>Compost:</strong> Food scraps, yard waste, paper towels</li>
+                <li><strong>Landfill:</strong> Plastic bags, styrofoam, mixed materials</li>
+                <li><strong>Hazardous:</strong> Batteries, electronics, chemicals</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const items = [
+            { name: "Plastic Bottle", type: "recyclable", image: "url('https://cdn-icons-png.flaticon.com/512/3144/3144456.png')" },
+            { name: "Banana Peel", type: "compostable", image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082035.png')" },
+            { name: "Newspaper", type: "recyclable", image: "url('https://cdn-icons-png.flaticon.com/512/3392/3392952.png')" },
+            { name: "Pizza Box", type: "compostable", image: "url('https://cdn-icons-png.flaticon.com/512/3081/3081987.png')" },
+            { name: "Aluminum Can", type: "recyclable", image: "url('https://cdn-icons-png.flaticon.com/512/3144/3144460.png')" },
+            { name: "Plastic Bag", type: "landfill", image: "url('https://cdn-icons-png.flaticon.com/512/3144/3144463.png')" },
+            { name: "Egg Shells", type: "compostable", image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082044.png')" },
+            { name: "Battery", type: "hazardous", image: "url('https://cdn-icons-png.flaticon.com/512/3081/3081980.png')" },
+            { name: "Glass Jar", type: "recyclable", image: "url('https://cdn-icons-png.flaticon.com/512/3144/3144457.png')" },
+            { name: "Styrofoam", type: "landfill", image: "url('https://cdn-icons-png.flaticon.com/512/3144/3144464.png')" },
+            { name: "Coffee Grounds", type: "compostable", image: "url('https://cdn-icons-png.flaticon.com/512/3082/3082043.png')" },
+            { name: "Electronics", type: "hazardous", image: "url('https://cdn-icons-png.flaticon.com/512/3081/3081982.png')" }
+        ];
+        
+        // Game state
+        let score = 0;
+        let streak = 0;
+        let timeLeft = 60;
+        let gameActive = false;
+        let timerInterval;
+        let currentItems = [];
+        
+        // DOM elements
+        const itemsContainer = document.getElementById('items-container');
+        const scoreDisplay = document.getElementById('score');
+        const streakDisplay = document.getElementById('streak');
+        const timerDisplay = document.getElementById('timer');
+        const feedbackDisplay = document.getElementById('feedback');
+        const progressBar = document.getElementById('progress-bar');
+        const startBtn = document.getElementById('start-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const bins = document.querySelectorAll('.bin');
+        
+        // Initialize game
+        function initGame() {
+            score = 0;
+            streak = 0;
+            timeLeft = 60;
+            gameActive = false;
+            
+            scoreDisplay.textContent = score;
+            streakDisplay.textContent = streak;
+            timerDisplay.textContent = timeLeft;
+            feedbackDisplay.textContent = '';
+            feedbackDisplay.className = 'feedback';
+            progressBar.style.width = '0%';
+            
+            clearInterval(timerInterval);
+            itemsContainer.innerHTML = '';
+            
+            startBtn.textContent = 'Start Game';
+        }
+        
+        // Start game
+        function startGame() {
+            if (gameActive) return;
+            
+            gameActive = true;
+            startBtn.textContent = 'Pause Game';
+            
+            // Generate random items
+            generateItems(6);
+            
+            // Start timer
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+        
+        // Pause game
+        function pauseGame() {
+            gameActive = false;
+            startBtn.textContent = 'Resume Game';
+            clearInterval(timerInterval);
+        }
+        
+        // End game
+        function endGame() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            startBtn.textContent = 'Play Again';
+            
+            // Calculate percentage correct
+            const percentage = Math.round((score / (score + currentItems.length)) * 100);
+            progressBar.style.width = `${percentage}%`;
+            
+            // Show final feedback
+            let feedback = '';
+            if (percentage >= 80) {
+                feedback = `Excellent! You got ${percentage}% correct! You're a Recycling Master!`;
+            } else if (percentage >= 60) {
+                feedback = `Good job! You got ${percentage}% correct. Keep practicing!`;
+            } else {
+                feedback = `You got ${percentage}% correct. Try again to improve!`;
+            }
+            
+            feedbackDisplay.textContent = feedback;
+            
+            // Update global stats
+            updateGlobalStats();
+        }
+        
+        // Generate random items
+        function generateItems(count) {
+            itemsContainer.innerHTML = '';
+            currentItems = [];
+            
+            // Shuffle items array
+            const shuffledItems = [...items].sort(() => 0.5 - Math.random());
+            
+            // Select first 'count' items
+            for (let i = 0; i < count && i < shuffledItems.length; i++) {
+                currentItems.push(shuffledItems[i]);
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = 'trash-item';
+                itemElement.style.backgroundImage = shuffledItems[i].image;
+                itemElement.textContent = shuffledItems[i].name;
+                itemElement.dataset.type = shuffledItems[i].type;
+                itemElement.draggable = true;
+                
+                // Add drag event listeners
+                itemElement.addEventListener('dragstart', dragStart);
+                
+                itemsContainer.appendChild(itemElement);
+            }
+        }
+        
+        // Drag and drop functions
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.type);
+            setTimeout(() => {
+                e.target.style.visibility = 'hidden';
+            }, 0);
+        }
+        
+        // Add drag and drop event listeners to bins
+        bins.forEach(bin => {
+            bin.addEventListener('dragover', e => {
+                e.preventDefault();
+                bin.style.transform = 'scale(1.05)';
+            });
+            
+            bin.addEventListener('dragleave', () => {
+                bin.style.transform = 'scale(1)';
+            });
+            
+            bin.addEventListener('drop', e => {
+                e.preventDefault();
+                bin.style.transform = 'scale(1)';
+                
+                if (!gameActive) return;
+                
+                const itemType = e.dataTransfer.getData('text/plain');
+                const binType = bin.dataset.type;
+                
+                // Find the dragged item
+                const items = document.querySelectorAll('.trash-item');
+                let draggedItem = null;
+                
+                items.forEach(item => {
+                    if (item.style.visibility === 'hidden') {
+                        draggedItem = item;
+                    }
+                });
+                
+                if (!draggedItem) return;
+                
+                // Check if correct bin
+                if (itemType === binType) {
+                    // Correct
+                    score++;
+                    streak++;
+                    feedbackDisplay.textContent = 'Correct! ' + getPositiveFeedback(binType);
+                    feedbackDisplay.className = 'feedback correct';
+                    
+                    // Add time bonus for streaks
+                    if (streak % 3 === 0) {
+                        timeLeft += 5;
+                        feedbackDisplay.textContent += ' +5 second bonus for your streak!';
+                    }
+                } else {
+                    // Incorrect
+                    streak = 0;
+                    feedbackDisplay.textContent = `Oops! That goes in the ${getBinName(itemType)} bin.`;
+                    feedbackDisplay.className = 'feedback incorrect';
+                }
+                
+                // Update displays
+                scoreDisplay.textContent = score;
+                streakDisplay.textContent = streak;
+                
+                // Remove the item
+                draggedItem.remove();
+                
+                // Check if all items are sorted
+                if (document.querySelectorAll('.trash-item').length === 0) {
+                    generateItems(6);
+                }
+            });
+        });
+        
+        // Helper functions
+        function getPositiveFeedback(binType) {
+            const feedbacks = {
+                recyclable: [
+                    "Great job! Recycling helps conserve resources.",
+                    "Perfect! Recycling reduces pollution.",
+                    "Awesome! You're helping save energy by recycling."
+                ],
+                compostable: [
+                    "Excellent! Composting creates nutrient-rich soil.",
+                    "Well done! Composting reduces methane emissions.",
+                    "Terrific! You're helping reduce landfill waste."
+                ],
+                landfill: [
+                    "Correct! Some items can't be recycled or composted.",
+                    "Right! This item needs special disposal.",
+                    "Good choice! Not everything belongs in recycling."
+                ],
+                hazardous: [
+                    "Important! Hazardous waste needs special handling.",
+                    "Correct! These items can harm the environment if not disposed properly.",
+                    "Good job! You're preventing toxic materials from polluting."
+                ]
+            };
+            
+            const randomIndex = Math.floor(Math.random() * feedbacks[binType].length);
+            return feedbacks[binType][randomIndex];
+        }
+        
+        function getBinName(type) {
+            const names = {
+                recyclable: "Recycling",
+                compostable: "Compost",
+                landfill: "Landfill",
+                hazardous: "Hazardous"
+            };
+            return names[type];
+        }
+        
+        function updateGlobalStats() {
+            // Update games played
+            let gamesPlayed = parseInt(localStorage.getItem('gamesPlayed')) || 0;
+            gamesPlayed++;
+            localStorage.setItem('gamesPlayed', gamesPlayed);
+            
+            // Calculate trees planted based on score (1 tree per 10 points)
+            let treesPlanted = parseInt(localStorage.getItem('treesPlanted')) || 0;
+            treesPlanted += Math.floor(score / 10);
+            localStorage.setItem('treesPlanted', treesPlanted);
+            
+            // Calculate CO2 saved (1lb per 5 points)
+            let co2Saved = parseInt(localStorage.getItem('co2Saved')) || 0;
+            co2Saved += Math.floor(score / 5);
+            localStorage.setItem('co2Saved', co2Saved);
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', () => {
+            if (gameActive) {
+                pauseGame();
+            } else {
+                if (startBtn.textContent === 'Play Again') {
+                    initGame();
+                }
+                startGame();
+            }
+        });
+        
+        resetBtn.addEventListener('click', initGame);
+        
+        // Initialize the game
+        initGame();
+        
+        // Prevent default drag behavior
+        document.addEventListener('dragover', e => e.preventDefault());
+        document.addEventListener('drop', e => e.preventDefault());
+    </script>
+</body>
+</html>

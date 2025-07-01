@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 Animal Rescue Adventure | KijaniHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --habitat-green: #27ae60;
+            --danger-red: #e74c3c;
+            --animal-blue: #3498db;
+            --light-bg: #f9f9f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #2e8b57;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0f7f0;
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .habitats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .habitat {
+            width: 150px;
+            height: 150px;
+            border-radius: 15px;
+            background-color: #ecf0f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .habitat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .habitat-icon {
+            font-size: 4rem;
+            z-index: 1;
+        }
+        
+        .habitat::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--habitat-green), #2ecc71);
+        }
+        
+        .habitat.danger::after {
+            background: linear-gradient(90deg, var(--danger-red), #c0392b);
+        }
+        
+        .habitat.complete::after {
+            background: linear-gradient(90deg, var(--animal-blue), #2980b9);
+        }
+        
+        .animals {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .animal {
+            width: 80px;
+            height: 80px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: grab;
+            transition: all 0.2s;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 5px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+        }
+        
+        .animal:hover {
+            transform: scale(1.1);
+        }
+        
+        .animal.dragging {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+        
+        .feedback {
+            text-align: center;
+            min-height: 2rem;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        
+        .correct {
+            color: #27ae60;
+        }
+        
+        .incorrect {
+            color: #e74c3c;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #e67e22, #d35400);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background-color: #2e8b57;
+            color: white;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            background-color: #3cb371;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .tutorial {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border-left: 5px solid #2e8b57;
+        }
+        
+        .tutorial h3 {
+            margin-bottom: 0.5rem;
+            color: #2e8b57;
+        }
+        
+        .tutorial ul {
+            padding-left: 1.5rem;
+        }
+        
+        .tutorial li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .habitat-info {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+        
+        @media (max-width: 768px) {
+            .habitat {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .habitat-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🐾 Animal Rescue Adventure</h1>
+        <p>Help endangered animals by restoring their habitats and protecting them from threats!</p>
+    </header>
+    
+    <div class="game-container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="animals-rescued">0</div>
+                <div class="stat-label">Animals Rescued</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="habitats-restored">0</div>
+                <div class="stat-label">Habitats Restored</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="threats-removed">0</div>
+                <div class="stat-label">Threats Removed</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="feedback" id="feedback">Drag animals to their correct habitats!</div>
+        
+        <div class="game-area">
+            <h3 style="text-align: center; color: var(--habitat-green);">Habitats</h3>
+            <div class="habitats" id="habitats">
+                <!-- Habitats will be added by JavaScript -->
+            </div>
+            
+            <h3 style="text-align: center; color: var(--animal-blue);">Endangered Animals</h3>
+            <div class="animals" id="animals">
+                <!-- Animals will be added by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn">Start Mission</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+        
+        <div class="tutorial">
+            <h3>How to Play:</h3>
+            <ul>
+                <li>Drag each animal to its correct habitat</li>
+                <li>Some habitats have threats (red border) - click to remove them first</li>
+                <li>Each correct match restores part of the habitat</li>
+                <li>Complete all habitats to win!</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const habitatsData = [
+            {
+                id: 1,
+                name: "Rainforest",
+                icon: "🌴",
+                animals: ["Jaguar", "Orangutan", "Scarlet Macaw"],
+                threats: ["Deforestation", "Illegal Logging"],
+                bgColor: "#d5f5e3"
+            },
+            {
+                id: 2,
+                name: "Arctic",
+                icon: "❄️",
+                animals: ["Polar Bear", "Arctic Fox", "Walrus"],
+                threats: ["Climate Change", "Oil Drilling"],
+                bgColor: "#e8f8f5"
+            },
+            {
+                id: 3,
+                name: "Ocean",
+                icon: "🌊",
+                animals: ["Sea Turtle", "Blue Whale", "Coral"],
+                threats: ["Plastic Pollution", "Overfishing"],
+                bgColor: "#d4e6f1"
+            },
+            {
+                id: 4,
+                name: "Savanna",
+                icon: "🌍",
+                animals: ["Elephant", "Lion", "Cheetah"],
+                threats: ["Poaching", "Habitat Loss"],
+                bgColor: "#f9e79f"
+            }
+        ];
+        
+        const animalsData = [
+            {
+                name: "Jaguar",
+                habitat: "Rainforest",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616408.png')",
+                status: "Near Threatened"
+            },
+            {
+                name: "Orangutan",
+                habitat: "Rainforest",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616430.png')",
+                status: "Critically Endangered"
+            },
+            {
+                name: "Scarlet Macaw",
+                habitat: "Rainforest",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616412.png')",
+                status: "Least Concern"
+            },
+            {
+                name: "Polar Bear",
+                habitat: "Arctic",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616405.png')",
+                status: "Vulnerable"
+            },
+            {
+                name: "Arctic Fox",
+                habitat: "Arctic",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616415.png')",
+                status: "Least Concern"
+            },
+            {
+                name: "Walrus",
+                habitat: "Arctic",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616419.png')",
+                status: "Vulnerable"
+            },
+            {
+                name: "Sea Turtle",
+                habitat: "Ocean",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616407.png')",
+                status: "Endangered"
+            },
+            {
+                name: "Blue Whale",
+                habitat: "Ocean",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616418.png')",
+                status: "Endangered"
+            },
+            {
+                name: "Coral",
+                habitat: "Ocean",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616426.png')",
+                status: "Threatened"
+            },
+            {
+                name: "Elephant",
+                habitat: "Savanna",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616410.png')",
+                status: "Endangered"
+            },
+            {
+                name: "Lion",
+                habitat: "Savanna",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616409.png')",
+                status: "Vulnerable"
+            },
+            {
+                name: "Cheetah",
+                habitat: "Savanna",
+                image: "url('https://cdn-icons-png.flaticon.com/512/616/616417.png')",
+                status: "Vulnerable"
+            }
+        ];
+        
+        // Game state
+        let animalsRescued = 0;
+        let habitatsRestored = 0;
+        let threatsRemoved = 0;
+        let gameActive = false;
+        let currentHabitats = [];
+        let currentAnimals = [];
+        let draggedAnimal = null;
+        
+        // DOM elements
+        const habitatsContainer = document.getElementById('habitats');
+        const animalsContainer = document.getElementById('animals');
+        const animalsRescuedDisplay = document.getElementById('animals-rescued');
+        const habitatsRestoredDisplay = document.getElementById('habitats-restored');
+        const threatsRemovedDisplay = document.getElementById('threats-removed');
+        const feedbackDisplay = document.getElementById('feedback');
+        const progressBar = document.getElementById('progress-bar');
+        const startBtn = document.getElementById('start-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        
+        // Initialize game
+        function initGame() {
+            animalsRescued = 0;
+            habitatsRestored = 0;
+            threatsRemoved = 0;
+            gameActive = false;
+            
+            animalsRescuedDisplay.textContent = animalsRescued;
+            habitatsRestoredDisplay.textContent = habitatsRestored;
+            threatsRemovedDisplay.textContent = threatsRemoved;
+            feedbackDisplay.textContent = 'Drag animals to their correct habitats!';
+            feedbackDisplay.className = 'feedback';
+            progressBar.style.width = '0%';
+            
+            habitatsContainer.innerHTML = '';
+            animalsContainer.innerHTML = '';
+            currentHabitats = [];
+            currentAnimals = [];
+            
+            startBtn.textContent = 'Start Mission';
+        }
+        
+        // Start game
+        function startGame() {
+            if (gameActive) return;
+            
+            gameActive = true;
+            startBtn.textContent = 'Mission in Progress';
+            
+            // Select random habitats and animals
+            setupLevel();
+        }
+        
+        // Set up the current level
+        function setupLevel() {
+            // Shuffle habitats and select 3
+            const shuffledHabitats = [...habitatsData].sort(() => 0.5 - Math.random()).slice(0, 3);
+            currentHabitats = shuffledHabitats.map(h => ({
+                ...h,
+                threats: [...h.threats],
+                animalsPlaced: 0,
+                completed: false
+            }));
+            
+            // Get animals for these habitats
+            currentAnimals = animalsData.filter(a => 
+                currentHabitats.some(h => h.name === a.habitat)
+            ).sort(() => 0.5 - Math.random()).slice(0, 6);
+            
+            // Create habitat elements
+            renderHabitats();
+            
+            // Create animal elements
+            renderAnimals();
+            
+            feedbackDisplay.textContent = `Help the animals return to their habitats! Some habitats have threats - click to remove them first.`;
+        }
+        
+        // Render habitat elements
+        function renderHabitats() {
+            habitatsContainer.innerHTML = '';
+            
+            currentHabitats.forEach(habitat => {
+                const habitatEl = document.createElement('div');
+                habitatEl.className = `habitat ${habitat.threats.length > 0 ? 'danger' : ''}`;
+                habitatEl.style.backgroundColor = habitat.bgColor;
+                habitatEl.dataset.id = habitat.id;
+                habitatEl.dataset.name = habitat.name;
+                habitatEl.dataset.hasThreat = habitat.threats.length > 0;
+                
+                const icon = document.createElement('div');
+                icon.className = 'habitat-icon';
+                icon.textContent = habitat.icon;
+                
+                const info = document.createElement('div');
+                info.className = 'habitat-info';
+                info.textContent = habitat.animals.length;
+                
+                habitatEl.appendChild(icon);
+                habitatEl.appendChild(info);
+                
+                // Add click handler for threats
+                if (habitat.threats.length > 0) {
+                    habitatEl.addEventListener('click', () => removeThreat(habitat, habitatEl));
+                } else {
+                    habitatEl.addEventListener('dragover', allowDrop);
+                    habitatEl.addEventListener('drop', dropAnimal);
+                }
+                
+                habitatsContainer.appendChild(habitatEl);
+            });
+        }
+        
+        // Render animal elements
+        function renderAnimals() {
+            animalsContainer.innerHTML = '';
+            
+            currentAnimals.forEach(animal => {
+                const animalEl = document.createElement('div');
+                animalEl.className = 'animal';
+                animalEl.style.backgroundImage = animal.image;
+                animalEl.textContent = animal.name;
+                animalEl.dataset.name = animal.name;
+                animalEl.dataset.habitat = animal.habitat;
+                animalEl.dataset.status = animal.status;
+                animalEl.draggable = true;
+                
+                animalEl.addEventListener('dragstart', dragAnimal);
+                animalEl.addEventListener('dragend', dragEnd);
+                
+                animalsContainer.appendChild(animalEl);
+            });
+        }
+        
+        // Remove threat from habitat
+        function removeThreat(habitat, habitatEl) {
+            if (!gameActive || habitat.threats.length === 0) return;
+            
+            // Remove one threat
+            habitat.threats.pop();
+            threatsRemoved++;
+            threatsRemovedDisplay.textContent = threatsRemoved;
+            
+            // Show feedback
+            const threatMessages = [
+                `Great! You removed a threat to the ${habitat.name}!`,
+                `Good work! The ${habitat.name} is safer now.`,
+                `Threat removed! Help more ${habitat.name} animals.`
+            ];
+            
+            const randomMessage = threatMessages[Math.floor(Math.random() * threatMessages.length)];
+            feedbackDisplay.textContent = randomMessage;
+            feedbackDisplay.className = 'feedback correct';
+            
+            // Update habitat
+            if (habitat.threats.length === 0) {
+                habitatEl.classList.remove('danger');
+                habitatEl.dataset.hasThreat = 'false';
+                
+                // Add drop handlers now that threats are gone
+                habitatEl.addEventListener('dragover', allowDrop);
+                habitatEl.addEventListener('drop', dropAnimal);
+                
+                // Remove click handler
+                habitatEl.removeEventListener('click', () => removeThreat(habitat, habitatEl));
+                
+                feedbackDisplay.textContent = `All threats removed from ${habitat.name}! Now you can return animals here.`;
+            } else {
+                habitatEl.querySelector('.habitat-info').textContent = habitat.threats.length;
+            }
+            
+            // Update global stats
+            updateGlobalStats();
+        }
+        
+        // Drag and drop functions
+        function dragAnimal(e) {
+            if (!gameActive) {
+                e.preventDefault();
+                return;
+            }
+            
+            draggedAnimal = e.target;
+            e.target.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', e.target.dataset.habitat);
+        }
+        
+        function dragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+        
+        function allowDrop(e) {
+            if (gameActive) e.preventDefault();
+        }
+        
+        function dropAnimal(e) {
+            if (!gameActive || !draggedAnimal) return;
+            
+            e.preventDefault();
+            const habitatName = e.target.dataset.name || e.target.closest('.habitat').dataset.name;
+            
+            if (draggedAnimal.dataset.habitat === habitatName) {
+                // Correct habitat
+                animalsRescued++;
+                animalsRescuedDisplay.textContent = animalsRescued;
+                
+                // Find habitat in currentHabitats
+                const habitat = currentHabitats.find(h => h.name === habitatName);
+                if (habitat) {
+                    habitat.animalsPlaced++;
+                    
+                    // Check if habitat is complete
+                    if (habitat.animalsPlaced >= 2 && !habitat.completed) {
+                        habitat.completed = true;
+                        habitatsRestored++;
+                        habitatsRestoredDisplay.textContent = habitatsRestored;
+                        
+                        // Mark habitat as complete
+                        const habitatEl = e.target.classList.contains('habitat') ? 
+                            e.target : e.target.closest('.habitat');
+                        habitatEl.classList.add('complete');
+                        habitatEl.classList.remove('danger');
+                        
+                        feedbackDisplay.textContent = `You restored the ${habitatName} habitat! ${getHabitatFact(habitatName)}`;
+                        feedbackDisplay.className = 'feedback correct';
+                    } else {
+                        const messages = [
+                            `Great job! The ${draggedAnimal.dataset.name} belongs in the ${habitatName}.`,
+                            `Perfect! The ${draggedAnimal.dataset.name} is home in the ${habitatName}.`,
+                            `Correct! The ${draggedAnimal.dataset.name} thrives in the ${habitatName}.`
+                        ];
+                        
+                        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                        feedbackDisplay.textContent = randomMessage;
+                        feedbackDisplay.className = 'feedback correct';
+                    }
+                }
+                
+                // Remove animal
+                draggedAnimal.remove();
+                draggedAnimal = null;
+                
+                // Update progress
+                const progress = (habitatsRestored / currentHabitats.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                // Check if all habitats are complete
+                if (currentHabitats.every(h => h.completed)) {
+                    endLevel();
+                }
+            } else {
+                // Wrong habitat
+                feedbackDisplay.textContent = `Oops! The ${draggedAnimal.dataset.name} doesn't live in the ${habitatName}. Try again!`;
+                feedbackDisplay.className = 'feedback incorrect';
+                draggedAnimal.classList.remove('dragging');
+                draggedAnimal = null;
+            }
+        }
+        
+        // End current level
+        function endLevel() {
+            gameActive = false;
+            
+            setTimeout(() => {
+                feedbackDisplay.textContent = `Congratulations! You restored all habitats and saved ${animalsRescued} animals! Ready for the next mission?`;
+                feedbackDisplay.className = 'feedback correct';
+                
+                startBtn.textContent = 'Next Mission';
+            }, 1000);
+        }
+        
+        // Helper functions
+        function getHabitatFact(habitatName) {
+            const facts = {
+                "Rainforest": "Rainforests produce 20% of Earth's oxygen!",
+                "Arctic": "The Arctic is warming twice as fast as the rest of the planet.",
+                "Ocean": "Oceans absorb about 30% of carbon dioxide produced by humans.",
+                "Savanna": "Savannas cover about 20% of Earth's land area."
+            };
+            
+            return facts[habitatName] || "";
+        }
+        
+        // Update global stats
+        function updateGlobalStats() {
+            // Update games played
+            let gamesPlayed = parseInt(localStorage.getItem('gamesPlayed')) || 0;
+            gamesPlayed++;
+            localStorage.setItem('gamesPlayed', gamesPlayed);
+            
+            // Calculate trees planted based on habitats restored (1 tree per habitat)
+            let treesPlanted = parseInt(localStorage.getItem('treesPlanted')) || 0;
+            treesPlanted += habitatsRestored;
+            localStorage.setItem('treesPlanted', treesPlanted);
+            
+            // Calculate CO2 saved (1lb per threat removed)
+            let co2Saved = parseInt(localStorage.getItem('co2Saved')) || 0;
+            co2Saved += threatsRemoved;
+            localStorage.setItem('co2Saved', co2Saved);
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', () => {
+            if (gameActive) return;
+            
+            if (startBtn.textContent === 'Next Mission') {
+                initGame();
+            }
+            startGame();
+        });
+        
+        resetBtn.addEventListener('click', initGame);
+        
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>

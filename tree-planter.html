@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 Tree Planter | KijaniHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sapling-green: #27ae60;
+            --tree-green: #2e8b57;
+            --mature-green: #1e5631;
+            --light-bg: #f9f9f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #2e8b57;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0f7f0;
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .garden {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 2rem 0;
+            min-height: 300px;
+        }
+        
+        .plot {
+            background-color: #f5e5c8;
+            border-radius: 10px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plot:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .plot::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background-color: var(--sapling-green);
+        }
+        
+        .tree {
+            font-size: 2rem;
+            transition: all 0.5s;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tree.sapling {
+            color: var(--sapling-green);
+            font-size: 1.5rem;
+        }
+        
+        .tree.young {
+            color: var(--tree-green);
+            font-size: 2rem;
+        }
+        
+        .tree.mature {
+            color: var(--mature-green);
+            font-size: 3rem;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.2));
+        }
+        
+        .tree-icon {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tree-info {
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.7);
+            z-index: 2;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background-color: #2e8b57;
+            color: white;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            background-color: #3cb371;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--sapling-green), var(--mature-green));
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .feedback {
+            text-align: center;
+            min-height: 2rem;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        
+        .tree-impact {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border-left: 5px solid var(--mature-green);
+        }
+        
+        .tree-impact h3 {
+            margin-bottom: 0.5rem;
+            color: var(--mature-green);
+        }
+        
+        .tree-impact ul {
+            padding-left: 1.5rem;
+        }
+        
+        .tree-impact li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .impact-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .impact-stat {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--mature-green);
+        }
+        
+        .impact-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .garden {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .stat-value {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🌱 Tree Planter</h1>
+        <p>Grow virtual trees and see their real-world environmental impact!</p>
+    </header>
+    
+    <div class="game-container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="trees-planted">0</div>
+                <div class="stat-label">Trees Planted</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="trees-mature">0</div>
+                <div class="stat-label">Mature Trees</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="co2-absorbed">0</div>
+                <div class="stat-label">CO₂ Absorbed (lbs)</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="feedback" id="feedback">
+            Click on empty plots to plant trees. Watch them grow over time!
+        </div>
+        
+        <div class="garden" id="garden">
+            <!-- 5x4 grid of plots (20 total) -->
+            <div class="plot" data-plot="1"></div>
+            <div class="plot" data-plot="2"></div>
+            <div class="plot" data-plot="3"></div>
+            <div class="plot" data-plot="4"></div>
+            <div class="plot" data-plot="5"></div>
+            <div class="plot" data-plot="6"></div>
+            <div class="plot" data-plot="7"></div>
+            <div class="plot" data-plot="8"></div>
+            <div class="plot" data-plot="9"></div>
+            <div class="plot" data-plot="10"></div>
+            <div class="plot" data-plot="11"></div>
+            <div class="plot" data-plot="12"></div>
+            <div class="plot" data-plot="13"></div>
+            <div class="plot" data-plot="14"></div>
+            <div class="plot" data-plot="15"></div>
+            <div class="plot" data-plot="16"></div>
+            <div class="plot" data-plot="17"></div>
+            <div class="plot" data-plot="18"></div>
+            <div class="plot" data-plot="19"></div>
+            <div class="plot" data-plot="20"></div>
+        </div>
+        
+        <div class="controls">
+            <button id="plant-btn">Plant Special Tree</button>
+            <button id="reset-btn">New Garden</button>
+        </div>
+        
+        <div class="tree-impact">
+            <h3>Your Trees' Impact:</h3>
+            <ul>
+                <li>One mature tree can absorb 48 lbs of CO₂ per year</li>
+                <li>Trees provide habitat for wildlife</li>
+                <li>They help prevent soil erosion</li>
+                <li>Trees improve air quality by filtering pollutants</li>
+            </ul>
+            
+            <div class="impact-stats">
+                <div>
+                    <div class="impact-stat" id="oxygen-produced">0</div>
+                    <div class="impact-label">Oxygen Produced (lbs/year)</div>
+                </div>
+                <div>
+                    <div class="impact-stat" id="water-filtered">0</div>
+                    <div class="impact-label">Water Filtered (gallons/year)</div>
+                </div>
+                <div>
+                    <div class="impact-stat" id="wildlife-supported">0</div>
+                    <div class="impact-label">Wildlife Supported</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const treeTypes = [
+            { name: "Oak", icon: "🌳", co2: 50, oxygen: 260, water: 1000, wildlife: 3 },
+            { name: "Maple", icon: "🍁", co2: 45, oxygen: 240, water: 900, wildlife: 2 },
+            { name: "Pine", icon: "🌲", co2: 55, oxygen: 280, water: 1100, wildlife: 4 },
+            { name: "Palm", icon: "🌴", co2: 40, oxygen: 220, water: 800, wildlife: 2 },
+            { name: "Fruit", icon: "🍎", co2: 35, oxygen: 200, water: 700, wildlife: 5 }
+        ];
+        
+        // Game state
+        let treesPlanted = 0;
+        let treesMature = 0;
+        let co2Absorbed = 0;
+        let oxygenProduced = 0;
+        let waterFiltered = 0;
+        let wildlifeSupported = 0;
+        let garden = Array(20).fill(null);
+        let growthIntervals = [];
+        
+        // DOM elements
+        const gardenPlots = document.querySelectorAll('.plot');
+        const treesPlantedDisplay = document.getElementById('trees-planted');
+        const treesMatureDisplay = document.getElementById('trees-mature');
+        const co2AbsorbedDisplay = document.getElementById('co2-absorbed');
+        const oxygenProducedDisplay = document.getElementById('oxygen-produced');
+        const waterFilteredDisplay = document.getElementById('water-filtered');
+        const wildlifeSupportedDisplay = document.getElementById('wildlife-supported');
+        const feedbackDisplay = document.getElementById('feedback');
+        const progressBar = document.getElementById('progress-bar');
+        const plantBtn = document.getElementById('plant-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        
+        // Initialize game
+        function initGame() {
+            // Clear any existing growth intervals
+            growthIntervals.forEach(interval => clearInterval(interval));
+            growthIntervals = [];
+            
+            // Reset stats
+            treesPlanted = 0;
+            treesMature = 0;
+            co2Absorbed = 0;
+            oxygenProduced = 0;
+            waterFiltered = 0;
+            wildlifeSupported = 0;
+            
+            treesPlantedDisplay.textContent = treesPlanted;
+            treesMatureDisplay.textContent = treesMature;
+            co2AbsorbedDisplay.textContent = co2Absorbed;
+            oxygenProducedDisplay.textContent = oxygenProduced;
+            waterFilteredDisplay.textContent = waterFiltered;
+            wildlifeSupportedDisplay.textContent = wildlifeSupported;
+            
+            progressBar.style.width = '0%';
+            feedbackDisplay.textContent = 'Click on empty plots to plant trees. Watch them grow over time!';
+            
+            // Clear garden
+            garden = Array(20).fill(null);
+            gardenPlots.forEach(plot => {
+                plot.innerHTML = '';
+                plot.style.backgroundColor = '#f5e5c8';
+            });
+        }
+        
+        // Plant a tree in a plot
+        function plantTree(plotIndex, isSpecial = false) {
+            if (garden[plotIndex] !== null) return; // Plot already has a tree
+            
+            // Choose random tree type
+            let treeType;
+            if (isSpecial) {
+                // Special tree (better stats)
+                treeType = {
+                    ...treeTypes[Math.floor(Math.random() * treeTypes.length)],
+                    co2: 70,
+                    oxygen: 350,
+                    water: 1500,
+                    wildlife: 6
+                };
+                feedbackDisplay.textContent = `You planted a special ${treeType.name} tree! It will have extra environmental benefits!`;
+            } else {
+                treeType = treeTypes[Math.floor(Math.random() * treeTypes.length)];
+                feedbackDisplay.textContent = `You planted a ${treeType.name} tree! It will grow over time.`;
+            }
+            
+            // Create tree element
+            const plot = gardenPlots[plotIndex];
+            const tree = document.createElement('div');
+            tree.className = 'tree sapling';
+            tree.innerHTML = `
+                <div class="tree-icon">${treeType.icon}</div>
+                <div class="tree-info">${treeType.name}</div>
+            `;
+            
+            plot.appendChild(tree);
+            plot.style.backgroundColor = '#e8f8f5';
+            
+            // Add to garden state
+            garden[plotIndex] = {
+                type: treeType,
+                stage: 'sapling',
+                growth: 0
+            };
+            
+            treesPlanted++;
+            treesPlantedDisplay.textContent = treesPlanted;
+            
+            // Start growth interval
+            const growthInterval = setInterval(() => growTree(plotIndex), 3000);
+            growthIntervals.push(growthInterval);
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        // Grow a tree to next stage
+        function growTree(plotIndex) {
+            const tree = garden[plotIndex];
+            if (!tree) return;
+            
+            const plot = gardenPlots[plotIndex];
+            const treeElement = plot.querySelector('.tree');
+            
+            tree.growth++;
+            
+            if (tree.growth === 3 && tree.stage === 'sapling') {
+                // Grow to young tree
+                tree.stage = 'young';
+                treeElement.classList.remove('sapling');
+                treeElement.classList.add('young');
+                
+                // Start contributing to stats
+                co2Absorbed += Math.floor(tree.type.co2 * 0.3);
+                oxygenProduced += Math.floor(tree.type.oxygen * 0.3);
+                waterFiltered += Math.floor(tree.type.water * 0.3);
+                wildlifeSupported += Math.floor(tree.type.wildlife * 0.3);
+                
+                updateStats();
+                feedbackDisplay.textContent = `Your ${tree.type.name} tree is growing! It's starting to help the environment.`;
+            } else if (tree.growth === 6 && tree.stage === 'young') {
+                // Grow to mature tree
+                tree.stage = 'mature';
+                treeElement.classList.remove('young');
+                treeElement.classList.add('mature');
+                
+                treesMature++;
+                treesMatureDisplay.textContent = treesMature;
+                
+                // Full stats contribution
+                co2Absorbed += Math.floor(tree.type.co2 * 0.7); // Remaining 70%
+                oxygenProduced += Math.floor(tree.type.oxygen * 0.7);
+                waterFiltered += Math.floor(tree.type.water * 0.7);
+                wildlifeSupported += Math.floor(tree.type.wildlife * 0.7);
+                
+                updateStats();
+                feedbackDisplay.textContent = `Your ${tree.type.name} tree is now mature! It's providing full environmental benefits.`;
+                
+                // Check if garden is full
+                if (treesMature === garden.filter(t => t !== null).length) {
+                    feedbackDisplay.textContent = `Amazing! All your trees are now mature and helping the planet!`;
+                }
+            }
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        // Update all stat displays
+        function updateStats() {
+            co2AbsorbedDisplay.textContent = co2Absorbed;
+            oxygenProducedDisplay.textContent = oxygenProduced;
+            waterFilteredDisplay.textContent = waterFiltered;
+            wildlifeSupportedDisplay.textContent = wildlifeSupported;
+            
+            // Update global stats
+            updateGlobalStats();
+        }
+        
+        // Update progress bar
+        function updateProgress() {
+            const totalPossible = garden.length * 6; // 6 growth stages per plot
+            let currentProgress = 0;
+            
+            garden.forEach(tree => {
+                if (tree) currentProgress += tree.growth;
+            });
+            
+            const progressPercent = (currentProgress / totalPossible) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+        
+        // Update global stats
+        function updateGlobalStats() {
+            // Update games played
+            let gamesPlayed = parseInt(localStorage.getItem('gamesPlayed')) || 0;
+            gamesPlayed++;
+            localStorage.setItem('gamesPlayed', gamesPlayed);
+            
+            // Calculate trees planted (already tracked)
+            let totalTreesPlanted = parseInt(localStorage.getItem('treesPlanted')) || 0;
+            totalTreesPlanted += treesPlanted;
+            localStorage.setItem('treesPlanted', totalTreesPlanted);
+            
+            // Calculate CO2 saved (already tracked in co2Absorbed)
+            let totalCO2Saved = parseInt(localStorage.getItem('co2Saved')) || 0;
+            totalCO2Saved += co2Absorbed;
+            localStorage.setItem('co2Saved', totalCO2Saved);
+        }
+        
+        // Event listeners
+        gardenPlots.forEach((plot, index) => {
+            plot.addEventListener('click', () => plantTree(index));
+        });
+        
+        plantBtn.addEventListener('click', () => {
+            // Find first empty plot
+            const emptyPlotIndex = garden.findIndex(tree => tree === null);
+            if (emptyPlotIndex !== -1) {
+                plantTree(emptyPlotIndex, true);
+            } else {
+                feedbackDisplay.textContent = 'No empty plots left! Start a new garden to plant more trees.';
+            }
+        });
+        
+        resetBtn.addEventListener('click', initGame);
+        
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>

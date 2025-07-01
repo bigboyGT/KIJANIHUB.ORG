@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Power Patrol | KijaniHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --power-yellow: #f1c40f;
+            --off-red: #e74c3c;
+            --on-green: #2ecc71;
+            --light-bg: #f9f9f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #2e8b57;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0f7f0;
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .house {
+            position: relative;
+            height: 400px;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/2553/2553628.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 2rem 0;
+        }
+        
+        .appliance {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+        }
+        
+        .appliance:hover {
+            transform: scale(1.1);
+        }
+        
+        .appliance.on {
+            filter: drop-shadow(0 0 10px var(--power-yellow));
+        }
+        
+        .appliance.off {
+            opacity: 0.7;
+            filter: grayscale(50%) drop-shadow(0 0 5px rgba(0,0,0,0.2));
+        }
+        
+        .power-meter {
+            width: 100%;
+            height: 30px;
+            background-color: #ecf0f1;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .power-level {
+            height: 100%;
+            background: linear-gradient(90deg, var(--power-yellow), #f39c12);
+            width: 100%;
+            transition: width 0.3s;
+        }
+        
+        .power-amount {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .feedback {
+            text-align: center;
+            min-height: 2rem;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        
+        .save-message {
+            color: var(--on-green);
+        }
+        
+        .waste-message {
+            color: var(--off-red);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background-color: #2e8b57;
+            color: white;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            background-color: #3cb371;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .tips-container {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border-left: 5px solid var(--power-yellow);
+        }
+        
+        .tips-container h3 {
+            margin-bottom: 0.5rem;
+            color: var(--power-yellow);
+        }
+        
+        .tips-container ul {
+            padding-left: 1.5rem;
+        }
+        
+        .tips-container li {
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .house {
+                height: 300px;
+            }
+            
+            .appliance {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .stat-value {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>⚡ Power Patrol</h1>
+        <p>Turn off unused lights and appliances to save energy and reduce your carbon footprint!</p>
+    </header>
+    
+    <div class="game-container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="appliances-off">0</div>
+                <div class="stat-label">Appliances Off</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="energy-saved">0</div>
+                <div class="stat-label">Watts Saved</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="time-left">60</div>
+                <div class="stat-label">Seconds Left</div>
+            </div>
+        </div>
+        
+        <div class="power-meter">
+            <div class="power-level" id="power-level" style="width: 100%;"></div>
+            <div class="power-amount" id="power-amount">100%</div>
+        </div>
+        
+        <div class="feedback" id="feedback">
+            Click START to begin your power patrol!
+        </div>
+        
+        <div class="house" id="house">
+            <!-- Appliances will be added here -->
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn">Start Game</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+        
+        <div class="tips-container">
+            <h3>Energy Saving Tips:</h3>
+            <ul>
+                <li>Turn off lights when leaving a room</li>
+                <li>Unplug devices when not in use (they still use "phantom power")</li>
+                <li>Use natural light during the day</li>
+                <li>Choose energy-efficient appliances (look for Energy Star label)</li>
+                <li>Set thermostats a few degrees higher in summer and lower in winter</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const appliances = [
+            {
+                name: "Living Room Light",
+                image: "https://cdn-icons-png.flaticon.com/512/3627/3627089.png",
+                position: { x: 30, y: 30 },
+                power: 60
+            },
+            {
+                name: "TV",
+                image: "https://cdn-icons-png.flaticon.com/512/3627/3627129.png",
+                position: { x: 40, y: 100 },
+                power: 120
+            },
+            {
+                name: "Computer",
+                image: "https://cdn-icons-png.flaticon.com/512/3627/3627136.png",
+                position: { x: 70, y: 180 },
+                power: 150
+            },
+            {
+                name: "Kitchen Light",
+                image: "https://cdn-icons-png.flaticon.com/512/3627/3627089.png",
+                position: { x: 70, y: 250 },
+                power: 75
+            },
+            {
+                name: "Refrigerator",
+                image: "https://cdn-icons-png.flaticon.com/512/3627/3627113.png",
+                position: { x: 150, y: 280 },
+                power: 200
+            },
+            {
+                name: "Microwave",
+                image: "https://cdn-icons-png.flaticon.com/512/3627/3627106.png",
+                position: { x: 200, y: 250 },
+                power: 100
+            },
+            {
+                name: "Bedroom Light",
+                image: "https://cdn-icons-png.flaticon.com/512/3627/3627089.png",
+                position: { x: 250, y: 100 },
+                power: 60
+            },
+            {
+                name: "Game Console",
+                image: "https://cdn-icons-png.flaticon.com/512/3627/3627137.png",
+                position: { x: 220, y: 150 },
+                power: 90
+            },
+            {
+                name: "Air Conditioner",
+                image: "https://cdn-icons-png.flaticon.com/512/3627/3627095.png",
+                position: { x: 280, y: 30 },
+                power: 500
+            }
+        ];
+        
+        // Game state
+        let appliancesOff = 0;
+        let energySaved = 0;
+        let timeLeft = 60;
+        let powerLevel = 100;
+        let gameActive = false;
+        let timerInterval;
+        let applianceElements = [];
+        let totalPower = 0;
+        
+        // DOM elements
+        const house = document.getElementById('house');
+        const appliancesOffDisplay = document.getElementById('appliances-off');
+        const energySavedDisplay = document.getElementById('energy-saved');
+        const timeLeftDisplay = document.getElementById('time-left');
+        const powerLevelDisplay = document.getElementById('power-level');
+        const powerAmountDisplay = document.getElementById('power-amount');
+        const feedbackDisplay = document.getElementById('feedback');
+        const startBtn = document.getElementById('start-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        
+        // Initialize game
+        function initGame() {
+            appliancesOff = 0;
+            energySaved = 0;
+            timeLeft = 60;
+            powerLevel = 100;
+            gameActive = false;
+            
+            appliancesOffDisplay.textContent = appliancesOff;
+            energySavedDisplay.textContent = energySaved;
+            timeLeftDisplay.textContent = timeLeft;
+            powerLevelDisplay.style.width = '100%';
+            powerAmountDisplay.textContent = '100%';
+            feedbackDisplay.textContent = 'Click START to begin your power patrol!';
+            feedbackDisplay.className = 'feedback';
+            
+            house.innerHTML = '';
+            applianceElements = [];
+            
+            clearInterval(timerInterval);
+            
+            startBtn.textContent = 'Start Game';
+            
+            // Create appliance elements
+            createAppliances();
+        }
+        
+        // Create appliance elements
+        function createAppliances() {
+            totalPower = appliances.reduce((sum, app) => sum + app.power, 0);
+            
+            appliances.forEach((appliance, index) => {
+                const appElement = document.createElement('div');
+                appElement.className = 'appliance on';
+                appElement.style.backgroundImage = `url('${appliance.image}')`;
+                appElement.style.left = `${appliance.position.x}px`;
+                appElement.style.top = `${appliance.position.y}px`;
+                appElement.dataset.index = index;
+                appElement.dataset.on = 'true';
+                
+                appElement.addEventListener('click', toggleAppliance);
+                
+                house.appendChild(appElement);
+                applianceElements.push(appElement);
+            });
+        }
+        
+        // Start game
+        function startGame() {
+            if (gameActive) {
+                pauseGame();
+                return;
+            }
+            
+            gameActive = true;
+            startBtn.textContent = 'Pause Game';
+            
+            // Start timer
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timeLeftDisplay.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+                
+                // Reduce power level based on appliances left on
+                const onAppliances = applianceElements.filter(el => el.dataset.on === 'true').length;
+                if (onAppliances > 0) {
+                    powerLevel -= (onAppliances * 0.5);
+                    if (powerLevel < 0) powerLevel = 0;
+                    
+                    powerLevelDisplay.style.width = `${powerLevel}%`;
+                    powerAmountDisplay.textContent = `${Math.round(powerLevel)}%`;
+                    
+                    if (powerLevel <= 20) {
+                        powerLevelDisplay.style.background = 'linear-gradient(90deg, #e74c3c, #c0392b)';
+                        feedbackDisplay.textContent = 'Warning! High energy use! Turn off appliances!';
+                        feedbackDisplay.className = 'feedback waste-message';
+                    } else if (powerLevel <= 50) {
+                        powerLevelDisplay.style.background = 'linear-gradient(90deg, #f39c12, #d35400)';
+                        feedbackDisplay.textContent = 'Energy use getting high - turn things off!';
+                        feedbackDisplay.className = 'feedback waste-message';
+                    }
+                }
+            }, 1000);
+        }
+        
+        // Pause game
+        function pauseGame() {
+            gameActive = false;
+            startBtn.textContent = 'Resume Game';
+            clearInterval(timerInterval);
+        }
+        
+        // End game
+        function endGame() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            startBtn.textContent = 'Play Again';
+            
+            // Calculate percentage saved
+            const percentageSaved = Math.round((energySaved / totalPower) * 100);
+            
+            // Show final feedback
+            let feedback = `Game Over! You turned off ${appliancesOff} appliances and saved ${energySaved} watts (`;
+            
+            if (percentageSaved >= 50) {
+                feedback += `${percentageSaved}% of total power). Excellent work! ⚡`;
+            } else if (percentageSaved >= 30) {
+                feedback += `${percentageSaved}% of total power). Good job!`;
+            } else {
+                feedback += `${percentageSaved}% of total power). Try to save more next time!`;
+            }
+            
+            feedbackDisplay.textContent = feedback;
+            feedbackDisplay.className = 'feedback save-message';
+            
+            // Update global stats
+            updateGlobalStats(energySaved);
+        }
+        
+        // Toggle appliance state
+        function toggleAppliance(e) {
+            if (!gameActive) return;
+            
+            const index = e.target.dataset.index;
+            const isOn = e.target.dataset.on === 'true';
+            const appliance = appliances[index];
+            
+            if (isOn) {
+                // Turn off
+                e.target.classList.remove('on');
+                e.target.classList.add('off');
+                e.target.dataset.on = 'false';
+                
+                // Update stats
+                appliancesOff++;
+                energySaved += appliance.power;
+                
+                appliancesOffDisplay.textContent = appliancesOff;
+                energySavedDisplay.textContent = energySaved;
+                
+                // Show feedback
+                const messages = [
+                    `Good job! You turned off the ${appliance.name} and saved ${appliance.power} watts!`,
+                    `Nice! The ${appliance.name} was using ${appliance.power} watts.`,
+                    `Great! You saved energy by turning off the ${appliance.name}.`,
+                    `Perfect! The ${appliance.name} doesn't need to be on all the time.`
+                ];
+                
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                feedbackDisplay.textContent = randomMessage;
+                feedbackDisplay.className = 'feedback save-message';
+            } else {
+                // Turn back on (penalty)
+                e.target.classList.remove('off');
+                e.target.classList.add('on');
+                e.target.dataset.on = 'true';
+                
+                // Update stats
+                appliancesOff--;
+                energySaved -= appliance.power;
+                
+                appliancesOffDisplay.textContent = appliancesOff;
+                energySavedDisplay.textContent = energySaved;
+                
+                // Show feedback
+                feedbackDisplay.textContent = `Oops! You turned the ${appliance.name} back on. Try to keep it off if not needed!`;
+                feedbackDisplay.className = 'feedback waste-message';
+            }
+        }
+        
+        // Update global stats
+        function updateGlobalStats(wattsSaved) {
+            // Update games played
+            let gamesPlayed = parseInt(localStorage.getItem('gamesPlayed')) || 0;
+            gamesPlayed++;
+            localStorage.setItem('gamesPlayed', gamesPlayed);
+            
+            // Calculate trees planted based on energy saved (1 tree per 1000 watts)
+            let treesPlanted = parseInt(localStorage.getItem('treesPlanted')) || 0;
+            treesPlanted += Math.floor(wattsSaved / 1000);
+            localStorage.setItem('treesPlanted', treesPlanted);
+            
+            // Calculate CO2 saved (1lb per 500 watts)
+            let co2Saved = parseInt(localStorage.getItem('co2Saved')) || 0;
+            co2Saved += Math.floor(wattsSaved / 500);
+            localStorage.setItem('co2Saved', co2Saved);
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', startGame);
+        resetBtn.addEventListener('click', initGame);
+        
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>

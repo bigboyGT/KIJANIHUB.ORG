@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌤️ Weather Defender | KijaniHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pollution-red: #e74c3c;
+            --clean-blue: #3498db;
+            --action-green: #2ecc71;
+            --light-bg: #f9f9f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #2e8b57;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0f7f0;
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .weather-map {
+            position: relative;
+            height: 400px;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/854/854878.png');
+            background-size: cover;
+            border-radius: 10px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+        
+        .pollution {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/3081/3081981.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            transition: all 0.3s;
+            filter: drop-shadow(0 0 5px rgba(231, 76, 60, 0.7));
+            animation: float 3s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .solution {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .solution-btn {
+            width: 80px;
+            height: 80px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 50%;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        .solution-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .solution-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .air-quality {
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(90deg, #2ecc71, #f1c40f, #e74c3c);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .air-quality-marker {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 4px;
+            height: 40px;
+            background-color: black;
+            transform: translateX(-50%);
+            transition: left 0.5s;
+        }
+        
+        .air-quality-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .feedback {
+            text-align: center;
+            min-height: 2rem;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        
+        .good {
+            color: var(--action-green);
+        }
+        
+        .bad {
+            color: var(--pollution-red);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background-color: #2e8b57;
+            color: white;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            background-color: #3cb371;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .tutorial {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border-left: 5px solid #2e8b57;
+        }
+        
+        .tutorial h3 {
+            margin-bottom: 0.5rem;
+            color: #2e8b57;
+        }
+        
+        .tutorial ul {
+            padding-left: 1.5rem;
+        }
+        
+        .tutorial li {
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .weather-map {
+                height: 300px;
+            }
+            
+            .solution-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .stat-value {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🌤️ Weather Defender</h1>
+        <p>Stop pollution and protect our climate from extreme weather events!</p>
+    </header>
+    
+    <div class="game-container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="pollution-stopped">0</div>
+                <div class="stat-label">Pollution Stopped</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="co2-reduced">0</div>
+                <div class="stat-label">CO₂ Reduced (tons)</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="time-left">60</div>
+                <div class="stat-label">Seconds Left</div>
+            </div>
+        </div>
+        
+        <div class="air-quality">
+            <div class="air-quality-marker" id="air-quality-marker" style="left: 50%;"></div>
+        </div>
+        <div class="air-quality-labels">
+            <span>Good</span>
+            <span>Moderate</span>
+            <span>Unhealthy</span>
+        </div>
+        
+        <div class="feedback" id="feedback">
+            Click on pollution sources to remove them! Use solutions below.
+        </div>
+        
+        <div class="weather-map" id="weather-map">
+            <!-- Pollution sources will appear here -->
+        </div>
+        
+        <div class="solution">
+            <div class="solution-btn" id="renewable-btn" title="Renewable Energy">☀️</div>
+            <div class="solution-btn" id="tree-btn" title="Plant Trees">🌳</div>
+            <div class="solution-btn" id="transport-btn" title="Clean Transport">🚲</div>
+            <div class="solution-btn" id="recycle-btn" title="Recycling">♻️</div>
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn">Start Game</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+        
+        <div class="tutorial">
+            <h3>Climate Solutions:</h3>
+            <ul>
+                <li><strong>Renewable Energy:</strong> Solar, wind, and hydro power reduce fossil fuel use</li>
+                <li><strong>Plant Trees:</strong> Trees absorb CO₂ and clean the air</li>
+                <li><strong>Clean Transport:</strong> Walking, biking, and electric vehicles reduce emissions</li>
+                <li><strong>Recycling:</strong> Reduces waste and energy needed for new products</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const pollutionSources = [
+            { type: "factory", co2: 5, icon: "🏭" },
+            { type: "car", co2: 2, icon: "🚗" },
+            { type: "coal", co2: 8, icon: "⚡" },
+            { type: "waste", co2: 3, icon: "🗑️" }
+        ];
+        
+        const solutions = {
+            "renewable": { target: ["factory", "coal"], co2: 7, icon: "☀️" },
+            "tree": { target: ["all"], co2: 4, icon: "🌳" },
+            "transport": { target: ["car"], co2: 5, icon: "🚲" },
+            "recycle": { target: ["waste"], co2: 4, icon: "♻️" }
+        };
+        
+        // Game state
+        let pollutionStopped = 0;
+        let co2Reduced = 0;
+        let timeLeft = 60;
+        let airQuality = 50; // 0-100 (0=best, 100=worst)
+        let gameActive = false;
+        let timerInterval;
+        let pollutionInterval;
+        let activePollution = [];
+        
+        // DOM elements
+        const weatherMap = document.getElementById('weather-map');
+        const pollutionStoppedDisplay = document.getElementById('pollution-stopped');
+        const co2ReducedDisplay = document.getElementById('co2-reduced');
+        const timeLeftDisplay = document.getElementById('time-left');
+        const airQualityMarker = document.getElementById('air-quality-marker');
+        const feedbackDisplay = document.getElementById('feedback');
+        const startBtn = document.getElementById('start-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const solutionBtns = {
+            renewable: document.getElementById('renewable-btn'),
+            tree: document.getElementById('tree-btn'),
+            transport: document.getElementById('transport-btn'),
+            recycle: document.getElementById('recycle-btn')
+        };
+        
+        // Initialize game
+        function initGame() {
+            pollutionStopped = 0;
+            co2Reduced = 0;
+            timeLeft = 60;
+            airQuality = 50;
+            gameActive = false;
+            
+            pollutionStoppedDisplay.textContent = pollutionStopped;
+            co2ReducedDisplay.textContent = co2Reduced;
+            timeLeftDisplay.textContent = timeLeft;
+            airQualityMarker.style.left = '50%';
+            feedbackDisplay.textContent = 'Click on pollution sources to remove them! Use solutions below.';
+            feedbackDisplay.className = 'feedback';
+            
+            weatherMap.innerHTML = '';
+            activePollution = [];
+            
+            clearInterval(timerInterval);
+            clearInterval(pollutionInterval);
+            
+            startBtn.textContent = 'Start Game';
+        }
+        
+        // Start game
+        function startGame() {
+            if (gameActive) {
+                pauseGame();
+                return;
+            }
+            
+            gameActive = true;
+            startBtn.textContent = 'Pause Game';
+            
+            // Start timer
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timeLeftDisplay.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+            
+            // Start generating pollution
+            pollutionInterval = setInterval(generatePollution, 2000);
+        }
+        
+        // Pause game
+        function pauseGame() {
+            gameActive = false;
+            startBtn.textContent = 'Resume Game';
+            clearInterval(timerInterval);
+            clearInterval(pollutionInterval);
+        }
+        
+        // End game
+        function endGame() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            clearInterval(pollutionInterval);
+            startBtn.textContent = 'Play Again';
+            
+            // Remove all pollution
+            weatherMap.innerHTML = '';
+            activePollution = [];
+            
+            // Show final feedback
+            let feedback = `Game Over! You stopped ${pollutionStopped} pollution sources and reduced ${co2Reduced} tons of CO₂! `;
+            
+            if (co2Reduced >= 30) {
+                feedback += "You're a Climate Hero! 🌍";
+            } else if (co2Reduced >= 15) {
+                feedback += "Good effort! Every action helps fight climate change.";
+            } else {
+                feedback += "Keep practicing to make a bigger impact!";
+            }
+            
+            feedbackDisplay.textContent = feedback;
+            feedbackDisplay.className = 'feedback good';
+            
+            // Update global stats
+            updateGlobalStats();
+        }
+        
+        // Generate pollution
+        function generatePollution() {
+            if (!gameActive || activePollution.length >= 8) return;
+            
+            const source = pollutionSources[Math.floor(Math.random() * pollutionSources.length)];
+            
+            const pollution = document.createElement('div');
+            pollution.className = 'pollution';
+            pollution.textContent = source.icon;
+            pollution.dataset.type = source.type;
+            pollution.dataset.co2 = source.co2;
+            pollution.dataset.id = Date.now();
+            
+            // Random position
+            const posX = Math.random() * (weatherMap.offsetWidth - 60);
+            const posY = Math.random() * (weatherMap.offsetHeight - 60);
+            
+            pollution.style.left = `${posX}px`;
+            pollution.style.top = `${posY}px`;
+            
+            // Click handler
+            pollution.addEventListener('click', () => selectPollution(pollution));
+            
+            weatherMap.appendChild(pollution);
+            activePollution.push({
+                element: pollution,
+                id: pollution.dataset.id,
+                type: source.type
+            });
+            
+            // Worsen air quality
+            airQuality += 5;
+            if (airQuality > 100) airQuality = 100;
+            updateAirQuality();
+        }
+        
+        // Update air quality display
+        function updateAirQuality() {
+            // Map 0-100 to 5%-95% (to keep marker within bar)
+            const markerPos = 5 + (airQuality * 0.9);
+            airQualityMarker.style.left = `${markerPos}%`;
+            
+            if (airQuality >= 70) {
+                feedbackDisplay.textContent = 'Warning! Air quality is unhealthy! Reduce pollution quickly!';
+                feedbackDisplay.className = 'feedback bad';
+            } else if (airQuality >= 40) {
+                feedbackDisplay.textContent = 'Air quality is moderate - keep improving it!';
+                feedbackDisplay.className = 'feedback';
+            } else {
+                feedbackDisplay.textContent = 'Great job! Air quality is good!';
+                feedbackDisplay.className = 'feedback good';
+            }
+        }
+        
+        // Select pollution for solution
+        function selectPollution(pollutionElement) {
+            if (!gameActive) return;
+            
+            // Highlight selected
+            const allPollution = document.querySelectorAll('.pollution');
+            allPollution.forEach(p => p.style.filter = 'drop-shadow(0 0 5px rgba(231, 76, 60, 0.7))');
+            pollutionElement.style.filter = 'drop-shadow(0 0 15px yellow)';
+            
+            // Store selected
+            currentSelected = pollutionElement.dataset.id;
+            
+            // Enable solution buttons
+            Object.keys(solutionBtns).forEach(key => {
+                const solution = solutions[key];
+                if (solution.target.includes('all') || solution.target.includes(pollutionElement.dataset.type)) {
+                    solutionBtns[key].style.transform = 'scale(1.1)';
+                    solutionBtns[key].style.boxShadow = '0 0 15px rgba(46, 204, 113, 0.7)';
+                } else {
+                    solutionBtns[key].style.opacity = '0.5';
+                }
+            });
+        }
+        
+        // Apply solution to pollution
+        function applySolution(solutionType) {
+            if (!gameActive || !currentSelected) return;
+            
+            const pollutionIndex = activePollution.findIndex(p => p.id === currentSelected);
+            if (pollutionIndex === -1) return;
+            
+            const pollution = activePollution[pollutionIndex];
+            const solution = solutions[solutionType];
+            
+            // Check if solution applies to this pollution type
+            if (!solution.target.includes('all') && !solution.target.includes(pollution.type)) {
+                feedbackDisplay.textContent = "This solution doesn't work on that pollution type!";
+                feedbackDisplay.className = 'feedback bad';
+                return;
+            }
+            
+            // Remove pollution
+            pollution.element.remove();
+            activePollution.splice(pollutionIndex, 1);
+            
+            // Update stats
+            pollutionStopped++;
+            co2Reduced += solution.co2;
+            airQuality -= 10;
+            if (airQuality < 0) airQuality = 0;
+            
+            pollutionStoppedDisplay.textContent = pollutionStopped;
+            co2ReducedDisplay.textContent = co2Reduced;
+            updateAirQuality();
+            
+            // Show feedback
+            const solutionNames = {
+                "renewable": "Renewable Energy",
+                "tree": "Tree Planting",
+                "transport": "Clean Transport",
+                "recycle": "Recycling"
+            };
+            
+            feedbackDisplay.textContent = `Great! You used ${solutionNames[solutionType]} to reduce pollution!`;
+            feedbackDisplay.className = 'feedback good';
+            
+            // Reset solution buttons
+            Object.keys(solutionBtns).forEach(key => {
+                solutionBtns[key].style.transform = '';
+                solutionBtns[key].style.boxShadow = '';
+                solutionBtns[key].style.opacity = '';
+            });
+            
+            currentSelected = null;
+        }
+        
+        // Update global stats
+        function updateGlobalStats() {
+            // Update games played
+            let gamesPlayed = parseInt(localStorage.getItem('gamesPlayed')) || 0;
+            gamesPlayed++;
+            localStorage.setItem('gamesPlayed', gamesPlayed);
+            
+            // Calculate trees planted based on CO2 reduced (1 tree per 2 tons)
+            let treesPlanted = parseInt(localStorage.getItem('treesPlanted')) || 0;
+            treesPlanted += Math.floor(co2Reduced / 2);
+            localStorage.setItem('treesPlanted', treesPlanted);
+            
+            // Calculate CO2 saved (already tracked in co2Reduced)
+            let co2Saved = parseInt(localStorage.getItem('co2Saved')) || 0;
+            co2Saved += co2Reduced;
+            localStorage.setItem('co2Saved', co2Saved);
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', startGame);
+        resetBtn.addEventListener('click', initGame);
+        
+        // Solution button event listeners
+        Object.keys(solutionBtns).forEach(key => {
+            solutionBtns[key].addEventListener('click', () => applySolution(key));
+        });
+        
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>
