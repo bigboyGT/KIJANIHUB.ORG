@@ -17,7 +17,7 @@
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,400;0,600;0,700;1,200;1,700&display=swap" rel="stylesheet">
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,400;0,600;0,700;1,200;1,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
             
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
@@ -28,8 +28,6 @@
         <link href="css/tooplate-barista.css" rel="stylesheet">
         
 <!--kijanihub-->
-   <link rel="icon" href="favicon.ico" type="image/x-icon">
-
     </head>
     
     <body>
@@ -38,7 +36,7 @@
                 <nav class="navbar navbar-expand-lg">                
                     <div class="container">
                         <a class="navbar-brand d-flex align-items-center" href="index.html">
-                            <img src="images/kijanihub logo without background.png" class="navbar-brand-image img-fluid" alt="Kijanihub">
+                            <img src="images/kijanihub logo without background.png" class="navbar-brand-image img-fluid" alt="Kijanihub" loading="lazy">
                             Kijanihub
                         </a>
         
@@ -141,10 +139,9 @@
 
                             <div class="col-lg-6 col-12">
                                 <div class="ratio ratio-1x1">
-                                    <video autoplay="" loop="" muted="" class="custom-video" poster="">
-                                        <source src="videos/FPV Drone Flight through Beautiful Iceland Canyon.mp4" type="video/mp4">
-
-                                        Your browser does not support the video tag.
+                                    <video autoplay loop muted class="custom-video" poster="images/video-poster.jpg" preload="none">
+                                      <source src="videos/FPV Drone Flight through Beautiful Iceland Canyon.mp4" type="video/mp4">
+                                      Your browser does not support the video tag.
                                     </video>
 
                                     <div class="about-video-info d-flex flex-column">
@@ -545,7 +542,7 @@
                                                         </div>
                                     
                                                         <div class="team-block-image-wrap">
-                                                            <img src="images/team/AFRICA ELEPHANT.jpeg" width="400" height="400" alt="Sample Image">
+                                                            <img src="images/team/AFRICA ELEPHANT.jpeg" width="400" height="400" alt="Sample Image" loading="lazy">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -790,12 +787,14 @@
             </main>
 
         <!-- JAVASCRIPT FILES -->
-        <script src="js/jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery.sticky.js"></script>
-        <script src="js/click-scroll.js"></script>
-        <script src="js/vegas.min.js"></script>
-        <script src="js/custom.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+<script src="js/jquery.min.js" defer></script>
+<script src="js/bootstrap.min.js" defer></script>
+<script src="js/jquery.sticky.js" defer></script>
+<script src="js/click-scroll.js" defer></script>
+<script src="js/vegas.min.js" defer></script>
+<script src="js/custom.js" defer></script>
 
     </body>
 </html>
